@@ -1,0 +1,87 @@
+# -*- sh -*-
+
+# Compiled source
+# .............................................................................
+
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.dylib
+
+# Compressed archives & package files
+# .............................................................................
+
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# OS-specific things to ignore:
+# .............................................................................
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Dropbox and similar files to ignore:
+# .............................................................................
+
+.dropbox
+
+# Emacs-specific things to ignore:
+# .............................................................................
+
+*~
+.#*
+\#*#
+.git/COMMIT_EDITMSG
+auto
+*.synctex.gz
+TAGS
+
+# LaTeX-specific things to ignore:
+# .............................................................................
+
+*.aux
+*.bbl
+*.blg
+*.fls
+*.loc
+*.lof
+*.log
+*.lot
+*.mp
+*.out
+*.toc
+*.toc
+
+# Python-specific things to ignore:
+# .............................................................................
+
+__pycache__
+*.py[cod]
+*$py.class
+
+# InnoSetup-specific things to ignore:
+# .............................................................................
+
+*.~is
+
+# Jupyter Notebook-specific things to ignore:
+# .............................................................................
+
+.ipynb_checkpoints
+
+# Project-specific things to ignore:
+# .............................................................................
