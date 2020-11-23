@@ -8,7 +8,7 @@ Everyone is asked to read and respect the [code of conduct](CODE_OF_CONDUCT.md) 
 
 ## Coordinating work
 
-A quick way to find out what is currently in the near-term plans for this project is to look at the [GitHub issue tracker](https://github.com/mhucka/zupper/issues), but the possibilities are not limited to what you see there &ndash; if you have ideas for new features and enhancements, please feel free to write them up as a new issue or contact the developers directly!
+A quick way to find out what is currently in the near-term plans for this project is to look at the [GitHub issue tracker](https://github.com/mhucka/zuppa/issues), but the possibilities are not limited to what you see there &ndash; if you have ideas for new features and enhancements, please feel free to write them up as a new issue or contact the developers directly!
 
 ## Submitting contributions
 
