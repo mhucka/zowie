@@ -94,20 +94,11 @@ class MainBody(object):
                 alert_fatal(f'Unable to parse after_date: "{str(ex)}". {hint}')
                 raise CannotProceed(ExitCode.bad_arg)
 
-
-
-        # Problem: turns out pdfs in storage/ are mixed for group
-        # and personal library.  Need to ask the user for all their
-        # library id's
-
-
-
-
         if not self.api_key and not self.library_id and not self.use_keyring:
             alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
             raise CannotProceed(ExitCode.bad_arg)
-        self.api_key, self.libtype, self.libid = zotero_credentials(
-            self.api_key, self.library_id, self.use_keyring)
+
+        self.zotero = Zotero(self.api_key, self.library_id)
 
         self.targets = []
         if __debug__: log(f'gathering list of PDF files')

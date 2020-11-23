@@ -37,15 +37,15 @@ from .main_body import MainBody
 # .............................................................................
 
 @plac.annotations(
-    api_key    = ('use API key "A" to access the Zotero API service',        'option', 'a'),
+    api_key    = ('user API key to access the Zotero API service',           'option', 'a'),
     after_date = ('only act on files created or modified after date "D"',    'option', 'd'),
-    identifier = ('Zotero library identifier',                               'option', 'i'),
+    identifier = ('Zotero user library identifier',                          'option', 'i'),
     methods    = ('select how the URIs are to be stored (default: link)',    'option', 'm'),
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
     version    = ('print version info and exit',                             'flag',   'V'),
     watch_mode = ('continuously watch for new files and update them',        'flag',   'w'),
-    no_keyring = ('do not store credentials in a keyring service',           'flag',   'X'),
+    no_keyring = ('do not store credentials in the keyring service',         'flag',   'X'),
     no_color   = ('do not color-code terminal output',                       'flag',   'Y'),
     debug      = ('write detailed trace to "OUT" ("-" means console)',       'option', '@'),
     files      = 'file(s) and/or folder(s) containing Zotero article PDF files',
@@ -54,33 +54,30 @@ from .main_body import MainBody
 def main(api_key = 'A', after_date = 'D', identifier = 'I', methods = 'M',
          dry_run = False, quiet = False, version = False, watch_mode = False,
          no_keyring = False,  no_color = False, debug = 'OUT', *files):
-    '''Zuppa (a loose acronym of "Zotero URIs into PDF Properties").
+    '''Zuppa ("Zotero URI PDF Property Annotator") is a tool for Zotero users.
 
-Zuppa writes Zotero item URIs into the metadata of PDF files.  It also adds
-the URIs to the files' macOS Spotlight file comments.
+Zuppa writes Zotero item URIs into the PDF files and/or the macOS Spotlight
+comments of PDF files in the user's Zotero database.  This makes it possible
+to look up the Zotero entry of a PDF file from outside of Zotero.
 
 Credentials for Zotero access
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Zuppa needs a library identifier and API key in order to retrieve information
-about your Zotero entries.  By default, it tries to get this information from
-the system keychain.  If the information does not exist in the keychain from a
-previous run of Zuppa, it will ask the user interactively for the identifier
-and API key, and (unless the -K option is given) store them in the user's
-keychain so that it does not have to ask again in the future.  It is also
-possible to supply the information directly on the command line using the
--i and -a options; the given values will override the values stored in the
-keychain.  (This is also how you can replace previously-stored values: use
--i and/or -a, without -K, and the new values will override the stored values.)
+Zuppa needs a Zotero API key and the user's personal library identifier.  By
+default, it tries to get this information from the system keychain.  If the
+information does not exist in the keychain from a previous run of Zuppa, it
+will ask the user interactively for the identifier and API key, and (unless
+the -K option is given) store them in the user's keychain so that it does not
+have to ask again in the future.  It is also possible to supply the
+information directly on the command line using the -i and -a options; the
+given values will then override the values stored in the keychain (unless the
+-K option is also given).  This is also how you can replace previously-stored
+values: use -a and -i (without -K) and the new values will override the
+stored values.
 
-When using the -i option, the library identifier can be prefixed with the
-string "user:" or "group:" to indicate whether the identifier refers to a
-personal or group library.  For example,
-
-  zuppa -i user:1234578 ...
-
-If -i is used and the value does not begin with "user:" or "group:", then it
-is assumed to be a personal library identifier.
+Zuppa will use the Zotero API to discover the user's shared libraries and
+groups.  This allows it to look up Zotero URIs for PDFs regardless of whether
+they come from the user's personal library or shared libraries.
 
 Basic usage
 ~~~~~~~~~~~
@@ -100,10 +97,9 @@ running and watching for changes in any of the arguments.  If any files are
 modified or added (including files within any folders listed on the command
 line), Zuppa repeats its normal processing for them.  For example:
 
-  zuppa -f -w ~/zotero/storage
+  zuppa -w ~/zotero/storage
 
-will start Zuppa in watch mode on a Zotero storage directory, with the
---finder-too option to update both the PDF files and the Finder comments.
+will start Zuppa in watch mode on a Zotero storage directory.
 
 
 Additional command-line arguments
