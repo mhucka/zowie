@@ -28,10 +28,9 @@ import sys
 if __debug__:
     from sidetrack import log
 
-from .credentials import keyring_credentials
 from .exceptions import *
 from .exit_codes import ExitCode
-from .zotero_utils import library_type
+from .zotero_utils import zotero_credentials
 
 
 # Exported classes.
@@ -87,48 +86,28 @@ class MainBody(object):
 
         if self.after_date:
             try:
+                # Convert user's input into a canonical format.
                 self.after_date = parse_datetime(self.after_date)
                 self.after_date_str = self.after_date.strftime(DATE_FORMAT)
                 if __debug__: log(f'parsed after_date as {self.after_date_str}')
             except Exception as ex:
-                alert_fatal(f'Unable to parse after_date value: "{str(ex)}". {hint}')
+                alert_fatal(f'Unable to parse after_date: "{str(ex)}". {hint}')
                 raise CannotProceed(ExitCode.bad_arg)
 
-        if self.api_key and not self.api_key.isalnum():
-            alert_fatal(f'"{tmp_key}" does not appear to be a valid API key')
+
+
+        # Problem: turns out pdfs in storage/ are mixed for group
+        # and personal library.  Need to ask the user for all their
+        # library id's
+
+
+
+
+        if not self.api_key and not self.library_id and not self.use_keyring:
+            alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
             raise CannotProceed(ExitCode.bad_arg)
-        tmpkey = self.api_key
-        if self.library_id:
-            tmptype, tmpid = self.library_id.split(':')
-            if not tmpid.isdigit():
-                alert_fatal(f'"{tmpid}" is not a valid Zotero library id')
-                raise CannotProceed(ExitCode.bad_arg)
-            if tmptype not in ['user', 'group']:
-                warn(f'Unrecognized library type "{tmptype}" -- defaulting to "user"')
-                tmptype = 'user'
-        else:
-            tmptype, tmpid = None, None
-        if all([tmpkey, tmpid, tmptype]):
-            # We were given values for everything. Save them if desired.
-            if self.use_keyring:
-                save_keyring_credentials(tmpkey, tmptype, tmpid)
-        elif any([tmpkey, tmptype, tmpid]):
-            if self.use_keyring:
-                saved_key, saved_type, saved_id = credentials_from_keyring()
-                dkey = tmpkey or saved_key
-                dtype = tmptype or saved_type
-                did = tmpid or saved_id
-            tmpkey, tmptype, tmpid = credentials_from_user(dkey, dtype, did)
-            if self.use_keyring:
-                save_keyring_credentials(tmpkey, tmptype, tmpid)
-        elif self.use_keyring:
-            # We were given nothing, so get it from the keyring
-            tmpkey, tmptype, tmpid = credentials_from_keyring()
-        else:
-            alert_fatal(f"No Zotero credentials & no use of keyring -- can't go on. {hint}")
-            raise CannotProceed(ExitCode.bad_arg)
-        self.api_key = tmpkey
-        self.library_id = tmptype + ':' + tmpid
+        self.api_key, self.libtype, self.libid = zotero_credentials(
+            self.api_key, self.library_id, self.use_keyring)
 
         self.targets = []
         if __debug__: log(f'gathering list of PDF files')
@@ -163,28 +142,3 @@ class MainBody(object):
     def _do_main_work(self):
         num_targets = len(self.targets)
         import pdb; pdb.set_trace()
-
-
-
-def validated_input(msg, default_value, is_valid):
-    while True:
-        if __debug__: log(f'asking user: "{msg} [{default_value}]"')
-        default = (' [' + default_value + ']') if default_value else ''
-        value = input(msg + default + ': ')
-        if is_valid(value):
-            if __debug__: log(f'got "{value}" from user')
-            return value
-        else:
-            alert(f'"{value}" does not appear valid for {msg}')
-
-
-def credentials_fromn_user(key, libtype, libid):
-    if not key:
-        key = validated_input('API key', key, lambda x: x.isalphanum())
-    if not libid:
-        libid = validated_input('Library ID', libid, lambda x: x.isdigit())
-    if not libtype:
-        libtype = validated_input('Type ("user" or "group")', libtype,
-                                   lambda x: x.lower() in ['user', 'group'])
-        libtype = libtype.lower()
-    return key, libtype, libid
