@@ -14,13 +14,13 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
+from   bun import UI, inform, warn, alert, alert_fatal
 from   commonpy.data_utils import timestamp
 from   commonpy.interrupt import config_interrupt
 from   boltons.debugutils import pdb_on_signal
 import os
 from   os import path, cpu_count
 import plac
-from   quiche import UI, inform, warn, alert, alert_fatal
 import signal
 import sys
 from   sys import exit as exit
@@ -37,23 +37,23 @@ from .main_body import MainBody
 # .............................................................................
 
 @plac.annotations(
-    api_key    = ('user API key to access the Zotero API service',           'option', 'a'),
+    api_key    = ('API key to access the Zotero API service',                'option', 'a'),
+    no_color   = ('do not color-code terminal output',                       'flag',   'C'),
     after_date = ('only act on files created or modified after date "D"',    'option', 'd'),
-    identifier = ('Zotero user library identifier',                          'option', 'i'),
+    identifier = ('Zotero user ID for API calls',                            'option', 'i'),
+    no_keyring = ('do not store credentials in the keyring service',         'flag',   'K'),
     methods    = ('select how the URIs are to be stored (default: link)',    'option', 'm'),
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
     version    = ('print version info and exit',                             'flag',   'V'),
     watch_mode = ('continuously watch for new files and update them',        'flag',   'w'),
-    no_keyring = ('do not store credentials in the keyring service',         'flag',   'X'),
-    no_color   = ('do not color-code terminal output',                       'flag',   'Y'),
     debug      = ('write detailed trace to "OUT" ("-" means console)',       'option', '@'),
     files      = 'file(s) and/or folder(s) containing Zotero article PDF files',
 )
 
-def main(api_key = 'A', after_date = 'D', identifier = 'I', methods = 'M',
-         dry_run = False, quiet = False, version = False, watch_mode = False,
-         no_keyring = False,  no_color = False, debug = 'OUT', *files):
+def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
+         no_keyring = False,  methods = 'M', dry_run = False, quiet = False,
+         version = False, watch_mode = False, debug = 'OUT', *files):
     '''Zuppa ("Zotero URI PDF Property Annotator") is a tool for Zotero users.
 
 Zuppa writes Zotero item URIs into the PDF files and/or the macOS Spotlight
@@ -63,21 +63,21 @@ to look up the Zotero entry of a PDF file from outside of Zotero.
 Credentials for Zotero access
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Zuppa needs a Zotero API key and the user's personal library identifier.  By
-default, it tries to get this information from the system keychain.  If the
-information does not exist in the keychain from a previous run of Zuppa, it
-will ask the user interactively for the identifier and API key, and (unless
-the -K option is given) store them in the user's keychain so that it does not
-have to ask again in the future.  It is also possible to supply the
-information directly on the command line using the -i and -a options; the
-given values will then override the values stored in the keychain (unless the
--K option is also given).  This is also how you can replace previously-stored
-values: use -a and -i (without -K) and the new values will override the
-stored values.
+Zuppa needs a Zotero API key and the user's personal library identifier (also
+known as the "user ID for use in API calls").  By default, it tries to get
+this information from the system keychain.  If the information does not exist
+in the keychain from a previous run of Zuppa, it will ask the user
+interactively for the identifier and API key, and (unless the -K option is
+given) store them in the user's keychain so that it does not have to ask
+again in the future.  It is also possible to supply the information directly
+on the command line using the -i and -a options; the given values will then
+override the values stored in the keychain (unless the -K option is also
+given).  This is also how you can replace previously-stored values: use -a
+and -i (without -K) and the new values will override the stored values.
 
-Zuppa will use the Zotero API to discover the user's shared libraries and
-groups.  This allows it to look up Zotero URIs for PDFs regardless of whether
-they come from the user's personal library or shared libraries.
+Zuppa uses the Zotero API to discover the user's shared libraries and groups.
+This allows it to look up Zotero URIs for PDFs regardless of whether they
+belong to the user's personal library or shared libraries.
 
 Basic usage
 ~~~~~~~~~~~
@@ -170,9 +170,9 @@ Command-line arguments summary
     try:
         body = MainBody(files       = files,
                         api_key     = None if api_key == 'A' else api_key,
-                        library_id  = None if identifier == 'I' else identifier,
-                        after_date  = None if after_date == 'D' else after_date,
+                        user_id     = None if identifier == 'I' else identifier,
                         use_keyring = not no_keyring,
+                        after_date  = None if after_date == 'D' else after_date,
                         methods     = methods,
                         watch_mode  = watch_mode,
                         dry_run     = dry_run)
