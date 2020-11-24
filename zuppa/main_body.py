@@ -14,14 +14,14 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
-from commonpy.data_utils import DATE_FORMAT, plural, timestamp, parse_datetime
+from   bun import inform, warn, alert, alert_fatal
+from commonpy.data_utils import DATE_FORMAT, pluralized, timestamp, parsed_datetime
 from commonpy.file_utils import filename_extension, files_in_directory
 from commonpy.network_utils import net, network_available
 from   datetime import datetime
 import os
 from   os import path
 from   pathlib import Path
-from   quiche import inform, warn, alert, alert_fatal
 import shutil
 import sys
 
@@ -30,7 +30,7 @@ if __debug__:
 
 from .exceptions import *
 from .exit_codes import ExitCode
-from .zotero_utils import zotero_credentials
+from .zotero_utils import Zotero
 
 
 # Exported classes.
@@ -94,11 +94,11 @@ class MainBody(object):
                 alert_fatal(f'Unable to parse after_date: "{str(ex)}". {hint}')
                 raise CannotProceed(ExitCode.bad_arg)
 
-        if not self.api_key and not self.library_id and not self.use_keyring:
+        if not any([self.api_key, self.user_id, self.use_keyring]):
             alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
             raise CannotProceed(ExitCode.bad_arg)
 
-        self.zotero = Zotero(self.api_key, self.library_id)
+        self.zotero = Zotero(self.api_key, self.user_id, self.use_keyring)
 
         self.targets = []
         if __debug__: log(f'gathering list of PDF files')
