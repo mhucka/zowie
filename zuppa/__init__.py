@@ -1,5 +1,5 @@
 '''
-Zupper: a tool to write Zotero item URIs into Zotero article PDF files
+Zuppa: a tool to write Zotero item URIs into Zotero article PDF files
 
 Authors
 -------
@@ -23,7 +23,7 @@ the file "LICENSE" for more information.
 
 __version__     = '0.0.1'
 __description__ = 'Write Zotero item URIs into article PDF files'
-__url__         = 'https://github.com/mhucka/zupper'
+__url__         = 'https://github.com/mhucka/zuppa'
 __author__      = 'Michael Hucka'
 __email__       = 'mhucka@caltech.edu'
 __license__     = 'MIT License'
