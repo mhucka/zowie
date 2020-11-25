@@ -1,7 +1,7 @@
-Zuppa
+Zuppa<img width="10%" align="right" src="https://github.com/mhucka/zuppa/raw/main/.graphics/zuppa-icon.png">
 ======
 
-Zuppa (_"**Z**otero **U**RI **P**DF **P**rop**er**ty" **A**nnotator_) is a command-line program that writes Zotero item URIs into the PDF files of a Zotero database.  Zuppa is written in Python and runs on macOS.
+Zuppa (_"**Z**otero **U**RI **P**DF **P**rop**er**ty **A**nnotator"_) is a command-line program that writes Zotero item URIs into the PDF files of a Zotero database.  Zuppa is written in Python and runs on macOS.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zupper.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zupper/releases)
@@ -78,3 +78,5 @@ Acknowledgments
 ---------------
 
 This work is a personal project developed by the author, using computing facilities and other resources of the [California Institute of Technology Library](https://www.library.caltech.edu).
+
+The [vector artwork](https://thenounproject.com/search/?q=soup&i=3124151) of a quiche, used as the icon for this repository, was created by [ghufronagustian](https://thenounproject.com/ghufronagustian/) from the Noun Project.  It is licensed under the Creative Commons [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license.
