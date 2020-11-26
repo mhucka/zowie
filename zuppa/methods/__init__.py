@@ -19,10 +19,12 @@ if __debug__:
 
 from .findercomment import FinderComment
 from .pdfsubject import PDFSubject
+from .pdfproducer import PDFProducer
 
 KNOWN_METHODS = {
     'findercomment': FinderComment,
     'pdfsubject': PDFSubject,
+    'pdfproducer': PDFProducer,
 }
 
 # Save this list to avoid recreating it all the time.
