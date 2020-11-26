@@ -42,6 +42,7 @@ from .main_body import MainBody
     after_date = ('only act on files created or modified after date "D"',    'option', 'd'),
     identifier = ('Zotero user ID for API calls',                            'option', 'i'),
     no_keyring = ('do not store credentials in the keyring service',         'flag',   'K'),
+    list       = ('print list of known methods',                             'flag',   'l'),
     methods    = ('select how the URIs are to be stored (default: link)',    'option', 'm'),
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
@@ -52,8 +53,9 @@ from .main_body import MainBody
 )
 
 def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
-         no_keyring = False,  methods = 'M', dry_run = False, quiet = False,
-         version = False, watch_mode = False, debug = 'OUT', *files):
+         no_keyring = False,  list = False, methods = 'M', dry_run = False,
+         quiet = False, version = False, watch_mode = False,
+         debug = 'OUT', *files):
     '''Zuppa ("Zotero URI PDF Property Annotator") is a tool for Zotero users.
 
 Zuppa writes Zotero item URIs into the PDF files and/or the macOS Spotlight
@@ -162,6 +164,11 @@ Command-line arguments summary
     if version:
         print_version()
         exit(int(ExitCode.success))
+    if list:
+        inform('Known methods: {}', ', '.join(methods_list()))
+        exit(int(ExitCode.success))
+
+    methods = ['findercomment'] if methods == 'M' else methods.lower().split(',')
 
     # Do the real work --------------------------------------------------------
 
