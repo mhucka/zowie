@@ -22,6 +22,7 @@ from pyzotero import zotero
 if __debug__:
     from sidetrack import log
 
+from .exceptions import *
 from .exit_codes import ExitCode
 from .keyring_utils import keyring_credentials, save_keyring_credentials
 from .keyring_utils import validated_input
@@ -47,12 +48,13 @@ ZoteroRecord.__doc__ = '''Zotero data about a local file
 # maybe this should be a subclass of the pytoztero class?
 
 class Zotero():
+
     def __init__(self, key, user_id, use_keyring):
-        if key and not key.isalnum():
-            alert_fatal(f'"{key}" does not appear to be a valid API key')
+        if key and (not key.isalnum() or len(key) < 20):
+            alert_fatal(f'"{key}" does not appear to be a valid API key.')
             raise CannotProceed(ExitCode.bad_arg)
         if user_id and not user_id.isdigit():
-            alert_fatal(f'"{user_id}" does not appear to be a Zotero user ID')
+            alert_fatal(f'"{user_id}" does not appear to be a Zotero user ID.')
             raise CannotProceed(ExitCode.bad_arg)
 
         # If the user supplied all the values on the command line, those are
@@ -92,7 +94,7 @@ class Zotero():
             self._libraries.append(user)
         except Exception as ex:
             if __debug__: log(f'failed to create Zotero user object: str(ex)')
-            alert_fatal('Unable to connect to Zotero API')
+            alert_fatal('Unable to connect to Zotero API.')
             raise
         try:
             for group in user.groups():
@@ -100,7 +102,7 @@ class Zotero():
                 self._libraries.append(zotero.Zotero(group['id'], 'group', key))
         except Exception as ex:
             if __debug__: log(f'failed to create Zotero group object: str(ex)')
-            alert('Unable to retrieve Zotero group library; proceeding without')
+            alert('Unable to retrieve Zotero group library; proceeding anyway.')
 
 
     def record_for_file(self, file):
