@@ -33,6 +33,7 @@ from zuppa import print_version
 from .exceptions import *
 from .exit_codes import ExitCode
 from .main_body import MainBody
+from .methods import methods_list
 
 # .............................................................................
 
@@ -165,7 +166,7 @@ Command-line arguments summary
         print_version()
         exit(int(ExitCode.success))
     if list:
-        inform('Known methods: {}', ', '.join(methods_list()))
+        inform('Known methods: [cyan2]{}[/]', ', '.join(methods_list()))
         exit(int(ExitCode.success))
 
     methods = ['findercomment'] if methods == 'M' else methods.lower().split(',')
