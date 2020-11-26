@@ -1,5 +1,5 @@
 '''
-Zupper: a program to write Zotero item URIs into Zotero article PDF files
+Zuppa: a program to write Zotero item URIs into Zotero article PDF files
 
 Authors
 -------
@@ -15,9 +15,9 @@ Please see the file "LICENSE" for more information.
 '''
 
 from   bun import inform, warn, alert, alert_fatal
-from commonpy.data_utils import DATE_FORMAT, pluralized, timestamp, parsed_datetime
-from commonpy.file_utils import filename_extension, files_in_directory
-from commonpy.network_utils import net, network_available
+from   commonpy.data_utils import DATE_FORMAT, pluralized, timestamp, parsed_datetime
+from   commonpy.file_utils import filename_extension, files_in_directory
+from   commonpy.network_utils import net, network_available
 from   datetime import datetime
 import os
 from   os import path
@@ -30,7 +30,8 @@ if __debug__:
 
 from .exceptions import *
 from .exit_codes import ExitCode
-from .zotero_utils import Zotero
+from .methods import KNOWN_METHODS, methods_list
+from .zotero import Zotero
 
 
 # Exported classes.
@@ -50,6 +51,12 @@ class MainBody(object):
         # We expose attribute "exception" that callers can use to find out
         # if the thread finished normally or with an exception.
         self.exception = None
+
+        # Create and initialize objects for the URI writers we will use.
+        self._writers = []
+        for method_name in self.methods:
+            method = KNOWN_METHODS[method_name]()
+            self._writers.append(method)
 
 
     def run(self):
@@ -78,8 +85,16 @@ class MainBody(object):
             alert_fatal('No network connection.')
             raise CannotProceed(ExitCode.no_network)
 
+        # Sanity-check the arguments ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         hint = f'(Hint: use -h for help.)'
 
+        if not all(s in methods_list() for s in self.methods):
+            alert_fatal(f'"{methods}" is/are not known methods. {hint}')
+            exit(int(ExitCode.bad_arg))
+        if not self.use_keyring and not any([self.api_key, self.user_id]):
+            alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
+            raise CannotProceed(ExitCode.bad_arg)
         if any(item.startswith('-') for item in self.files):
             alert_fatal(f'Unrecognized option in arguments. {hint}')
             raise CannotProceed(ExitCode.bad_arg)
@@ -87,49 +102,54 @@ class MainBody(object):
         if self.after_date:
             try:
                 # Convert user's input into a canonical format.
-                self.after_date = parse_datetime(self.after_date)
+                self.after_date = parsed_datetime(self.after_date)
                 self.after_date_str = self.after_date.strftime(DATE_FORMAT)
                 if __debug__: log(f'parsed after_date as {self.after_date_str}')
             except Exception as ex:
                 alert_fatal(f'Unable to parse after_date: "{str(ex)}". {hint}')
                 raise CannotProceed(ExitCode.bad_arg)
 
-        if not any([self.api_key, self.user_id, self.use_keyring]):
-            alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
-            raise CannotProceed(ExitCode.bad_arg)
+        # Set up Zotero connection and gather files for work ~~~~~~~~~~~~~~~~~~
 
-        self.zotero = Zotero(self.api_key, self.user_id, self.use_keyring)
+        self._zotero = Zotero(self.api_key, self.user_id, self.use_keyring)
 
-        self.targets = []
-        if __debug__: log(f'gathering list of PDF files')
+        self._files = []
+        if __debug__: log(f'gathering list of PDF files ...')
         for item in self.files:
             if path.isfile(item) and filename_extension(item) == '.pdf':
-                self.targets.append(item)
+                self._files.append(item)
             elif path.isdir(item):
-                # It's a directory, so look for files within.
-                if __debug__: log(f'adding targets in subdirectory {item}')
-                self.targets += files_in_directory(item, extensions = ['.pdf'])
+                if __debug__: log(f'adding PDF files in subdirectory {item}')
+                self._files += files_in_directory(item, extensions = ['.pdf'])
             else:
                 warn(f'Not a PDF file or folder of files: "{item}"')
-        if __debug__: log(f'gathered {len(self.targets)} PDF files')
+        if __debug__: log(f'gathered {pluralized("PDF file", self._files, True)}')
 
         if self.after_date:
-            kept = []
             if __debug__: log(f'filtering files by date {self.after_date_str}')
+            kept = []
             tzinfo = self.after_date.tzinfo
             for pdffile in self.files:
                 mtime = datetime.fromtimestamp(Path(pdffile).stat().st_mtime)
                 if mtime.replace(tzinfo = tzinfo) >= self.after_date:
                     if __debug__: log(f'keeping {pdffile}')
                     kept.append(pdffile)
-            self.targets = kept
-            if __debug__: log(f'kept {len(self.targets)} PDF files after filtering')
+            self._files = kept
 
-        if not self.targets:
+        if not self._files:
             alert_fatal('No PDF files to process; quitting.')
             raise CannotProceed(ExitCode.bad_arg)
 
 
     def _do_main_work(self):
-        num_targets = len(self.targets)
-        import pdb; pdb.set_trace()
+        inform(f'Will process {pluralized("PDF file", self._files, True)}'
+               + f' using {pluralized("method", self.methods)}'
+               + f' [underline]{", ".join(self.methods)}[/].')
+        num_targets = len(self._files)
+
+        for pdffile in self._files:
+            record = self._zotero.record_for_file(pdffile)
+            if __debug__: log(f'{record.parent_key} is parent of {record.key}'
+                              + f' for file {pdffile}')
+            for writer in self._writers:
+                writer.write_uri(pdffile, record.link)
