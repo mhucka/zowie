@@ -15,9 +15,10 @@ Please see the file "LICENSE" for more information.
 '''
 
 from bun import inform, warn, alert, alert_fatal
+from commonpy.interrupt import raise_for_interrupts
 from collections import namedtuple
 from os import path as path
-from pyzotero import zotero
+from pyzotero import zotero, zotero_errors
 
 if __debug__:
     from sidetrack import log
@@ -64,20 +65,17 @@ class Zotero():
         # either the keyring or by prompting the user.
 
         if __debug__: log('keyring {}', 'enabled' if use_keyring else 'disabled')
-        if key and user_id and use_keyring:
-            # Given values for everything. Save them if desired.
-            if __debug__: log('saving new credentials to keyring')
+        if key is None and user_id is None and use_keyring:
+            # We weren't given a key and id, but we can look in the keyring.
+            if __debug__: log(f'getting id & key from keyring')
+            key, user_id = keyring_credentials()
+        if not key:
+            key = validated_input('API key', key, lambda x: x.isalnum())
+        if not user_id:
+            user_id = validated_input('User ID', user_id, lambda x: x.isdigit())
+        if use_keyring:
+            if __debug__: log('saving credentials to keyring')
             save_keyring_credentials(key, user_id)
-        else:
-            # Given some values but not all. Look up the rest & use as defaults.
-            k_key, k_id = keyring_credentials() if use_keyring else (None, None)
-            if not key:
-                key = validated_input('API key', k_key, lambda x: x.isalnum())
-            if not user_id:
-                user_id = validated_input('User ID', k_id, lambda x: x.isdigit())
-            if use_keyring:
-                if __debug__: log('saving new credentials to keyring')
-                save_keyring_credentials(key, user_id)
 
         self._key = key
         self._user_id = user_id
@@ -91,15 +89,32 @@ class Zotero():
         try:
             if __debug__: log(f'connecting to Zotero as user {user_id}')
             user = zotero.Zotero(user_id, 'user', key)
+            # pyzotero will return an object but that doesn't mean the user
+            # actually gave valid credentials. Need to try an operation.
+            user.count_items()
             self._libraries.append(user)
+            raise_for_interrupts()
+        except zotero_errors.UserNotAuthorised as ex:
+            if __debug__: log(f'got exception {str(ex)}')
+            alert_fatal('Unable to connect to Zotero: invalid ID and/or API key.',
+                        'The Zotero servers rejected attempts to connect.')
+            raise CannotProceed(ExitCode.bad_arg)
+        except KeyboardInterrupt as ex:
+            if __debug__: log(f'got exception {str(ex)}')
+            raise
         except Exception as ex:
             if __debug__: log(f'failed to create Zotero user object: str(ex)')
             alert_fatal('Unable to connect to Zotero API.')
             raise
+
         try:
             for group in user.groups():
                 if __debug__: log(f'user can access group id {group["id"]}')
                 self._libraries.append(zotero.Zotero(group['id'], 'group', key))
+                raise_for_interrupts()
+        except KeyboardInterrupt as ex:
+            if __debug__: log(f'got exception {str(ex)}')
+            raise
         except Exception as ex:
             if __debug__: log(f'failed to create Zotero group object: str(ex)')
             alert('Unable to retrieve Zotero group library; proceeding anyway.')
@@ -116,8 +131,17 @@ class Zotero():
         for library in self._libraries:
             try:
                 record = library.item(itemkey)
+            except KeyboardInterrupt as ex:
+                if __debug__: log(f'got exception {str(ex)}')
+                raise
             except Exception as ex:
+                if __debug__: log(f'got exception {str(ex)}')
                 continue
+            # pyzotero calls urllib3 for network connections. The latter uses
+            # try-except clauses that broadly catch all Exceptions but don't
+            # check for for KeyboardInterrupt. Thus, ^C during a network call
+            # will show up as a failure to return data, not a KeyboardInterrupt.
+            raise_for_interrupts()
         if not record:
             raise NotFound(f'Cannot find a record for item key "{itemkey}"')
         libtype = record['library']['type']
@@ -126,6 +150,10 @@ class Zotero():
         return ZoteroRecord(key = itemkey, parent_key = parentkey, type = libtype,
                             link = link, file = file, record = record)
 
+
+    # For the format of the URIs, see thes discussions in the Zotero forums:
+    # https://forums.zotero.org/discussion/comment/335046/#Comment_335046
+    # https://forums.zotero.org/discussion/78312/zotero-uri-vs-select-item
 
     def item_link(self, record):
         '''Given a record, returns an item link (i.e., "zotero://select/...)'''
