@@ -142,9 +142,10 @@ class MainBody(object):
 
 
     def _do_main_work(self):
+        warn(f'Running in dry run mode – will not modify files.')
         inform(f'Will process {pluralized("PDF file", self._files, True)}'
                + f' using {pluralized("method", self.methods)}'
-               + f' [underline]{", ".join(self.methods)}[/].')
+               + f' [cyan2]{", ".join(self.methods)}[/].')
         num_targets = len(self._files)
 
         for pdffile in self._files:
@@ -152,4 +153,4 @@ class MainBody(object):
             if __debug__: log(f'{record.parent_key} is parent of {record.key}'
                               + f' for file {pdffile}')
             for writer in self._writers:
-                writer.write_uri(pdffile, record.link)
+                writer.write_uri(pdffile, record.link, self.dry_run)

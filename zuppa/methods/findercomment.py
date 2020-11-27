@@ -50,7 +50,7 @@ class FinderComment(WriterMethod):
         return 'findercomment'
 
 
-    def write_uri(self, file, uri):
+    def write_uri(self, file, uri, dry_run):
         '''Write the "uri" into the Finder comments of file "file".
 
         If there's an existing comment, read it.  If there's a Zotero URI
@@ -72,4 +72,6 @@ class FinderComment(WriterMethod):
             comments = uri
 
         inform(f'writing Zotero URI into Finder comments of file [grey89]{file}[/]')
-        _FINDER_SCRIPTS.call('set_comments', file, comments)
+        if not dry_run:
+            if __debug__: log(f'invoking AppleScript function on {file}')
+            _FINDER_SCRIPTS.call('set_comments', file, comments)
