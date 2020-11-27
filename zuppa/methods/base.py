@@ -82,6 +82,6 @@ class WriterMethod(ABC):
 
 
     @abstractmethod
-    def write_uri(self, file, link):
+    def write_uri(self, file, uri, dry_run):
         '''Write the link into the file.'''
         pass
