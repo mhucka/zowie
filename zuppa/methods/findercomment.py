@@ -29,11 +29,15 @@ from .base import WriterMethod
 
 _FINDER_SCRIPTS = applescript.AppleScript('''
 on get_comments{f}
-    tell application "Finder" to return comment of (POSIX file f as alias)
+    tell application "Finder"
+        return comment of (POSIX file f as alias)
+    end tell
 end run
 
 on set_comments{f, c}
-    tell application "Finder" to set comment of (POSIX file f as alias) to c as Unicode text
+    tell application "Finder"
+        set comment of (POSIX file f as alias) to c as Unicode text
+    end tell
 end run
 ''')
 
@@ -64,6 +68,8 @@ class FinderComment(WriterMethod):
             inform(f'Replacing existing Zotero URI in Finder comments of [grey89]{file}[/]')
             if __debug__: log(f'overwriting existing Zotero URI with {uri}')
             comments = re.sub('(zotero://\S+)', uri, comments)
+        else:
+            comments = uri
 
         inform(f'writing Zotero URI into Finder comments of file [grey89]{file}[/]')
         _FINDER_SCRIPTS.call('set_comments', file, comments)
