@@ -83,9 +83,61 @@ belong to the user's personal library or shared libraries.
 Basic usage
 ~~~~~~~~~~~
 
-The most convenient way to run Zuppa is to let it store your credentials in
-your keychain so that you do not have to provide them each time or write them
-on the command line.
+Zuppa can operate on a folder, or one or more individual PDF files, or a mix
+of both.  Its basic mode of operation is to obtain the Zotero item URI of the
+bibliographic record containing each PDF file found, then write a Zotero
+select link into (depending on your choice) the macOS Finder comments of the
+PDF file, the PDF "Subject" metadata attribute, and/or the PDF "Producer"
+metadata attribute.  A Zotero select link has the form `zotero://select/...`
+and when opened on macOS, causes the Zotero desktop application to open that
+item in your database.
+
+Suppose your local Zotero database is located in ~/my-zotero and Zotero's
+"storage" subfolder (for PDF files) is ~/my-zotero/storage/.  Perhaps the
+simplest way to run Zuppa is the following command:
+
+  zuppa ~/my-zotero/storage
+
+It will ask you for your Zotero API credentials (if this is your first run of
+Zuppa), then search for PDF files recursively under ~/my-zotero/storage/.
+For each PDF file found, Zuppa will contact the Zotero API server over the
+network and determine the item URI for the bibliographic entry containing that
+PDF file.  Finally, it will use the default method of writing the Zotero select
+link, which is to write it into the Finder comments for the file.
+
+If the -d option is given, the PDF files will be filtered to use only those
+whose last-modified date/time stamp is no older than the given date/time
+description.  Valid descriptors are those accepted by the Python dateparser
+library.  Make sure to enclose descriptions within single or double
+quotes.  Examples:
+
+  zuppa -d "2 weeks ago" -a ....
+  zuppa -d "2014-08-29"  -a ....
+  zuppa -d "12 Dec 2014" -a ....
+  zuppa -d "July 4, 2013" -a ....
+
+To make Zuppa only print what it would do without doing it, use the -n "dry
+run" option.
+
+Methods of writing the Zotero item URI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Zuppa supports multiple methods of writing the Zotero link.  The option -l
+will cause Zuppa to print a list of the methods available, then exit.  The
+option -m can be used to select one or more methods when running Zuppa.
+(Separate the method names with commas, without spaces.)  For example,
+
+  zuppa -m findercomment,pdfsubject ~/my-zotero/storage
+
+will make Zuppa write the Zotero select link into the Finder commands and
+the PDF metadata attribute "Subject".  At this time, the following methods
+are available:
+
+  findercomment:
+
+  pdfsubject:
+
+  pdfproducer:
 
 
 Additional command-line arguments
