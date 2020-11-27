@@ -48,15 +48,13 @@ from .methods import methods_list
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
     version    = ('print version info and exit',                             'flag',   'V'),
-    watch_mode = ('continuously watch for new files and update them',        'flag',   'w'),
     debug      = ('write detailed trace to "OUT" ("-" means console)',       'option', '@'),
     files      = 'file(s) and/or folder(s) containing Zotero article PDF files',
 )
 
 def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
          no_keyring = False,  list = False, methods = 'M', dry_run = False,
-         quiet = False, version = False, watch_mode = False,
-         debug = 'OUT', *files):
+         quiet = False, version = False, debug = 'OUT', *files):
     '''Zuppa ("Zotero URI PDF Property Annotator") is a tool for Zotero users.
 
 Zuppa writes Zotero item URIs into the PDF files and/or the macOS Spotlight
@@ -88,21 +86,6 @@ Basic usage
 The most convenient way to run Zuppa is to let it store your credentials in
 your keychain so that you do not have to provide them each time or write them
 on the command line.
-
-
-Watch mode
-~~~~~~~~~~
-
-If given the option -w, Zuppa will go into continuous watch mode: instead
-of exiting after processing the arguments (i.e., gathering a list of PDF files,
-filtering by last modification date, and updating file metadata), it will keep
-running and watching for changes in any of the arguments.  If any files are
-modified or added (including files within any folders listed on the command
-line), Zuppa repeats its normal processing for them.  For example:
-
-  zuppa -w ~/zotero/storage
-
-will start Zuppa in watch mode on a Zotero storage directory.
 
 
 Additional command-line arguments
@@ -182,7 +165,6 @@ Command-line arguments summary
                         use_keyring = not no_keyring,
                         after_date  = None if after_date == 'D' else after_date,
                         methods     = methods,
-                        watch_mode  = watch_mode,
                         dry_run     = dry_run)
         config_interrupt(body.stop, UserCancelled(ExitCode.user_interrupt))
         body.run()
