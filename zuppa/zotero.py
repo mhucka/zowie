@@ -143,7 +143,8 @@ class Zotero():
             # will show up as a failure to return data, not a KeyboardInterrupt.
             raise_for_interrupts()
         if not record:
-            raise NotFound(f'Cannot find a record for item key "{itemkey}"')
+            if __debug__: log(f'could not find a record for item key "{itemkey}"')
+            return None
         libtype = record['library']['type']
         parentkey = record['data']['parentItem']
         link = self.item_link(record)

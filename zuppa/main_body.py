@@ -105,6 +105,9 @@ class MainBody(object):
                 self.after_date = parsed_datetime(self.after_date)
                 self.after_date_str = self.after_date.strftime(DATE_FORMAT)
                 if __debug__: log(f'parsed after_date as {self.after_date_str}')
+            except KeyboardInterrupt as ex:
+                if __debug__: log(f'got exception {str(ex)}')
+                raise
             except Exception as ex:
                 alert_fatal(f'Unable to parse after_date: "{str(ex)}". {hint}')
                 raise CannotProceed(ExitCode.bad_arg)
@@ -151,6 +154,9 @@ class MainBody(object):
 
         for pdffile in self._files:
             record = self._zotero.record_for_file(pdffile)
+            if not record:
+                alert(f'Unable to find Zotero entry for file {pdffile}')
+                continue
             if __debug__: log(f'{record.parent_key} is parent of {record.key}'
                               + f' for file {pdffile}')
             for writer in self._writers:
