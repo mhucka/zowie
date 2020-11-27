@@ -26,7 +26,8 @@ Introduction
 
 When using [Zotero](https://zotero.org), you may on occasion want to work with the PDF files from outside of Zotero.  For example, if you're a [DEVONthink](https://www.devontechnologies.com/apps/devonthink) user, you will at some point discover the power of indexing your local Zotero database from DEVONthink.  However, when viewing or manipulating the PDF files from outside of Zotero, you may run into the following problem: when looking at a given PDF file, _how do you find out which Zotero entry it belongs to_?
 
-Enter Zuppa (a loose acronym for _"**Z**otero **U**RI **P**DF **P**rop**er**ty **A**nnotator"_).  Zuppa looks through the files in a local Zotero for Mac database, looks up the URIs for each PDF file found, and writes the URIs into (depending on the user's choice) the PDF file and/or an extended attribute used for macOS Finder/Spotlight comments.
+Enter Zuppa (a loose acronym for _"**Z**otero **U**RI **P**DF **P**rop**er**ty **A**nnotator"_).  Zuppa scans through the files in a local Zotero database, looks up the Zotero bibliographic record corresponding to each PDF file found, and writes a Zotero "select" link into (depending on the user's choice) the PDF file and/or the macOS Finder/Spotlight comments.  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zuppa thus makes it possible to go from a PDF file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the
+Zotero record corresponding to that PDF file.
 
 
 Installation
@@ -39,8 +40,6 @@ Usage
 -----
 
 [_..Forthcoming..._]
-
-`com.apple.metadata:kMDItemFinderComment`
 
 
 Known issues and limitations
