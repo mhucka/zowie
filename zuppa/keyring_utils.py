@@ -105,7 +105,10 @@ def validated_input(msg, default_value, is_valid):
         if __debug__: log(f'asking user: "{msg} [{default_value}]"')
         default = (' [' + default_value + ']') if default_value else ''
         value = input(msg + default + ': ')
-        if is_valid(value):
+        if default_value and value == '':
+            if __debug__: log(f'user chose default value "{default_value}"')
+            return default_value
+        elif is_valid(value):
             if __debug__: log(f'got "{value}" from user')
             return value
         else:
