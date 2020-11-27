@@ -142,7 +142,8 @@ class MainBody(object):
 
 
     def _do_main_work(self):
-        warn(f'Running in dry run mode – will not modify files.')
+        if self.dry_run:
+            warn(f'Running in dry run mode – will not modify files.')
         inform(f'Will process {pluralized("PDF file", self._files, True)}'
                + f' using {pluralized("method", self.methods)}'
                + f' [cyan2]{", ".join(self.methods)}[/].')
