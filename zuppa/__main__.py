@@ -17,6 +17,7 @@ Please see the file "LICENSE" for more information.
 from   bun import UI, inform, warn, alert, alert_fatal
 from   commonpy.data_utils import timestamp
 from   commonpy.interrupt import config_interrupt
+from   commonpy.string_utils import antiformat
 from   boltons.debugutils import pdb_on_signal
 import os
 from   os import path, cpu_count
@@ -246,7 +247,7 @@ Command-line arguments summary
             warn('Interrupted.')
             exit_code = ExitCode.user_interrupt
         else:
-            msg = str(exception[1])
+            msg = antiformat(str(exception[1]))
             alert_fatal(f'Encountered error {exception[0].__name__}: {msg}')
             exit_code = ExitCode.exception
             if __debug__:
