@@ -120,6 +120,42 @@ If given the `-@` argument, this program will output a detailed trace of what it
 When `-@ has` been given, Zuppa also installs a signal handler on signal `SIGUSR1` that will drop Zuppa into the pdb debugger if the signal is sent to the running process.
 
 
+### _Summary of command-line options_
+
+The following table summarizes all the command line options available.
+
+| Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp;&nbsp;&nbsp; | Meaning | Default |  |
+|---------- |-------------------|--------------------------------------|---------|---|
+| `-a`_A_   | `--api-key`_A_    | API key to access the Zotero API service | | |
+| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | | |
+| `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | | |
+| `-h`      | `--help`          | Display help text and exit | | |
+| `-i`      | `--identifer`_I_  | Zotero user ID for API calls | | |
+| `-K`      | `--no-keyring`    | Don't use a keyring/keychain | Store login info in keyring | |
+| `-l`      | `--list`          | Display known services and exit | | | 
+| `-m`      | `--method`_M_     | Select how the URIs are to be stored | `findercomment` | |
+| `-n`      | `--dry-run`       | Report what would be done but don't do it | | | 
+| `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working |
+| `-V`      | `--version`       | Display program version info and exit | | |
+| `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
+
+⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.
+
+
+### _Return values_
+
+This program exits with a return code of 0 if no problems are encountered.  It returns a nonzero value otherwise. The following table lists the possible return values:
+
+| Code | Meaning                                                  |
+|:----:|----------------------------------------------------------|
+| 0    | success &ndash; program completed normally               |
+| 1    | the user interrupted the program's execution             |
+| 2    | encountered a bad or missing value for an option         |
+| 3    | no network detected &ndash; cannot proceed               |
+| 4    | file error &ndash; encountered a problem with a file     |
+| 5    | server error &ndash; encountered a problem with a server |
+| 6    | an exception or fatal error occurred                     |
+
 
 Known issues and limitations
 ----------------------------
