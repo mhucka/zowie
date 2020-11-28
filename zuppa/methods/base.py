@@ -81,6 +81,13 @@ class WriterMethod(ABC):
         pass
 
 
+    @property
+    @abstractmethod
+    def description(self):
+        '''Returns a description what this method does.'''
+        pass
+
+
     @abstractmethod
     def write_uri(self, file, uri, dry_run):
         '''Write the link into the file.'''

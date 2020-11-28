@@ -31,6 +31,18 @@ class PDFProducer(WriterMethod):
         return 'pdfproducer'
 
 
+    def description(self):
+        return ('Rewrites the PDF "Producer" metadata field in the file. For'
+                + ' some users, this field has not utility, and thus can be'
+                + ' usefully hijacked for the purpose of storing the Zotero'
+                + ' item URI. This makes the value accessible from macOS'
+                + ' Preview, Adobe Acrobat, DEVONthink, and presumably any'
+                + ' other application that can read the PDF metadata fields.'
+                + ' However, note that some users (archivists, forensics'
+                + ' investigators, possibly others) may in fact use the'
+                + ' Producer field, and overwriting it may be undesirable.')
+
+
     def write_uri(self, file, uri, dry_run):
         '''Write the "uri" into the Producer attribute of PDF file "file".
         The previous value will be overwritten.

@@ -16,6 +16,7 @@ Please see the file "LICENSE" for more information.
 
 import applescript
 from   bun import inform
+from   commonpy.string_utils import antiformat
 import re
 
 if __debug__:
@@ -50,6 +51,16 @@ class FinderComment(WriterMethod):
         return 'findercomment'
 
 
+    def description(self):
+        return ('Prepends the Zotero select link to the Finder comments for the'
+                + ' file. Zuppa tries to be careful how it does this: if it'
+                + ' finds a Zotero URI as the first thing in the comments, it'
+                + ' replaces that URI instead of prepending a new one.'
+                + ' However, Finder comments are notorious for being easy to'
+                + ' damage or lose, so beware that Zuppa may irretrievably'
+                + ' corrupt any existing Finder comments on the file.')
+
+
     def write_uri(self, file, uri, dry_run):
         '''Write the "uri" into the Finder comments of file "file".
 
@@ -61,17 +72,18 @@ class FinderComment(WriterMethod):
         '''
 
         comments = _FINDER_SCRIPTS.call('get_comments', file)
+        path = antiformat(f'[grey89]{file}[/]')
         if comments and uri in comments:
-            inform(f'Zotero URI already present in Finder comments of [grey89]{file}[/]')
+            inform(f'Zotero URI already present in Finder comments of {path}')
             return
         elif comments and 'zotero://select' in comments:
-            inform(f'Replacing existing Zotero URI in Finder comments of [grey89]{file}[/]')
+            inform(f'Replacing existing Zotero URI in Finder comments of {path}')
             if __debug__: log(f'overwriting existing Zotero URI with {uri}')
             comments = re.sub('(zotero://\S+)', uri, comments)
         else:
+            inform(F'Writing Zotero URI into Finder comments of file {path}')
             comments = uri
 
-        inform(f'writing Zotero URI into Finder comments of file [grey89]{file}[/]')
         if not dry_run:
             if __debug__: log(f'invoking AppleScript function on {file}')
             _FINDER_SCRIPTS.call('set_comments', file, comments)
