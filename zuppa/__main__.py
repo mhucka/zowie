@@ -44,7 +44,7 @@ from .methods import methods_list
     identifier = ('Zotero user ID for API calls',                            'option', 'i'),
     no_keyring = ('do not store credentials in the keyring service',         'flag',   'K'),
     list       = ('print list of known methods',                             'flag',   'l'),
-    methods    = ('select how the URIs are to be stored (default: link)',    'option', 'm'),
+    method     = ('select how the URIs are to be stored (default: comment)', 'option', 'm'),
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
     version    = ('print version info and exit',                             'flag',   'V'),
@@ -53,7 +53,7 @@ from .methods import methods_list
 )
 
 def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
-         no_keyring = False,  list = False, methods = 'M', dry_run = False,
+         no_keyring = False,  list = False, method = 'M', dry_run = False,
          quiet = False, version = False, debug = 'OUT', *files):
     '''Zuppa ("Zotero URI PDF Property Annotator") is a tool for Zotero users.
 
@@ -132,7 +132,7 @@ At this time, the following methods are available:
     accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably
     any other application that can read the PDF metadata fields. However,
     note that some users (archivists, forensics investigators, possibly
-    others) do use the Producer field, and overwriting it may be undesirable.
+    others) may use the Producer field, and overwriting it may be undesirable.
 
 Filtering by date
 ~~~~~~~~~~~~~~~~~
@@ -215,7 +215,7 @@ Command-line arguments summary
         inform('Known methods: [cyan2]{}[/]', ', '.join(methods_list()))
         exit(int(ExitCode.success))
 
-    methods = ['findercomment'] if methods == 'M' else methods.lower().split(',')
+    methods_list = ['findercomment'] if method == 'M' else method.lower().split(',')
 
     # Do the real work --------------------------------------------------------
 
@@ -227,7 +227,7 @@ Command-line arguments summary
                         user_id     = None if identifier == 'I' else identifier,
                         use_keyring = not no_keyring,
                         after_date  = None if after_date == 'D' else after_date,
-                        methods     = methods,
+                        methods     = methods_list,
                         dry_run     = dry_run)
         config_interrupt(body.stop, UserCancelled(ExitCode.user_interrupt))
         body.run()
