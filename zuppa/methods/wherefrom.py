@@ -57,18 +57,21 @@ class WhereFrom(WriterMethod):
 
         path = antiformat(f'[grey89]{file}[/]')
         if __debug__: log(f'reading extended attributes of {file}')
-        if 'com.apple.metadata:kMDItemWhereFroms' in listxattr(file):
-            wherefroms = getxattr(file, 'com.apple.metadata:kMDItemWhereFroms')
+        if b'com.apple.metadata:kMDItemWhereFroms' in listxattr(file):
+            wherefroms = getxattr(file, b'com.apple.metadata:kMDItemWhereFroms')
             wherefroms = biplist.readPlistFromString(wherefroms)
-            if __debug__: log(f'found {len(wherefroms)} wherefroms on {file}')
-            if wherefroms[0] == uri:
+            if __debug__: log(f'read wherefroms value {wherefroms} on {file}')
+            if type(wherefroms) == str:
+                # It has to be a list for DEVONthink to parse it correctly.
+                inform(f'Replacing existing value of "Where from" of {path}')
+                wherefroms = [uri]
+            elif wherefroms[0] == uri:
                 inform(f'Zotero URI already present in "Where from" of {path}')
                 return
-            elif 'zotero://select' in wherefroms[0]:
+            elif 'zotero://' in wherefroms[0]:
                 inform(f'Replacing existing Zotero URI in "Where from" of {path}')
-                wherefroms[0] = uri
+                wherefroms[0] = [uri]
             else:
-                import pdb; pdb.set_trace()
                 wherefroms.insert(0, uri)
         else:
             if __debug__: log(f'no prior wherefroms found on {file}')
@@ -76,4 +79,4 @@ class WhereFrom(WriterMethod):
             wherefroms = [uri]
 
         binary = biplist.writePlistToString(wherefroms)
-        setxattr(file, 'com.apple.metadata:kMDItemWhereFroms', binary)
+        setxattr(file, b'com.apple.metadata:kMDItemWhereFroms', binary)
