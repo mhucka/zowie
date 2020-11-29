@@ -20,9 +20,11 @@ if __debug__:
 from .findercomment import FinderComment
 from .pdfsubject import PDFSubject
 from .pdfproducer import PDFProducer
+from .wherefrom import WhereFrom
 
 KNOWN_METHODS = {
     'findercomment': FinderComment,
+    'wherefrom': WhereFrom,
     'pdfsubject': PDFSubject,
     'pdfproducer': PDFProducer,
 }
