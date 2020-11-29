@@ -59,8 +59,8 @@ def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
     '''Zuppa ("Zotero URI PDF Property Annotator") is a tool for Zotero users.
 
 Zuppa writes Zotero item URIs into the PDF files and/or the macOS Finder
-comments of PDF files in the user's Zotero database. This makes it possible
-to look up the Zotero entry of a PDF file from outside of Zotero.
+metadata attributes of PDF files in the user's Zotero database. This makes it
+possible to look up the Zotero entry of a PDF file from outside of Zotero.
 
 Credentials for Zotero access
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,40 +92,55 @@ If this is your first run of Zuppa, it will ask you for your userID and API
 key, then search for PDF files recursively under ~/my-zotero/.  For each PDF
 file found, Zuppa will contact the Zotero servers over the network and
 determine the item URI for the bibliographic entry containing that PDF
-file. Finally, it will use the default method of writing the Zotero link,
-which is to write it into the Finder comments for the PDF file.
+file. Finally, it will use its default method of writing the Zotero link,
+which is to write it into the "Where from" extended attribute on the file.
 
 Instead of a folder, you can invoke zuppa on one or more individual files (but
 be careful to quote pathnames with spaces in them, such as in this example):
 
   zuppa "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 
+Methods of writing the Zotero select link
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Zuppa supports multiple methods of writing the Zotero select link. The default
-is to write it into the Finder comments. The option -l will cause Zuppa to
+is to write it into "Where from" attribute. The option -l will cause Zuppa to
 print a list of all the methods available, then exit. The option -m can be
 used to select one or more methods when running Zuppa. (Separate the method
 names with commas, without spaces.) For example,
 
- zuppa -m findercomment,pdfsubject ~/my-zotero/storage
+ zuppa -m wherefrom,findercomment ~/my-zotero/storage
 
 will make Zuppa write the Zotero select link into the Finder comments as well
-as the PDF metadata attribute "Subject".
+as the "Where from" field.
 
 At this time, the following methods are available:
 
+  wherefrom: prepends the Zotero item URI to the "Where from" metadata field
+    of a file, which is typically used by macOS to store a file's download
+    origin. DEVONthink sets the docoument "URL" property value from this
+    field upon file import and export. If macOS Spotlight indexing is turned
+    on for the volume containing the file, the macOS Finder will display the
+    upated "Where from" values in the Get Info panel of the file; if
+    Spotlight is not turned on, the Get info panel will not be updated, but
+    commands such as xattr will correctly show changes to the value. This
+    metadata field is a list; thus, that it is possible to add a value without
+    losing previous values. However, DEVONthink only uses the first value, and
+    most other applications do not even provide a way to view the value(s).
+
   findercomment: prepends the Zotero item URI to the Finder comments for
-    the file. It tries to be careful: if it finds a Zotero URI as the first
-    thing in the comments, it replaces that URI instead of prepending a new
-    one. However, Finder comments are notorious for being easy to damage or
-    lose, so beware that Zuppa may irretrievably corrupt any existing Finder
-    comments on the file.
+    the file. The Finder comments are a free-text field. Zuppa tries to be
+    careful: if it finds a Zotero URI as the first thing in the comment text,
+    it replaces that URI instead of prepending a new one. However, Finder
+    comments are notorious for being easy to damage or lose, so beware that
+    Zuppa may irretrievably corrupt any existing Finder comments on the file.
 
   pdfsubject: rewrites the Subject metadata field in the PDF file. This is
     not the same as the Title field; for some users, the Subject field is not
-    used for any other purpose and thus can be usefully hijacked for the
-    purpose of storing the Zotero item URI. This makes the value accessible
-    from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other
-    application that can read the PDF metadata fields.
+    used for any purpose and thus can be usefully hijacked for storing
+    storing the Zotero item URI. This makes the value accessible from macOS
+    Preview, Adobe Acrobat, DEVONthink, and presumably any other application
+    that can read the PDF metadata fields.
 
   pdfproducer: rewrites the Producer metadata field in the PDF file. For
     some users, this field has not utility, and thus can be usefully hijacked
@@ -152,8 +167,8 @@ quotes. Examples:
 Additional command-line arguments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To make Zuppa only print what it would do without actually doing it, use
-the -n "dry run" option.
+If given the -n ("dry run") option, Zuppa will only print what it would do
+without actually doing it.
 
 If given the -q option, Zuppa will not print its usual informational messages
 while it is working. It will only print messages for warnings or errors.
@@ -216,7 +231,7 @@ Command-line arguments summary
         inform('Known methods: [cyan2]{}[/]', ', '.join(methods_list()))
         exit(int(ExitCode.success))
 
-    methods_list = ['findercomment'] if method == 'M' else method.lower().split(',')
+    methods_list = ['wherefrom'] if method == 'M' else method.lower().split(',')
 
     # Do the real work --------------------------------------------------------
 
