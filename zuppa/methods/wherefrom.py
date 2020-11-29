@@ -63,13 +63,13 @@ class WhereFrom(WriterMethod):
             if __debug__: log(f'read wherefroms value {wherefroms} on {file}')
             if type(wherefroms) == str:
                 # It has to be a list for DEVONthink to parse it correctly.
-                inform(f'Replacing existing value of "Where from" of {path}')
+                warn(f'Replacing existing value of "Where from" of {path}')
                 wherefroms = [uri]
             elif wherefroms[0] == uri:
                 inform(f'Zotero URI already present in "Where from" of {path}')
                 return
             elif type(wherefroms[0]) is str and wherefroms[0].startswith('zotero://'):
-                inform(f'Replacing existing Zotero URI in "Where from" of {path}')
+                warn(f'Replacing existing Zotero URI in "Where from" of {path}')
                 wherefroms[0] = uri
             else:
                 wherefroms.insert(0, uri)

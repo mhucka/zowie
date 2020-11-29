@@ -15,7 +15,7 @@ Please see the file "LICENSE" for more information.
 '''
 
 import applescript
-from   bun import inform
+from   bun import inform, warn
 from   commonpy.string_utils import antiformat
 import re
 
@@ -77,7 +77,7 @@ class FinderComment(WriterMethod):
             inform(f'Zotero URI already present in Finder comments of {path}')
             return
         elif comments and 'zotero://select' in comments:
-            inform(f'Replacing existing Zotero URI in Finder comments of {path}')
+            warn(f'Replacing existing Zotero URI in Finder comments of {path}')
             if __debug__: log(f'overwriting existing Zotero URI with {uri}')
             comments = re.sub('(zotero://\S+)', uri, comments)
         else:
