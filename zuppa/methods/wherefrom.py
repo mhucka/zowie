@@ -16,7 +16,7 @@ Please see the file "LICENSE" for more information.
 
 import applescript
 import biplist
-from   bun import inform
+from   bun import inform, warn
 from   commonpy.string_utils import antiformat
 import re
 from   xattr import getxattr, setxattr, listxattr
@@ -68,9 +68,9 @@ class WhereFrom(WriterMethod):
             elif wherefroms[0] == uri:
                 inform(f'Zotero URI already present in "Where from" of {path}')
                 return
-            elif 'zotero://' in wherefroms[0]:
+            elif type(wherefroms[0]) is str and wherefroms[0].startswith('zotero://'):
                 inform(f'Replacing existing Zotero URI in "Where from" of {path}')
-                wherefroms[0] = [uri]
+                wherefroms[0] = uri
             else:
                 wherefroms.insert(0, uri)
         else:
