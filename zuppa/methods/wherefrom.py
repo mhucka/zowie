@@ -57,9 +57,14 @@ class WhereFrom(WriterMethod):
             wherefroms = biplist.readPlistFromString(wherefroms)
             if __debug__: log(f'read wherefroms value {wherefroms} on {file}')
             if type(wherefroms) == str:
-                # It has to be a list for DEVONthink to parse it correctly.
-                warn(f'Replacing existing value of "Where from" of {path}')
-                wherefroms = [uri]
+                if __debug__: log(f'wherefroms value is a string on {file}')
+                # Has to be a list for DEVONthink to parse it, so reformat it.
+                if wherefroms == uri:
+                    inform(f'Reformating already-present Zotero URI in "Where from" of {path}')
+                    wherefroms = [uri]
+                else:
+                    inform(f'Adding Zotero URI to front of "Where from" of {path}')
+                    wherefroms = [uri,  wherefroms]
             elif wherefroms[0] == uri:
                 inform(f'Zotero URI already present in "Where from" of {path}')
                 return
@@ -67,10 +72,11 @@ class WhereFrom(WriterMethod):
                 warn(f'Replacing existing Zotero URI in "Where from" of {path}')
                 wherefroms[0] = uri
             else:
+                inform(f'Adding Zotero URI to front of "Where from" of {path}')
                 wherefroms.insert(0, uri)
         else:
             if __debug__: log(f'no prior wherefroms found on {file}')
-            inform(f'Writing Zotero URI into "Where From" metadata of file {path}')
+            inform(f'Writing Zotero URI into "Where From" metadata of {path}')
             wherefroms = [uri]
 
         binary = biplist.writePlistToString(wherefroms)
