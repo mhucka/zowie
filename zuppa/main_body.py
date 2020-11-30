@@ -30,7 +30,7 @@ if __debug__:
 
 from .exceptions import *
 from .exit_codes import ExitCode
-from .methods import KNOWN_METHODS, methods_list
+from .methods import KNOWN_METHODS, method_names
 from .zotero import Zotero
 
 
@@ -89,7 +89,7 @@ class MainBody(object):
 
         hint = f'(Hint: use -h for help.)'
 
-        if not all(s in methods_list() for s in self.methods):
+        if not all(s in method_names() for s in self.methods):
             alert_fatal(f'"{methods}" is/are not known methods. {hint}')
             exit(int(ExitCode.bad_arg))
         if not self.use_keyring and not any([self.api_key, self.user_id]):

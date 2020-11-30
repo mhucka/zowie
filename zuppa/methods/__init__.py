@@ -30,7 +30,7 @@ KNOWN_METHODS = {
 }
 
 # Save this list to avoid recreating it all the time.
-METHODS_LIST = sorted(KNOWN_METHODS.keys())
+_METHOD_NAMES = sorted(KNOWN_METHODS.keys())
 
-def methods_list():
-    return METHODS_LIST
+def method_names():
+    return _METHOD_NAMES
