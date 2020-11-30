@@ -68,7 +68,7 @@ Zuppa can operate on a folder, or one or more individual PDF files, or a mix of 
 zuppa ~/my-zotero
 ```
 
-If this is your first run of Zuppa, it will ask you for your userID and API key, then search for PDF files recursively under `~/my-zotero/`.  For each PDF file found, Zuppa will contact the Zotero servers over the network and determine the item URI for the bibliographic entry containing that PDF file. Finally, it will use the default method of recording the Zotero link, which is to write it into the "Where from" metadata attribute of the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
+If this is your first run of Zuppa, it will ask you for your userID and API key, then search for PDF files recursively under `~/my-zotero/`.  For each PDF file found, Zuppa will contact the Zotero servers over the network and determine the item URI for the bibliographic entry containing that PDF file. Finally, it will use the default method of recording the Zotero link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
 
 Instead of a folder, you can invoke zuppa on one or more individual files (but be careful to quote pathnames with spaces in them, such as in this example):
 
@@ -78,7 +78,9 @@ zuppa "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 
 ### Available methods of writing Zotero links
 
-Zuppa supports multiple methods of writing the Zotero select link. The default method is to write it into the `com.apple.metadata:kMDItemWhereFroms` extended attribute of the file, which is displayed as "Where from" in Finder "Get Info" panels. The option `-l` will cause Zuppa to print a list of all the methods available, then exit. The option `-m` can be used to select one or more methods when running Zuppa. (Write the method names separated with commas without spaces.) For example,
+Zuppa supports multiple methods of writing the Zotero select link.  The option `-l` will cause Zuppa to print a list of all the methods available, then exit. The default method is to write it to the Finder comments, which are displayed in the Finder's "Get Info" panel for a file.
+
+The option `-m` can be used to select one or more methods when running Zuppa. Write the method names separated with commas without spaces. For example,
 
 ```shell
 zuppa -m findercomment,pdfsubject ~/my-zotero/storage
@@ -88,9 +90,9 @@ will make Zuppa write the Zotero select link into the Finder comments as well as
 
 At this time, the following methods are available:
 
-* **`wherefrom`**: prepends the Zotero item URI to the ["Where from"](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) metadata field of a file, which is typically used by web browsers to store a file's download origin. [DEVONthink](https://www.devontechnologies.com/apps/devonthink) sets the docoument "URL" property value from this field upon file import and export. If macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but commands such as `xattr` will correctly show changes to the value. This metadata field is a list; thus, that it is possible to add a value without losing previous values. However, DEVONthink only uses the first value, and most other applications do not even provide a way to view the value(s).
-
 *  **`findercomment`**: prepends the Zotero item URI to the Finder comments for the file. Zuppa tries to be careful how it does this: if it finds a Zotero URI as the first thing in the comments, it replaces that URI instead of prepending a new one. However, Finder comments are notorious for being easy to damage or lose, so beware that Zuppa may irretrievably corrupt any existing Finder comments on the file.
+
+*  **`wherefrom`**: prepends the Zotero item URI to the "Where from" metadata field of a file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute).  This field is displayed as "Where from" in Finder "Get Info" panels.  It is typically used by web browsers to store a file's download origin. If macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but commands such as `xattr` will correctly show changes to the value. This metadata field is a list; thus, that it is possible to add a value without losing previous values.
 
 *  **`pdfsubject`**: rewrites the _Subject_ metadata field in the PDF file. This is not the same as the _Title_ field.  For some users, the _Subject_ field is not used for any purpose and thus can be usefully hijacked for storing the Zotero item URI. This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can read the PDF metadata fields.
 
@@ -133,7 +135,7 @@ The following table summarizes all the command line options available.
 | `-i`      | `--identifer`_I_  | Zotero user ID for API calls | | |
 | `-K`      | `--no-keyring`    | Don't use a keyring/keychain | Store login info in keyring | |
 | `-l`      | `--list`          | Display known services and exit | | | 
-| `-m`      | `--method`_M_     | Control how Zotero select links are stored | `wherefrom` | |
+| `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
 | `-n`      | `--dry-run`       | Report what would be done but don't do it | Do it | | 
 | `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working |
 | `-V`      | `--version`       | Display program version info and exit | | |
