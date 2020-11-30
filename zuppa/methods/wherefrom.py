@@ -36,21 +36,16 @@ class WhereFrom(WriterMethod):
 
 
     def description(self):
-        return ('Prepends the Zotero item URI to the "Where from" metadata field'
-                + ' of a file, which is typically used by macOS to store a'
-                + " file's download origin. DEVONthink sets the docoument"
-                + ' "URL" property value from this field upon file import and'
-                + ' export. If macOS Spotlight indexing is turned on for the'
-                + ' volume containing the file, the macOS Finder will display'
-                + ' the upated "Where from" values in the Get Info panel of the'
-                + ' file; if Spotlight is not turned on, the Get info panel'
-                + ' will not be updated, but commands such as xattr will'
-                + ' correctly show changes to the value. This metadata field'
-                + ' is a list; thus, that it is possible to add a value without'
-                + ' losing previous values. However, DEVONthink only uses the'
-                + ' first value, and most other applications do not even'
-                + ' provide a way to view the value(s).')
-
+        return ('Prepends the Zotero item URI to the "Where from" metadata'
+                + ' field of a file, which is typically used by macOS to store'
+                + " a file's download origin. If macOS Spotlight indexing is"
+                + ' turned on for the volume containing the file, the macOS'
+                + ' Finder will display the upated "Where from" value(s) in'
+                + ' the Get Info panel of the file; if Spotlight is not turned'
+                + ' on, the Get info panel will not be updated, but commands'
+                + ' such as xattr will correctly show changes to the value.'
+                + ' This metadata field can be a list; thus, it is possible'
+                + ' to add a value without losing previous values.')
 
     def write_uri(self, file, uri, dry_run):
         '''Write the "uri" into the "Where From" metadata attribute of "file".'''
