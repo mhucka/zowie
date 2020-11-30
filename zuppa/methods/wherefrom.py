@@ -31,10 +31,14 @@ from .base import WriterMethod
 # .............................................................................
 
 class WhereFrom(WriterMethod):
+    '''Implements writing Zotero URIs into the "Where from" metadata field.'''
+
+    @classmethod
     def name(self):
         return 'wherefrom'
 
 
+    @classmethod
     def description(self):
         return ('Prepends the Zotero item URI to the "Where from" metadata'
                 + ' field of a file, which is typically used by macOS to store'

@@ -199,7 +199,7 @@ Command-line arguments summary
         inform('Known methods:\n')
         width = (shutil.get_terminal_size().columns - 2) or 79
         for name in method_names():
-            text = f'[cyan2]{name}[/]: ' + KNOWN_METHODS[name]().description()
+            text = f'[cyan2]{name}[/]: ' + KNOWN_METHODS[name].description()
             inform('\n'.join(wrap(text, width = width, subsequent_indent = '  ')))
             inform('')
         exit(int(ExitCode.success))

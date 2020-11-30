@@ -28,10 +28,14 @@ from .base import WriterMethod
 # .............................................................................
 
 class PDFProducer(WriterMethod):
+    '''Implements writing Zotero URIs into the PDF file's Producer property.'''
+
+    @classmethod
     def name(self):
         return 'pdfproducer'
 
 
+    @classmethod
     def description(self):
         return ('Rewrites the PDF "Producer" metadata field in the file. For'
                 + ' some users, this field has not utility, and thus can be'

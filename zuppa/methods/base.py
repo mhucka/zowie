@@ -82,6 +82,7 @@ class WriterMethod(ABC):
 
 
     @property
+    @classmethod
     @abstractmethod
     def description(self):
         '''Returns a description what this method does.'''

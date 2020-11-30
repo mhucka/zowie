@@ -47,10 +47,14 @@ end run
 # .............................................................................
 
 class FinderComment(WriterMethod):
+    '''Implements writing Zotero URI into the macOS Finder comments for a file.'''
+
+    @classmethod
     def name(self):
         return 'findercomment'
 
 
+    @classmethod
     def description(self):
         return ('Prepends the Zotero select link to the Finder comments for the'
                 + ' file. Zuppa tries to be careful how it does this: if it'
@@ -62,7 +66,7 @@ class FinderComment(WriterMethod):
 
 
     def write_uri(self, file, uri, dry_run):
-        '''Write the "uri" into the Finder comments of file "file".
+        '''Writes the "uri" into the Finder comments of file "file".
 
         If there's an existing comment, read it.  If there's a Zotero URI
         as the first thing in the comment, replace that URI with this one,
