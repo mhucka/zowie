@@ -14,7 +14,8 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
-from   bun import inform
+from   bun import inform, warn
+from   commonpy.string_utils import antiformat
 from   pdfrw import PdfReader, PdfWriter
 
 if __debug__:
@@ -48,7 +49,22 @@ class PDFProducer(WriterMethod):
         The previous value will be overwritten.
         '''
         if __debug__: log(f'reading PDF file {file}')
+        path = antiformat(f'[grey89]{file}[/]')
         trailer = PdfReader(file)
+        producer = trailer.Info.Producer
+        if producer:
+            if __debug__: log(f'read PDF Producer value {producer} on {file}')
+            if uri in producer:
+                inform(f'Zotero URI already present in PDF "Producer" field of {path}')
+                return
+            elif producer.startswith('zotero://select'):
+                warn(f'Replacing existing Zotero URI in PDF "Producer" field of {path}')
+            else:
+                warn(f'Overwriting PDF "Producer" field of {path}')
+        else:
+            if __debug__: log(f'no prior PDF Producer field found on {file}')
+            inform(f'Writing Zotero URI into PDF "Producer" field of {path}')
+
         trailer.Info.Producer = uri
         if not dry_run:
             if __debug__: log(f'writing PDF file with new Producer field: {file}')

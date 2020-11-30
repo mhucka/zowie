@@ -14,7 +14,8 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
-from   bun import inform
+from   bun import inform, warn
+from   commonpy.string_utils import antiformat
 from   pdfrw import PdfReader, PdfWriter
 
 if __debug__:
@@ -47,8 +48,23 @@ class PDFSubject(WriterMethod):
         The previous value will be overwritten.
         '''
         if __debug__: log(f'reading PDF file {file}')
+        path = antiformat(f'[grey89]{file}[/]')
         trailer = PdfReader(file)
+        subject = trailer.Info.Subject
+        if subject:
+            if __debug__: log(f'read PDF Subject value {subject} on {file}')
+            if uri in subject:
+                inform(f'Zotero URI already present in PDF "Subject" field of {path}')
+                return
+            elif subject.startswith('zotero://select'):
+                warn(f'Replacing existing Zotero URI in PDF "Subject" field of {path}')
+            else:
+                warn(f'Overwriting PDF "Subject" field of {path}')
+        else:
+            if __debug__: log(f'no prior PDF Subject field found on {file}')
+            inform(f'Writing Zotero URI into PDF "Subject" field of {path}')
+
         trailer.Info.Subject = uri
         if not dry_run:
-            if __debug__: log(f'writing PDF file with new subject field: {file}')
+            if __debug__: log(f'writing PDF file with new Subject field: {file}')
             PdfWriter(file, trailer = trailer).write()
