@@ -81,7 +81,7 @@ class FinderComment(WriterMethod):
             if __debug__: log(f'overwriting existing Zotero URI with {uri}')
             comments = re.sub('(zotero://\S+)', uri, comments)
         else:
-            inform(f'Writing Zotero URI into Finder comments of file {path}')
+            inform(f'Writing Zotero URI into Finder comments of {path}')
             comments = uri
 
         if not dry_run:
