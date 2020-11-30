@@ -23,8 +23,10 @@ import os
 from   os import path, cpu_count
 import plac
 import signal
+import shutil
 import sys
 from   sys import exit as exit
+from   textwrap import wrap
 
 if __debug__:
     from sidetrack import set_debug, log, logr
@@ -34,7 +36,7 @@ from zuppa import print_version
 from .exceptions import *
 from .exit_codes import ExitCode
 from .main_body import MainBody
-from .methods import methods_list
+from .methods import method_names, KNOWN_METHODS
 
 # .............................................................................
 
@@ -93,7 +95,7 @@ key, then search for PDF files recursively under ~/my-zotero/.  For each PDF
 file found, Zuppa will contact the Zotero servers over the network and
 determine the item URI for the bibliographic entry containing that PDF
 file. Finally, it will use its default method of writing the Zotero link,
-which is to write it into the "Where from" extended attribute on the file.
+which is to write it into the macOS Finder comments for the file.
 
 Instead of a folder, you can invoke zuppa on one or more individual files (but
 be careful to quote pathnames with spaces in them, such as in this example):
@@ -103,52 +105,18 @@ be careful to quote pathnames with spaces in them, such as in this example):
 Methods of writing the Zotero select link
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Zuppa supports multiple methods of writing the Zotero select link. The default
-is to write it into "Where from" attribute. The option -l will cause Zuppa to
-print a list of all the methods available, then exit. The option -m can be
-used to select one or more methods when running Zuppa. (Separate the method
-names with commas, without spaces.) For example,
+Zuppa supports multiple methods of writing the Zotero select link.  The
+option -l will cause Zuppa to print a list of all the methods available,
+then exit. The default is to write it into Finder comments for the file.
+(These comments are visible in the Finder's "Get Info" panel for the file.)
 
- zuppa -m wherefrom,findercomment ~/my-zotero/storage
+The option -m can be used to select one or more methods when running
+Zuppa. Separate the method names with commas, without spaces. For example,
+
+  zuppa -m findercomment,wherefrom ~/my-zotero/storage
 
 will make Zuppa write the Zotero select link into the Finder comments as well
 as the "Where from" field.
-
-At this time, the following methods are available:
-
-  wherefrom: prepends the Zotero item URI to the "Where from" metadata field
-    of a file, which is typically used by macOS to store a file's download
-    origin. DEVONthink sets the docoument "URL" property value from this
-    field upon file import and export. If macOS Spotlight indexing is turned
-    on for the volume containing the file, the macOS Finder will display the
-    upated "Where from" values in the Get Info panel of the file; if
-    Spotlight is not turned on, the Get info panel will not be updated, but
-    commands such as xattr will correctly show changes to the value. This
-    metadata field is a list; thus, that it is possible to add a value without
-    losing previous values. However, DEVONthink only uses the first value, and
-    most other applications do not even provide a way to view the value(s).
-
-  findercomment: prepends the Zotero item URI to the Finder comments for
-    the file. The Finder comments are a free-text field. Zuppa tries to be
-    careful: if it finds a Zotero URI as the first thing in the comment text,
-    it replaces that URI instead of prepending a new one. However, Finder
-    comments are notorious for being easy to damage or lose, so beware that
-    Zuppa may irretrievably corrupt any existing Finder comments on the file.
-
-  pdfsubject: rewrites the Subject metadata field in the PDF file. This is
-    not the same as the Title field; for some users, the Subject field is not
-    used for any purpose and thus can be usefully hijacked for storing
-    storing the Zotero item URI. This makes the value accessible from macOS
-    Preview, Adobe Acrobat, DEVONthink, and presumably any other application
-    that can read the PDF metadata fields.
-
-  pdfproducer: rewrites the Producer metadata field in the PDF file. For
-    some users, this field has not utility, and thus can be usefully hijacked
-    for the purpose of storing the Zotero item URI. This makes the value
-    accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably
-    any other application that can read the PDF metadata fields. However,
-    note that some users (archivists, forensics investigators, possibly
-    others) may use the Producer field, and overwriting it may be undesirable.
 
 Filtering by date
 ~~~~~~~~~~~~~~~~~
@@ -228,10 +196,15 @@ Command-line arguments summary
         print_version()
         exit(int(ExitCode.success))
     if list:
-        inform('Known methods: [cyan2]{}[/]', ', '.join(methods_list()))
+        inform('Known methods:\n')
+        width = (shutil.get_terminal_size().columns - 2) or 79
+        for name in method_names():
+            text = f'[cyan2]{name}[/]: ' + KNOWN_METHODS[name]().description()
+            inform('\n'.join(wrap(text, width = width, subsequent_indent = '  ')))
+            inform('')
         exit(int(ExitCode.success))
 
-    methods_list = ['wherefrom'] if method == 'M' else method.lower().split(',')
+    methods_list = ['findercomment'] if method == 'M' else method.lower().split(',')
 
     # Do the real work --------------------------------------------------------
 
