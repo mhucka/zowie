@@ -25,7 +25,7 @@ Introduction
 
 When using [Zotero](https://zotero.org), you may on occasion want to work with the PDF files from outside of Zotero.  For example, if you're a [DEVONthink](https://www.devontechnologies.com/apps/devonthink) user, you will at some point discover the power of indexing your local Zotero database from DEVONthink.  However, when viewing or manipulating the PDF files from outside of Zotero, you may run into the following problem: when looking at a given PDF file, _how do you find out which Zotero entry it belongs to_?
 
-Enter Zowie (a loose acronym for _"**Z**otero link **w**r**i**t**e**r"_).  Zowie scans through the files in a local Zotero database, looks up the Zotero bibliographic record corresponding to each PDF file found, and writes a [Zotero "select" link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into (depending on the user's choice) the PDF file and/or certain macOS Finder/Spotlight metadata fields.  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a PDF file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that PDF file.
+Enter Zowie (a loose acronym for _"**Z**otero link **w**r**i**t**e**r"_, and pronounced like [the interjection](https://www.merriam-webster.com/dictionary/zowie)).  Zowie scans through the files in a local Zotero database, looks up the Zotero bibliographic record corresponding to each PDF file found, and writes a [Zotero select link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into the PDF file and/or certain macOS Finder/Spotlight metadata fields (depending on the user's choice).  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a PDF file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that PDF file.
 
 Zowie uses the Zotero API to discover the user's shared libraries and groups.  This allows it to look up Zotero item URIs for PDFs regardless of whether they belong to the user's personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files.
 
@@ -70,7 +70,7 @@ zowie ~/my-zotero
 
 If this is your first run of Zowie, it will ask you for your userID and API key, then search for PDF files recursively under `~/my-zotero/`.  For each PDF file found, Zowie will contact the Zotero servers over the network and determine the Zotero select link for the bibliographic entry containing that PDF file. Finally, it will use the default method of recording the link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
 
-Instead of a folder, you can invoke zowie on one or more individual files (but be careful to quote pathnames with spaces in them, such as in this example):
+Instead of a folder, you can invoke Zowie on one or more individual files (but be careful to quote pathnames with spaces in them, such as in this example):
 
 ```shell
 zowie "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
