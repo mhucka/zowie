@@ -4,7 +4,7 @@ Zowie<img width="10%" align="right" src="https://github.com/mhucka/zowie/raw/mai
 Zowie (_"**Z**otero link **w**r**i**t**e**r"_) is a command-line program that writes Zotero _select_ links into the PDF files of a Zotero database.  Zowie is written in Python and runs on macOS.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
-[![Latest release](https://img.shields.io/github/v/release/mhucka/zupper.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zupper/releases)
+[![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
 
 
 Table of contents
@@ -139,7 +139,7 @@ The following table summarizes all the command line options available.
 | `-l`      | `--list`          | Display known services and exit | | | 
 | `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
 | `-n`      | `--dry-run`       | Report what would be done but don't do it | Do it | | 
-| `-o`      | `--overwrite`     | Always overwrite metadata content | Don't if already present | |
+| `-o`      | `--overwrite`     | Always overwrite metadata content | Don't write if already present | |
 | `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working |
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
