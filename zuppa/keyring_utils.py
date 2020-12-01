@@ -33,7 +33,7 @@ if __debug__:
 # Global constants.
 # .............................................................................
 
-_KEYRING = f'org.caltechlibrary.{__package__}'
+_KEYRING = f'mhucka.{__package__}'
 '''The name of the keyring used to store server access credentials, if any.'''
 
 
