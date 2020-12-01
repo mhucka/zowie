@@ -131,12 +131,17 @@ class Zotero():
         for library in self._libraries:
             try:
                 record = library.item(itemkey)
+                if __debug__: log(f'{itemkey} found in library {library.library_id}')
+                break
+            except zotero_errors.ResourceNotFound:
+                if __debug__: log(f'{itemkey} not found in library {library.library_id}')
+                continue
             except KeyboardInterrupt as ex:
-                if __debug__: log(f'got exception {str(ex)}')
+                if __debug__: log(f'interrupted: {str(ex)}')
                 raise
             except Exception as ex:
                 if __debug__: log(f'got exception {str(ex)}')
-                continue
+                raise
             # pyzotero calls urllib3 for network connections. The latter uses
             # try-except clauses that broadly catch all Exceptions but don't
             # check for for KeyboardInterrupt. Thus, ^C during a network call
