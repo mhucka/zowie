@@ -4,6 +4,7 @@ Zowie<img width="10%" align="right" src="https://github.com/mhucka/zowie/raw/mai
 Zowie (_"**Z**otero link **w**r**i**t**e**r"_) is a command-line program that writes Zotero _select_ links into the PDF files of a Zotero database.  Zowie is written in Python and runs on macOS.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
+[![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
 
 
