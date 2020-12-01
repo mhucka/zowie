@@ -37,7 +37,7 @@ ZoteroRecord.__doc__ = '''Zotero data about a local file
   'key' is the Zotero key for the file attachment
   'parent_key' is the top-level record that contains the file attachment
   'type' is the type of library containing it, either "user", or "group"
-  'link' is a Zotero item link of the form "zotero://select/..."
+  'link' is a Zotero select link of the form "zotero://select/..."
   'file' is the path to the file on the local file system
   'record' is the entire record from Zotero
 '''

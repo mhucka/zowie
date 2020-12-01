@@ -1,5 +1,5 @@
 '''
-pdfsubject.py: write Zotero URI into the PDF file's subject property
+pdfsubject.py: write Zotero select link into the PDF file's subject property
 
 Authors
 -------
@@ -28,7 +28,7 @@ from .base import WriterMethod
 # .............................................................................
 
 class PDFSubject(WriterMethod):
-    '''Implements writing Zotero URIs into the PDF file's Producer property.'''
+    '''Implements writing Zotero links into the PDF file's Producer property.'''
 
     @classmethod
     def name(self):
@@ -41,13 +41,13 @@ class PDFSubject(WriterMethod):
                 + ' is not the same as the Title field. For some users, the'
                 + ' Subject field is not used for any other purpose and thus'
                 + ' can be usefully hijacked for the purpose of storing the'
-                + ' Zotero item URI. This makes the value accessible from'
+                + ' Zotero select link. This makes the value accessible from'
                 + ' macOS Preview, Adobe Acrobat, DEVONthink, and presumably'
                 + ' any other application that can read the PDF metadata'
                 + ' fields.')
 
 
-    def write_uri(self, file, uri, dry_run, overwrite):
+    def write_link(self, file, uri, dry_run, overwrite):
         '''Write the "uri" into the Subject attribute of PDF file "file".
         The previous value will be overwritten.
         '''
@@ -59,16 +59,16 @@ class PDFSubject(WriterMethod):
             if subject:
                 if __debug__: log(f'read PDF Subject value {subject} on {file}')
                 if uri in subject:
-                    inform(f'Zotero URI already present in PDF "Subject" field of {path}')
+                    inform(f'Zotero link already present in PDF "Subject" field of {path}')
                     return
                 elif subject.startswith('zotero://select'):
-                    warn(f'Replacing existing Zotero URI in PDF "Subject" field of {path}')
+                    warn(f'Replacing existing Zotero link in PDF "Subject" field of {path}')
                 else:
                     # Overwrite mode is not on, so user might not expect this.
                     warn(f'Overwriting PDF "Subject" field of {path}')
             else:
                 if __debug__: log(f'no prior PDF Subject field found on {file}')
-                inform(f'Writing Zotero URI into PDF "Subject" field of {path}')
+                inform(f'Writing Zotero link into PDF "Subject" field of {path}')
         else:
             inform(f'Overwriting PDF "Subject" field of {path}')
 

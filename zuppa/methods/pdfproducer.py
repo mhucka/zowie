@@ -1,5 +1,5 @@
 '''
-pdfproducer.py: write Zotero URI into the PDF file's Producer property
+pdfproducer.py: write Zotero select link into the PDF file's Producer property
 
 Authors
 -------
@@ -28,7 +28,7 @@ from .base import WriterMethod
 # .............................................................................
 
 class PDFProducer(WriterMethod):
-    '''Implements writing Zotero URIs into the PDF file's Producer property.'''
+    '''Implements writing Zotero links into the PDF file's Producer property.'''
 
     @classmethod
     def name(self):
@@ -40,7 +40,7 @@ class PDFProducer(WriterMethod):
         return ('Rewrites the PDF "Producer" metadata field in the file. For'
                 + ' some users, this field has not utility, and thus can be'
                 + ' usefully hijacked for the purpose of storing the Zotero'
-                + ' item URI. This makes the value accessible from macOS'
+                + ' select link. This makes the value accessible from macOS'
                 + ' Preview, Adobe Acrobat, DEVONthink, and presumably any'
                 + ' other application that can read the PDF metadata fields.'
                 + ' However, note that some users (archivists, forensics'
@@ -48,7 +48,7 @@ class PDFProducer(WriterMethod):
                 + ' Producer field, and overwriting it may be undesirable.')
 
 
-    def write_uri(self, file, uri, dry_run, overwrite):
+    def write_link(self, file, uri, dry_run, overwrite):
         '''Write the "uri" into the Producer attribute of PDF file "file".
         The previous value will be overwritten.
         '''
@@ -60,16 +60,16 @@ class PDFProducer(WriterMethod):
             if producer:
                 if __debug__: log(f'read PDF Producer value {producer} on {file}')
                 if uri in producer:
-                    inform(f'Zotero URI already present in PDF "Producer" field of {path}')
+                    inform(f'Zotero link already present in PDF "Producer" field of {path}')
                     return
                 elif producer.startswith('zotero://select'):
-                    warn(f'Replacing existing Zotero URI in PDF "Producer" field of {path}')
+                    warn(f'Replacing existing Zotero link in PDF "Producer" field of {path}')
                 else:
                     # Overwrite mode is not on, so user might not expect this.
                     warn(f'Overwriting PDF "Producer" field of {path}')
             else:
                 if __debug__: log(f'no prior PDF Producer field found on {file}')
-                inform(f'Writing Zotero URI into PDF "Producer" field of {path}')
+                inform(f'Writing Zotero link into PDF "Producer" field of {path}')
         else:
             inform(f'Overwriting PDF "Producer" field of {path}')
 

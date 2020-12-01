@@ -1,5 +1,5 @@
 '''
-Zuppa module for implementing different methods of writing Zotero links
+Zowie module for implementing different methods of writing Zotero links
 
 Authors
 -------

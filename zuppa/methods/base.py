@@ -1,5 +1,5 @@
 '''
-base.py: base class definition for annotation methods in zuppa
+base.py: base class definition for annotation methods in Zowie
 
 Authors
 -------
@@ -90,6 +90,6 @@ class WriterMethod(ABC):
 
 
     @abstractmethod
-    def write_uri(self, file, uri, dry_run, overwrite):
+    def write_link(self, file, uri, dry_run, overwrite):
         '''Write the link into the file.'''
         pass

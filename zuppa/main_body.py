@@ -1,5 +1,5 @@
 '''
-Zuppa: a program to write Zotero item URIs into Zotero article PDF files
+Zowie: a program to write Zotero select links into Zotero article PDF files
 
 Authors
 -------
@@ -163,4 +163,4 @@ class MainBody(object):
             if __debug__: log(f'{record.parent_key} is parent of {record.key}'
                               + f' for file {pdffile}')
             for method in self._writers:
-                method.write_uri(pdffile, record.link, self.dry_run, self.overwrite)
+                method.write_link(pdffile, record.link, self.dry_run, self.overwrite)

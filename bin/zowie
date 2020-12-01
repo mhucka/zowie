@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3
 # =============================================================================
-# @file    zuppa
-# @brief   Simple interface to run Zuppa
+# @file    zowie
+# @brief   Simple interface to run Zowie
 # @author  Michael Hucka <mhucka@caltech.edu>
 # @license Please see the file named LICENSE in the project directory
-# @website https://github.com/mhucka/zuppa
+# @website https://github.com/mhucka/zowie
 # =============================================================================
 
 # Allow this program to be executed directly from the 'bin' directory.
@@ -20,8 +20,8 @@ except:
     sys.path.append('..')
 
 # Hand over to the command line interface.
-import zuppa
-from zuppa.__main__ import main as main
+import zowie
+from zowie.__main__ import main as main
 
 if __name__ == "__main__":
     plac.call(main)

@@ -1,5 +1,5 @@
 '''
-wherefrom.py: write Zotero URI into the "Where from" metadata field
+wherefrom.py: writes Zotero select link into the "Where from" metadata field
 
 Authors
 -------
@@ -31,7 +31,7 @@ from .base import WriterMethod
 # .............................................................................
 
 class WhereFrom(WriterMethod):
-    '''Implements writing Zotero URIs into the "Where from" metadata field.'''
+    '''Implements writing Zotero links into the "Where from" metadata field.'''
 
     @classmethod
     def name(self):
@@ -40,7 +40,7 @@ class WhereFrom(WriterMethod):
 
     @classmethod
     def description(self):
-        return ('Prepends the Zotero item URI to the "Where from" metadata'
+        return ('Prepends the Zotero select link to the "Where from" metadata'
                 + ' field of a file, which is typically used by macOS to store'
                 + " a file's download origin. If macOS Spotlight indexing is"
                 + ' turned on for the volume containing the file, the macOS'
@@ -51,7 +51,7 @@ class WhereFrom(WriterMethod):
                 + ' This metadata field can be a list; thus, it is possible'
                 + ' to add a value without losing previous values.')
 
-    def write_uri(self, file, uri, dry_run, overwrite):
+    def write_link(self, file, uri, dry_run, overwrite):
         '''Write the "uri" into the "Where From" metadata attribute of "file".'''
 
         path = antiformat(f'[grey89]{file}[/]')
@@ -68,23 +68,23 @@ class WhereFrom(WriterMethod):
                         inform(f'Reformating already-present link in "Where from" of {path}')
                         wherefroms = [uri]
                     else:
-                        inform(f'Adding Zotero URI to front of "Where from" of {path}')
+                        inform(f'Adding Zotero link to front of "Where from" of {path}')
                         wherefroms = [uri,  wherefroms]
                 elif wherefroms[0] == uri:
-                    inform(f'Zotero URI already present in "Where from" of {path}')
+                    inform(f'Zotero link already present in "Where from" of {path}')
                     return
                 elif type(wherefroms[0]) is str and wherefroms[0].startswith('zotero://'):
-                    warn(f'Replacing existing Zotero URI in "Where from" of {path}')
+                    warn(f'Replacing existing Zotero link in "Where from" of {path}')
                     wherefroms[0] = uri
                 else:
-                    inform(f'Adding Zotero URI to front of "Where from" of {path}')
+                    inform(f'Adding Zotero link to front of "Where from" of {path}')
                     wherefroms.insert(0, uri)
             else:
                 if __debug__: log(f'no prior wherefroms found on {file}')
-                inform(f'Writing Zotero URI into "Where From" metadata of {path}')
+                inform(f'Writing Zotero link into "Where From" metadata of {path}')
                 wherefroms = [uri]
         else:
-            inform(f'Overwriting "Where From" metadata with Zotero URI in {path}')
+            inform(f'Overwriting "Where From" metadata with Zotero link in {path}')
             wherefroms = [uri]
 
         binary = biplist.writePlistToString(wherefroms)
