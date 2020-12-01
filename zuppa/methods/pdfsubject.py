@@ -47,26 +47,30 @@ class PDFSubject(WriterMethod):
                 + ' fields.')
 
 
-    def write_uri(self, file, uri, dry_run):
+    def write_uri(self, file, uri, dry_run, overwrite):
         '''Write the "uri" into the Subject attribute of PDF file "file".
         The previous value will be overwritten.
         '''
-        if __debug__: log(f'reading PDF file {file}')
         path = antiformat(f'[grey89]{file}[/]')
+        if __debug__: log(f'reading PDF file {file}')
         trailer = PdfReader(file)
         subject = trailer.Info.Subject
-        if subject:
-            if __debug__: log(f'read PDF Subject value {subject} on {file}')
-            if uri in subject:
-                inform(f'Zotero URI already present in PDF "Subject" field of {path}')
-                return
-            elif subject.startswith('zotero://select'):
-                warn(f'Replacing existing Zotero URI in PDF "Subject" field of {path}')
+        if not overwrite:
+            if subject:
+                if __debug__: log(f'read PDF Subject value {subject} on {file}')
+                if uri in subject:
+                    inform(f'Zotero URI already present in PDF "Subject" field of {path}')
+                    return
+                elif subject.startswith('zotero://select'):
+                    warn(f'Replacing existing Zotero URI in PDF "Subject" field of {path}')
+                else:
+                    # Overwrite mode is not on, so user might not expect this.
+                    warn(f'Overwriting PDF "Subject" field of {path}')
             else:
-                warn(f'Overwriting PDF "Subject" field of {path}')
+                if __debug__: log(f'no prior PDF Subject field found on {file}')
+                inform(f'Writing Zotero URI into PDF "Subject" field of {path}')
         else:
-            if __debug__: log(f'no prior PDF Subject field found on {file}')
-            inform(f'Writing Zotero URI into PDF "Subject" field of {path}')
+            inform(f'Overwriting PDF "Subject" field of {path}')
 
         trailer.Info.Subject = uri
         if not dry_run:

@@ -96,7 +96,8 @@ class MainBody(object):
             alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
             raise CannotProceed(ExitCode.bad_arg)
         if any(item.startswith('-') for item in self.files):
-            alert_fatal(f'Unrecognized option in arguments. {hint}')
+            bad = next(item for item in self.files if item.startswith('-'))
+            alert_fatal(f'Unrecognized option "{bad}" in arguments. {hint}')
             raise CannotProceed(ExitCode.bad_arg)
 
         if self.after_date:
@@ -145,6 +146,8 @@ class MainBody(object):
 
 
     def _do_main_work(self):
+        if self.overwrite:
+            warn(f'Overwrite mode in effect.')
         if self.dry_run:
             warn(f'Running in dry run mode – will not modify files.')
         inform(f'Will process {pluralized("PDF file", self._files, True)}'
@@ -159,5 +162,5 @@ class MainBody(object):
                 continue
             if __debug__: log(f'{record.parent_key} is parent of {record.key}'
                               + f' for file {pdffile}')
-            for writer in self._writers:
-                writer.write_uri(pdffile, record.link, self.dry_run)
+            for method in self._writers:
+                method.write_uri(pdffile, record.link, self.dry_run, self.overwrite)

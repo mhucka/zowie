@@ -51,37 +51,42 @@ class WhereFrom(WriterMethod):
                 + ' This metadata field can be a list; thus, it is possible'
                 + ' to add a value without losing previous values.')
 
-    def write_uri(self, file, uri, dry_run):
+    def write_uri(self, file, uri, dry_run, overwrite):
         '''Write the "uri" into the "Where From" metadata attribute of "file".'''
 
         path = antiformat(f'[grey89]{file}[/]')
-        if __debug__: log(f'reading extended attributes of {file}')
-        if b'com.apple.metadata:kMDItemWhereFroms' in listxattr(file):
-            wherefroms = getxattr(file, b'com.apple.metadata:kMDItemWhereFroms')
-            wherefroms = biplist.readPlistFromString(wherefroms)
-            if __debug__: log(f'read wherefroms value {wherefroms} on {file}')
-            if type(wherefroms) == str:
-                if __debug__: log(f'wherefroms value is a string on {file}')
-                # Has to be a list for DEVONthink to parse it, so reformat it.
-                if wherefroms == uri:
-                    inform(f'Reformating already-present Zotero URI in "Where from" of {path}')
-                    wherefroms = [uri]
+        if not overwrite:
+            if __debug__: log(f'reading extended attributes of {file}')
+            if b'com.apple.metadata:kMDItemWhereFroms' in listxattr(file):
+                wherefroms = getxattr(file, b'com.apple.metadata:kMDItemWhereFroms')
+                wherefroms = biplist.readPlistFromString(wherefroms)
+                if __debug__: log(f'read wherefroms value {wherefroms} on {file}')
+                if type(wherefroms) == str:
+                    if __debug__: log(f'wherefroms value is a string on {file}')
+                    # Has to be a list for DEVONthink to parse it, so reformat it.
+                    if wherefroms == uri:
+                        inform(f'Reformating already-present link in "Where from" of {path}')
+                        wherefroms = [uri]
+                    else:
+                        inform(f'Adding Zotero URI to front of "Where from" of {path}')
+                        wherefroms = [uri,  wherefroms]
+                elif wherefroms[0] == uri:
+                    inform(f'Zotero URI already present in "Where from" of {path}')
+                    return
+                elif type(wherefroms[0]) is str and wherefroms[0].startswith('zotero://'):
+                    warn(f'Replacing existing Zotero URI in "Where from" of {path}')
+                    wherefroms[0] = uri
                 else:
                     inform(f'Adding Zotero URI to front of "Where from" of {path}')
-                    wherefroms = [uri,  wherefroms]
-            elif wherefroms[0] == uri:
-                inform(f'Zotero URI already present in "Where from" of {path}')
-                return
-            elif type(wherefroms[0]) is str and wherefroms[0].startswith('zotero://'):
-                warn(f'Replacing existing Zotero URI in "Where from" of {path}')
-                wherefroms[0] = uri
+                    wherefroms.insert(0, uri)
             else:
-                inform(f'Adding Zotero URI to front of "Where from" of {path}')
-                wherefroms.insert(0, uri)
+                if __debug__: log(f'no prior wherefroms found on {file}')
+                inform(f'Writing Zotero URI into "Where From" metadata of {path}')
+                wherefroms = [uri]
         else:
-            if __debug__: log(f'no prior wherefroms found on {file}')
-            inform(f'Writing Zotero URI into "Where From" metadata of {path}')
+            inform(f'Overwriting "Where From" metadata with Zotero URI in {path}')
             wherefroms = [uri]
 
         binary = biplist.writePlistToString(wherefroms)
+        if __debug__: log(f'writing "where froms" extended attribute of {file}')
         setxattr(file, b'com.apple.metadata:kMDItemWhereFroms', binary)

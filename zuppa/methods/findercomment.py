@@ -28,6 +28,10 @@ from .base import WriterMethod
 # Constants.
 # .............................................................................
 
+# The following code is based in part on code from Python package "osxmetadata"
+# version 0.99.10 of 2020-09-01, Copyright (c) 2020 Rhet Turnbull.
+# https://github.com/RhetTbull/osxmetadata/blob/master/osxmetadata/findercomments.py
+
 _FINDER_SCRIPTS = applescript.AppleScript('''
 on get_comments{f}
     tell application "Finder"
@@ -38,6 +42,13 @@ end run
 on set_comments{f, c}
     tell application "Finder"
         set comment of (POSIX file f as alias) to c as Unicode text
+    end tell
+end run
+
+on clear_comments{f}
+    tell application "Finder"
+        set c to missing value
+        set comment of (POSIX file f as alias) to c
     end tell
 end run
 ''')
@@ -65,7 +76,7 @@ class FinderComment(WriterMethod):
                 + ' corrupt any existing Finder comments on the file.')
 
 
-    def write_uri(self, file, uri, dry_run):
+    def write_uri(self, file, uri, dry_run, overwrite):
         '''Writes the "uri" into the Finder comments of file "file".
 
         If there's an existing comment, read it.  If there's a Zotero URI
@@ -75,19 +86,27 @@ class FinderComment(WriterMethod):
         comments.  In either case, write the results back.
         '''
 
-        comments = _FINDER_SCRIPTS.call('get_comments', file)
         path = antiformat(f'[grey89]{file}[/]')
-        if comments and uri in comments:
-            inform(f'Zotero URI already present in Finder comments of {path}')
-            return
-        elif comments and 'zotero://select' in comments:
-            warn(f'Replacing existing Zotero URI in Finder comments of {path}')
-            if __debug__: log(f'overwriting existing Zotero URI with {uri}')
-            comments = re.sub('(zotero://\S+)', uri, comments)
+        if not overwrite:
+            if __debug__: log(f'reading Finder comments of file {file}')
+            comments = _FINDER_SCRIPTS.call('get_comments', file)
+            if comments and uri in comments:
+                inform(f'Zotero URI already present in Finder comments of {path}')
+                return
+            elif comments and 'zotero://select' in comments:
+                warn(f'Replacing existing Zotero URI in Finder comments of {path}')
+                if __debug__: log(f'overwriting existing Zotero URI with {uri}')
+                comments = re.sub('(zotero://\S+)', uri, comments)
+            else:
+                inform(f'Writing Zotero URI into Finder comments of {path}')
+                comments = uri
         else:
-            inform(f'Writing Zotero URI into Finder comments of {path}')
+            if not dry_run:
+                if __debug__: log(f'invoking AS function to clear comment on {file}')
+                _FINDER_SCRIPTS.call('clear_comments', file)
+            inform(f'Ovewriting Finder comments with Zotero URI in {path}')
             comments = uri
 
         if not dry_run:
-            if __debug__: log(f'invoking AppleScript function on {file}')
+            if __debug__: log(f'invoking AS function to set comment on {file}')
             _FINDER_SCRIPTS.call('set_comments', file, comments)

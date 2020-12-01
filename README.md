@@ -76,27 +76,29 @@ Instead of a folder, you can invoke zuppa on one or more individual files (but b
 zuppa "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 ```
 
+
 ### Available methods of writing Zotero links
 
-Zuppa supports multiple methods of writing the Zotero select link.  The option `-l` will cause Zuppa to print a list of all the methods available, then exit. The default method is to write it to the Finder comments, which are displayed in the Finder's "Get Info" panel for a file.
+Zuppa supports multiple methods of writing the Zotero select link.  The option `-l` will cause Zuppa to print a list of all the methods available, then exit.  The default method is to write it to the Finder comments, which are displayed in the Finder's "Get Info" panel for a file.
 
-The option `-m` can be used to select one or more methods when running Zuppa. Write the method names separated with commas without spaces. For example,
+The option `-m` can be used to select one or more methods when running Zuppa.  Write the method names separated with commas without spaces. For example, the following command will make Zuppa write the Zotero select link into the Finder comments as well as the PDF metadata attribute _Subject_:
 
 ```shell
 zuppa -m findercomment,pdfsubject ~/my-zotero/storage
 ```
 
-will make Zuppa write the Zotero select link into the Finder comments as well as the PDF metadata attribute _Subject_.
-
 At this time, the following methods are available:
 
-*  **`findercomment`**: prepends the Zotero item URI to the Finder comments for the file. Zuppa tries to be careful how it does this: if it finds a Zotero URI as the first thing in the comments, it replaces that URI instead of prepending a new one. However, Finder comments are notorious for being easy to damage or lose, so beware that Zuppa may irretrievably corrupt any existing Finder comments on the file.
+*  **`findercomment`**: prepends the Zotero item URI to the Finder comments for the file. Zuppa tries to be careful how it does this: if it finds a Zotero URI as the first thing in the comments, it replaces that URI instead of prepending a new one. However, Finder comments are notorious for being easy to damage or get into inconsistent states.  _If you have existing Finder comments that you absolutely don't want to lose, avoid this method_.  On the other hand, if you don't use comments for other purposes but find that Zuppa does not always succeed in writing the Zotero link to the Finder comments, consider using the `-o` option discussed below.
 
 *  **`wherefrom`**: prepends the Zotero item URI to the "Where from" metadata field of a file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute).  This field is displayed as "Where from" in Finder "Get Info" panels.  It is typically used by web browsers to store a file's download origin. If macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but commands such as `xattr` will correctly show changes to the value. This metadata field is a list; thus, that it is possible to add a value without losing previous values.
 
 *  **`pdfsubject`**: rewrites the _Subject_ metadata field in the PDF file. This is not the same as the _Title_ field.  For some users, the _Subject_ field is not used for any purpose and thus can be usefully hijacked for storing the Zotero item URI. This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can read the PDF metadata fields.
 
 *  **`pdfproducer`**: rewrites the _Producer_ metadata field in the PDF file. For some users, this field has not utility, and thus can be usefully hijacked for the purpose of storing the Zotero item URI. This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can read the PDF metadata fields. However, note that some users (archivists, forensics investigators, possibly others) do use the _Producer_ field, and overwriting it may be undesirable.
+
+Zuppa tries to detect whether the Zotero URI is already present in the chosen metadata field(s) and it will skip rewriting those fields as a matter of efficiency. However, some types of metadata are poorly implemented in macOS, and inconsistencies can arise between what Zuppa reads and what other programs read. (This is especially true with Finder comments) The `-o` option will cause Zuppa to forcefully overwrite the chosen metadata field(s) with new values, skipping the check for previous values and, where possible, clearing the previous values before writing the Zotero select link.
+
 
 ### Filtering by date
 
@@ -137,6 +139,7 @@ The following table summarizes all the command line options available.
 | `-l`      | `--list`          | Display known services and exit | | | 
 | `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
 | `-n`      | `--dry-run`       | Report what would be done but don't do it | Do it | | 
+| `-o`      | `--overwrite`     | Always overwrite metadata content | Don't if already present | |
 | `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working |
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |

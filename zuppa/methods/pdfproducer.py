@@ -48,26 +48,30 @@ class PDFProducer(WriterMethod):
                 + ' Producer field, and overwriting it may be undesirable.')
 
 
-    def write_uri(self, file, uri, dry_run):
+    def write_uri(self, file, uri, dry_run, overwrite):
         '''Write the "uri" into the Producer attribute of PDF file "file".
         The previous value will be overwritten.
         '''
-        if __debug__: log(f'reading PDF file {file}')
         path = antiformat(f'[grey89]{file}[/]')
+        if __debug__: log(f'reading PDF file {file}')
         trailer = PdfReader(file)
         producer = trailer.Info.Producer
-        if producer:
-            if __debug__: log(f'read PDF Producer value {producer} on {file}')
-            if uri in producer:
-                inform(f'Zotero URI already present in PDF "Producer" field of {path}')
-                return
-            elif producer.startswith('zotero://select'):
-                warn(f'Replacing existing Zotero URI in PDF "Producer" field of {path}')
+        if not overwrite:
+            if producer:
+                if __debug__: log(f'read PDF Producer value {producer} on {file}')
+                if uri in producer:
+                    inform(f'Zotero URI already present in PDF "Producer" field of {path}')
+                    return
+                elif producer.startswith('zotero://select'):
+                    warn(f'Replacing existing Zotero URI in PDF "Producer" field of {path}')
+                else:
+                    # Overwrite mode is not on, so user might not expect this.
+                    warn(f'Overwriting PDF "Producer" field of {path}')
             else:
-                warn(f'Overwriting PDF "Producer" field of {path}')
+                if __debug__: log(f'no prior PDF Producer field found on {file}')
+                inform(f'Writing Zotero URI into PDF "Producer" field of {path}')
         else:
-            if __debug__: log(f'no prior PDF Producer field found on {file}')
-            inform(f'Writing Zotero URI into PDF "Producer" field of {path}')
+            inform(f'Overwriting PDF "Producer" field of {path}')
 
         trailer.Info.Producer = uri
         if not dry_run:

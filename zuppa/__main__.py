@@ -49,6 +49,7 @@ from .methods import method_names, KNOWN_METHODS
     list       = ('print list of known methods',                             'flag',   'l'),
     method     = ('select how the URIs are to be stored (default: comment)', 'option', 'm'),
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
+    overwrite  = ('forcefully overwrite previous data with Zotero URI',      'flag',   'o'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
     version    = ('print version info and exit',                             'flag',   'V'),
     debug      = ('write detailed trace to "OUT" ("-" means console)',       'option', '@'),
@@ -57,7 +58,7 @@ from .methods import method_names, KNOWN_METHODS
 
 def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
          no_keyring = False,  list = False, method = 'M', dry_run = False,
-         quiet = False, version = False, debug = 'OUT', *files):
+         overwrite = False, quiet = False, version = False, debug = 'OUT', *files):
     '''Zuppa ("Zotero URI PDF Property Annotator") is a tool for Zotero users.
 
 Zuppa writes Zotero item URIs into the PDF files and/or the macOS Finder
@@ -111,12 +112,21 @@ then exit. The default is to write it into Finder comments for the file.
 (These comments are visible in the Finder's "Get Info" panel for the file.)
 
 The option -m can be used to select one or more methods when running
-Zuppa. Separate the method names with commas, without spaces. For example,
+Zuppa. Separate the method names with commas, without spaces. For example, the
+following command will make Zuppa write the Zotero select link into the Finder
+comments as well as the "Where from" field:
 
   zuppa -m findercomment,wherefrom ~/my-zotero/storage
 
-will make Zuppa write the Zotero select link into the Finder comments as well
-as the "Where from" field.
+Where possible, Zuppa tries to detect whether the Zotero URI is already
+present in the chosen metadata field(s) and it will skip rewriting those
+fields as a matter of efficiency. However, some types of metadata are poorly
+implemented in macOS, and inconsistencies can arise between what Zuppa reads
+and what other programs read. (This is especially the case with Finder
+comments) The -o option will cause Zuppa to forcefully overwrite the chosen
+metadata field(s) with new values, skipping the check for previous values
+and, where possible, clearing the previous values before writing the Zotero
+select link.
 
 Filtering by date
 ~~~~~~~~~~~~~~~~~
@@ -124,7 +134,7 @@ Filtering by date
 If the -d option is given, the PDF files will be filtered to use only those
 whose last-modified date/time stamp is no older than the given date/time
 description. Valid descriptors are those accepted by the Python dateparser
-library. Make sure to enclose descriptions within single or double
+package. Make sure to enclose descriptions within single or double
 quotes. Examples:
 
  zuppa -d "2 weeks ago" ....
@@ -155,7 +165,6 @@ be '-' to indicate console output, or a file path to send the output to a file.
 When -@ has been given, Zuppa also installs a signal handler on signal SIGUSR1
 that will drop Zuppa into the pdb debugger if the signal is sent to the
 running process.
-
 
 Return values
 ~~~~~~~~~~~~~
@@ -217,7 +226,8 @@ Command-line arguments summary
                         use_keyring = not no_keyring,
                         after_date  = None if after_date == 'D' else after_date,
                         methods     = methods_list,
-                        dry_run     = dry_run)
+                        dry_run     = dry_run,
+                        overwrite   = overwrite)
         config_interrupt(body.stop, UserCancelled(ExitCode.user_interrupt))
         body.run()
         exception = body.exception
