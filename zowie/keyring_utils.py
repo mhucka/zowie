@@ -113,3 +113,4 @@ def validated_input(msg, default_value, is_valid):
             return value
         else:
             alert(f'"{value}" does not appear valid for {msg}')
+            return None
