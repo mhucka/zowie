@@ -67,16 +67,19 @@ class FinderComment(WriterMethod):
 
     @classmethod
     def description(self):
-        return ('Prepends the Zotero select link to the Finder comments for the'
-                + ' file. Zowie tries to be careful how it does this: if it'
-                + ' finds a Zotero URI as the first thing in the comments, it'
-                + ' replaces that URI instead of prepending a new one.'
-                + ' However, Finder comments are notorious for being easy to'
-                + ' damage or lose, so beware that Zowie may irretrievably'
-                + ' corrupt any existing Finder comments on the file.')
+        return ('Prepends the Zotero select link to the Finder comments for'
+                + ' the file. Zowie tries to be careful how it does this: if it'
+                + ' finds a Zotero link as the first thing in the comments, it'
+                + ' replaces that link instead of prepending a new one,'
+                + ' keeping the rest of the comment text intact. If you use the'
+                + ' overwrite flag (-o), it will instead replace the whole'
+                + ' Finder comments with the Zotero link. (Note that Finder'
+                + ' comments are notorious for being easy to damage or get into'
+                + ' inconsistent states. If you have existing Finder comments'
+                + " that you absolutely don't want to lose, avoid this method.)")
 
 
-    def write_link(self, file, uri, dry_run, overwrite):
+    def write_link(self, file, uri):
         '''Writes the "uri" into the Finder comments of file "file".
 
         If there's an existing comment, read it.  If there's a Zotero select
@@ -87,7 +90,7 @@ class FinderComment(WriterMethod):
         '''
 
         path = antiformat(f'[grey89]{file}[/]')
-        if not overwrite:
+        if not self.overwrite:
             if __debug__: log(f'reading Finder comments of file {file}')
             comments = _FINDER_SCRIPTS.call('get_comments', file)
             if comments and uri in comments:
@@ -101,12 +104,12 @@ class FinderComment(WriterMethod):
                 inform(f'Writing Zotero link into Finder comments of {path}')
                 comments = uri
         else:
-            if not dry_run:
+            if not self.dry_run:
                 if __debug__: log(f'invoking AS function to clear comment on {file}')
                 _FINDER_SCRIPTS.call('clear_comments', file)
-            inform(f'Ovewriting Finder comments with Zotero link in {path}')
+            inform(f'Ovewriting Finder comments with Zotero link for file {path}')
             comments = uri
 
-        if not dry_run:
+        if not self.dry_run:
             if __debug__: log(f'invoking AS function to set comment on {file}')
             _FINDER_SCRIPTS.call('set_comments', file, comments)
