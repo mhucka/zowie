@@ -47,7 +47,7 @@ from .methods import method_names, KNOWN_METHODS
     identifier = ('Zotero user ID for API calls',                            'option', 'i'),
     no_keyring = ('do not store credentials in the keyring service',         'flag',   'K'),
     list       = ('print list of known methods',                             'flag',   'l'),
-    method     = ('select how to store links (default: finder comments)',    'option', 'm'),
+    method     = ('select method to store links (default: finder comments)', 'option', 'm'),
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
     overwrite  = ('forcefully overwrite previous content',                   'flag',   'o'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
@@ -114,19 +114,21 @@ then exit. The default is to write it into Finder comments for the file.
 The option -m can be used to select one or more methods when running
 Zowie. Separate the method names with commas, without spaces. For example, the
 following command will make Zowie write the Zotero select link into the Finder
-comments as well as the "Where from" field:
+comments as well as the "Where from" attribute:
 
   zowie -m findercomment,wherefrom ~/my-zotero/storage
 
-Where possible, Zowie tries to detect whether the Zotero select link is already
-present in the chosen metadata field(s) and it will skip rewriting those
-fields as a matter of efficiency. However, some types of metadata are poorly
-implemented in macOS, and inconsistencies can arise between what Zowie reads
-and what other programs read. (This is especially the case with Finder
-comments) The -o option will cause Zowie to forcefully overwrite the chosen
-metadata field(s) with new values, skipping the check for previous values
-and, where possible, clearing the previous values before writing the Zotero
-select link.
+Where possible, Zowie tries to preserve the previous contents of metadata
+attributes.  For example, In the case of Finder comments and "Where from", it
+looks for existing Zotero links in the contents and updates those links only;
+if it does not find an existing Zotero link, it prepends one instead of
+replacing the value completely.  The general rule is that Zowie will try to
+detect whether a Zotero select link is already present in the chosen metadata
+attribute(s) and will only update the link text if a link is found;
+otherwise, it will not write the Zotero select link at all unless given the
+overwrite (-o) option.  The overwrite option (-o) makes Zowie replace values
+completely.  Check the description of the methods for more details about what
+they do by default and the impact of the -o option.
 
 Filtering by date
 ~~~~~~~~~~~~~~~~~
@@ -197,8 +199,7 @@ Command-line arguments summary
 
     # Preprocess arguments and handle early exits -----------------------------
 
-    ui = UI('Zowie', 'Zotero Link Writer',
-            use_color = not no_color, be_quiet = quiet)
+    ui = UI('Zowie', 'ZOtero link WrItEr', use_color = not no_color, be_quiet = quiet)
     ui.start()
 
     if version:
@@ -206,7 +207,7 @@ Command-line arguments summary
         exit(int(ExitCode.success))
     if list:
         inform('Known methods:\n')
-        width = (shutil.get_terminal_size().columns - 2) or 79
+        width = (shutil.get_terminal_size().columns - 2) or 78
         for name in method_names():
             text = f'[cyan2]{name}[/]: ' + KNOWN_METHODS[name].description()
             inform('\n'.join(wrap(text, width = width, subsequent_indent = '  ')))

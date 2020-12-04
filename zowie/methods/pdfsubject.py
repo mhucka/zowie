@@ -37,42 +37,48 @@ class PDFSubject(WriterMethod):
 
     @classmethod
     def description(self):
-        return ('Rewrites the PDF "Subject" metadata field in the file. This'
-                + ' is not the same as the Title field. For some users, the'
-                + ' Subject field is not used for any other purpose and thus'
-                + ' can be usefully hijacked for the purpose of storing the'
-                + ' Zotero select link. This makes the value accessible from'
-                + ' macOS Preview, Adobe Acrobat, DEVONthink, and presumably'
-                + ' any other application that can read the PDF metadata'
-                + ' fields.')
+        return ('Writes the Zotero select link into the "Subject" metadata'
+                + ' field in the PDF file. This is not the same as the "Title"'
+                + ' field. For some users, the "Subject" field is not used for'
+                + ' any purpose and thus can be usefully hijacked for storing'
+                + ' the Zotero select link. This makes the value accessible'
+                + ' from macOS Preview, Adobe Acrobat, DEVONthink, and'
+                + ' presumably any other application that can display the PDF'
+                + ' metadata fields. If the "Subject" field is not empty on a'
+                + ' given file, Zowie looks for an existing Zotero select link'
+                + ' within the value and updates the link if one is found;'
+                + ' otherwise, Zowie will leave the field untouched unless given'
+                + ' the overwrite flag (-o), in which case, it will replace'
+                + ' the entire contents of the field with the Zotero select link.')
 
 
-    def write_link(self, file, uri, dry_run, overwrite):
-        '''Write the "uri" into the Subject attribute of PDF file "file".
-        The previous value will be overwritten.
-        '''
-        path = antiformat(f'[grey89]{file}[/]')
+    def write_link(self, file, uri):
+        '''Write the "uri" into the Subject attribute of PDF file "file".'''
+
         if __debug__: log(f'reading PDF file {file}')
         trailer = PdfReader(file)
-        subject = trailer.Info.Subject
-        if not overwrite:
-            if subject:
-                if __debug__: log(f'read PDF Subject value {subject} on {file}')
-                if uri in subject:
-                    inform(f'Zotero link already present in PDF "Subject" field of {path}')
-                    return
-                elif subject.startswith('zotero://select'):
-                    warn(f'Replacing existing Zotero link in PDF "Subject" field of {path}')
-                else:
-                    # Overwrite mode is not on, so user might not expect this.
-                    warn(f'Overwriting PDF "Subject" field of {path}')
+        path = antiformat(f'[grey89]{file}[/]')
+        if not self.overwrite:
+            subject = trailer.Info.Subject or ''
+            if __debug__: log(f'found PDF Subject value {subject} on {file}')
+            if uri in subject:
+                inform(f'Zotero link already present in PDF "Subject" field of {path}')
+                return
+            elif subject.startswith('zotero://select'):
+                inform(f'Replacing existing Zotero link in PDF "Subject" field of {path}')
+                subject = re.sub('(zotero://\S+)', uri, subject)
+                trailer.Info.Subject = subject
+            elif subject is not None:
+                warn(f'Not overwriting existing PDF "Subject" value in {path}')
+                return
             else:
                 if __debug__: log(f'no prior PDF Subject field found on {file}')
                 inform(f'Writing Zotero link into PDF "Subject" field of {path}')
+                trailer.Info.Subject = uri
         else:
             inform(f'Overwriting PDF "Subject" field of {path}')
+            trailer.Info.Subject = uri
 
-        trailer.Info.Subject = uri
-        if not dry_run:
-            if __debug__: log(f'writing PDF file with new Subject field: {file}')
+        if not self.dry_run:
+            if __debug__: log(f'writing PDF file with new "Subject" field: {file}')
             PdfWriter(file, trailer = trailer).write()

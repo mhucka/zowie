@@ -33,8 +33,24 @@ Zowie uses the Zotero API to discover the user's shared libraries and groups.  T
 
 Installation
 ------------
- 
-[_..Forthcoming..._]
+
+The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python 2 &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
+
+You should be able to install `zowie` with [`pip`](https://pip.pypa.io/en/stable/installing/).  To install `zowie` from the [Python package repository (PyPI)](https://pypi.org), run the following command:
+```
+python3 -m pip install zowie --upgrade
+```
+
+As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `zowie` directly from GitHub, like this:
+```sh
+python3 -m pip install git+https://github.com/caltechlibrary/zowie.git --upgrade
+```
+
+After installing it, on Linux and macOS systems you should end up with a program called `zowie` in a location normally searched by your terminal shell.  You should be able to run `zowie` from the shell like any other program.  If `zowie` ended up in a location not normally searched by your terminal shell, you should still be able to invoke the program as a Python module.  For example,
+
+```shell
+python3 -m zowie -h
+```
 
 
 Usage
@@ -82,7 +98,7 @@ zowie "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 
 Zowie supports multiple methods of writing the Zotero select link.  The option `-l` will cause Zowie to print a list of all the methods available, then exit.  The default method is to write it to the Finder comments, which are displayed in the Finder's "Get Info" panel for a file.
 
-The option `-m` can be used to select one or more methods when running Zowie.  Write the method names separated with commas without spaces. For example, the following command will make Zowie write the Zotero select link into the Finder comments as well as the PDF metadata attribute _Subject_:
+The option `-m` can be used to select one or more methods when running Zowie.  Write the method names separated with commas without spaces.  For example, the following command will make Zowie write the Zotero select link into the Finder comments as well as the PDF metadata attribute _Subject_:
 
 ```shell
 zowie -m findercomment,pdfsubject ~/my-zotero/storage
@@ -90,15 +106,15 @@ zowie -m findercomment,pdfsubject ~/my-zotero/storage
 
 At this time, the following methods are available:
 
-*  **`findercomment`**: prepends the Zotero select link to the Finder comments for the file. Zowie tries to be careful how it does this: if it finds a Zotero link as the first thing in the comments, it _replaces_ that link instead of prepending a new one. However, Finder comments are notorious for being easy to damage or get into inconsistent states.  _If you have existing Finder comments that you absolutely don't want to lose, avoid this method_.  On the other hand, if you don't use comments for other purposes but find that Zowie does not always succeed in writing the Zotero link to the Finder comments, consider using the `-o` option discussed below.
+*  **`findercomment`**: prepends the Zotero select link to the Finder comments for the file. Zowie tries to be careful how it does this: if it finds a Zotero link as the first thing in the comments, it _replaces_ that link instead of prepending a new one, keeping the rest of the comment text intact.  If you use the overwrite flag (`-o`), it will instead replace the whole Finder comments with the Zotero link.  (Note that Finder comments are notorious for being easy to damage or get into inconsistent states.  _If you have existing Finder comments that you absolutely don't want to lose, avoid this method_.)
 
-*  **`wherefrom`**: prepends the Zotero select link to the "Where from" metadata field of a file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute).  This field is displayed as "Where from" in Finder "Get Info" panels.  It is typically used by web browsers to store a file's download origin. If macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but commands such as `xattr` will correctly show changes to the value. This metadata field is a list; thus, that it is possible to add a value without losing previous values.
+*  **`wherefrom`**: prepends the Zotero select link to the "Where from" metadata field of a file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute).  This field is displayed as "Where from" in Finder "Get Info" panels.  It is typically used by web browsers to store a file's download origin.  If macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but commands such as `xattr` will correctly show changes to the value.  This metadata field is a list; thus, that it is possible to add a value without losing previous values.  If you use the overwrite flag (`-o`), Zowie will instead replace all existing values and write only the Zotero link in the "Where from" attribute.
 
-*  **`pdfsubject`**: rewrites the _Subject_ metadata field in the PDF file. This is not the same as the _Title_ field.  For some users, the _Subject_ field is not used for any purpose and thus can be usefully hijacked for storing the Zotero select link. This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can read the PDF metadata fields.
+*  **`pdfsubject`**: writes the Zotero select link into the _Subject_ metadata field in the PDF file. This is not the same as the _Title_ field.  For some users, the _Subject_ field is not used for any purpose and thus can be usefully hijacked for storing the Zotero select link.  This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.  If the _Subject_ field is not empty on a given file, Zowie looks for an existing Zotero select link within the value and updates the link if one is found; otherwise, Zowie will leave the field untouched unless given the overwrite flag (`-o`), in which case, it will replace the entire contents of the field with the Zotero select link.
 
-*  **`pdfproducer`**: rewrites the _Producer_ metadata field in the PDF file. For some users, this field has not utility, and thus can be usefully hijacked for the purpose of storing the Zotero select link. This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can read the PDF metadata fields. However, note that some users (archivists, forensics investigators, possibly others) do use the _Producer_ field, and overwriting it may be undesirable.
+   **`pdfproducer`**: rewrites the _Producer_ metadata field in the PDF file. For some users, this field has not utility, and thus can be usefully hijacked for the purpose of storing the Zotero select link. This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields. However, note that some users (archivists, forensics investigators, possibly others) do use the _Producer_ field, and overwriting it may be undesirable. If the _Producer_ field is not empty on a given file, Zowie looks for an existing Zotero select link within the value and updates the link if one is found; otherwise, Zowie will leave the field untouched unless given the overwrite flag (`-o`), in which case, it will replace the entire contents of the field with the Zotero select link.
 
-Zowie tries to detect whether the Zotero select link is already present in the chosen metadata field(s) and it will skip rewriting those fields as a matter of efficiency. However, some types of metadata are poorly implemented in macOS, and inconsistencies can arise between what Zowie reads and what other programs read. (This is especially true with Finder comments) The `-o` option will cause Zowie to forcefully overwrite the chosen metadata field(s) with new values, skipping the check for previous values and, where possible, clearing the previous values before writing the Zotero select link.
+Zowie avoids destroying attribute value contents where possible.  It tries to detect whether the Zotero select link is already present in the chosen metadata attribute(s) and will only update the link text if a link is found; otherwise, it will _not_ write the Zotero select link at all _unless_ given the `-o` option.  Note that, depending on the attribute, it is possible that a file has an attribute value that is not visible in the Finder or other applications.  This is especially true for "Where from" values and Finder comments.  The implication is that it may not be apparent when a file has a value for a given attribute, which can lead to confusion if Zowie thinks there is a value and refuses to change it without the `-o` option.
 
 
 ### Filtering by date
@@ -111,6 +127,7 @@ zowie -d "2014-08-29" ....
 zowie -d "12 Dec 2014" ....
 zowie -d "July 4, 2013" ....
 ```
+
 
 ### Additional command-line arguments
 
@@ -140,7 +157,7 @@ The following table summarizes all the command line options available.
 | `-l`      | `--list`          | Display known services and exit | | | 
 | `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
 | `-n`      | `--dry-run`       | Report what would be done but don't do it | Do it | | 
-| `-o`      | `--overwrite`     | Always overwrite metadata content | Don't write if already present | |
+| `-o`      | `--overwrite`     | Overwrite previous metadata content | Don't write if already present | |
 | `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working |
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
