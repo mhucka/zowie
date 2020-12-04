@@ -97,19 +97,21 @@ class FinderComment(WriterMethod):
                 inform(f'Zotero link already present in Finder comments of {path}')
                 return
             elif comments and 'zotero://select' in comments:
-                warn(f'Replacing existing Zotero link in Finder comments of {path}')
+                inform(f'Replacing existing Zotero link in Finder comments of {path}')
                 if __debug__: log(f'overwriting existing Zotero link with {uri}')
                 comments = re.sub('(zotero://\S+)', uri, comments)
+            elif comments:
+                warn(f'Not overwriting existing Finder comments of {path}')
+                return
             else:
                 inform(f'Writing Zotero link into Finder comments of {path}')
                 comments = uri
         else:
-            if not self.dry_run:
-                if __debug__: log(f'invoking AS function to clear comment on {file}')
-                _FINDER_SCRIPTS.call('clear_comments', file)
             inform(f'Ovewriting Finder comments with Zotero link for file {path}')
             comments = uri
 
         if not self.dry_run:
+            if __debug__: log(f'invoking AS function to clear comment on {file}')
+            _FINDER_SCRIPTS.call('clear_comments', file)
             if __debug__: log(f'invoking AS function to set comment on {file}')
             _FINDER_SCRIPTS.call('set_comments', file, comments)
