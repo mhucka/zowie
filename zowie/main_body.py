@@ -55,7 +55,7 @@ class MainBody(object):
         # Create and initialize objects for the URI writers we will use.
         self._writers = []
         for method_name in self.methods:
-            method = KNOWN_METHODS[method_name]()
+            method = KNOWN_METHODS[method_name](self.dry_run, self.overwrite)
             self._writers.append(method)
 
 
@@ -163,4 +163,4 @@ class MainBody(object):
             if __debug__: log(f'{record.parent_key} is parent of {record.key}'
                               + f' for file {pdffile}')
             for method in self._writers:
-                method.write_link(pdffile, record.link, self.dry_run, self.overwrite)
+                method.write_link(pdffile, record.link)

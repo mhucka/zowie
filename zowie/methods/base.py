@@ -26,8 +26,11 @@ if __debug__:
 # https://stackoverflow.com/questions/1061283/lt-instead-of-cmp
 
 class WriterMethod(ABC):
-    def __init__(self):
-        pass
+    '''Base class for Zotero select link writer methods.'''
+
+    def __init__(self, dry_run = False, overwrite = False):
+        self.dry_run = dry_run
+        self.overwrite = overwrite
 
 
     def __str__(self):
