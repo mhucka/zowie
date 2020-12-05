@@ -43,7 +43,7 @@ python3 -m pip install zowie
 
 As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `zowie` directly from GitHub, like this:
 ```sh
-python3 -m pip install git+https://github.com/caltechlibrary/zowie.git
+python3 -m pip install git+https://github.com/mhucka/zowie.git
 ```
 
 
