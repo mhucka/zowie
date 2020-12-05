@@ -63,6 +63,8 @@ class WhereFrom(WriterMethod):
     def write_link(self, file, uri):
         '''Write the "uri" into the "Where From" metadata attribute of "file".'''
 
+        # file pathname string may contain '{' and '}', so guard against it.
+        fp = antiformat(file)
         path = antiformat(f'[grey89]{file}[/]')
         if not self.overwrite:
             (wherefroms, malformed) = self._wherefroms(file)
@@ -82,7 +84,7 @@ class WhereFrom(WriterMethod):
                     inform(f'Prepending Zotero link to front of "Where from" of {path}')
                     wherefroms.insert(0, uri)
             else:
-                if __debug__: log(f'no prior wherefroms found on {file}')
+                if __debug__: log(f'no prior wherefroms found on {fp}')
                 inform(f'Writing Zotero link into "Where From" metadata of {path}')
                 wherefroms = [uri]
         else:
@@ -96,13 +98,14 @@ class WhereFrom(WriterMethod):
         '''Returns a tuple (wherefroms, malformed), where the second element
         indicates where the content was malformed in some way.'''
 
+        fp = antiformat(file)
         if b'com.apple.metadata:kMDItemWhereFroms' in listxattr(file):
             wherefroms = getxattr(file, b'com.apple.metadata:kMDItemWhereFroms')
             if not wherefroms.startswith(b'bplist'):
                 # There's content, but it's not a list. We don't know how to
                 # parse it and can't anticipate every possible variation, but
                 # we shouldn't leave it or destroy it either, if we can help it.
-                if __debug__: log(f'wherefroms {wherefroms} is not a list on {file}')
+                if __debug__: log(f'wherefroms {wherefroms} is not a list on {fp}')
                 try:
                     # We want to return an array of strings. Here, we have
                     # bytes. Try to convert it, just in case we succeed.
@@ -110,26 +113,26 @@ class WhereFrom(WriterMethod):
                 except UnicodeDecodeError:
                     raise FileError(f'Malformed non-list value for attribute'
                                     + ' com.apple.metadata:kMDItemWhereFroms'
-                                    + ' on file {file}')
+                                    + ' on file {fp}')
                 return ([wherefroms], True)
             try:
                 wherefroms = biplist.readPlistFromString(wherefroms)
             except biplist.InvalidPlistException as ex:
-                if __debug__: log(f'got exception {str(ex)} parsing wherefroms of {file}')
+                if __debug__: log(f'got exception {str(ex)} parsing wherefroms of {fp}')
                 # The property exists, it looks like a list, but it failed to
                 # parse. We can't treat it as preexisting content because it'll
                 # probably screw up something else. If we're going to overwrite
                 # it anyway, we won't get to this point anyway. Otherwise:
                 raise FileError(f'Unable to parse attribute'
                                 + ' com.apple.metadata:kMDItemWhereFroms'
-                                + ' on file {file}')
+                                + ' on file {fp}')
             return (wherefroms, False)
         else:
-            if __debug__: log(f'no kMDItemWhereFroms attribute on {file}')
+            if __debug__: log(f'no kMDItemWhereFroms attribute on {fp}')
             return (None, False)
 
 
     def _write_wherefroms(self, file, wherefroms):
         binary = biplist.writePlistToString(wherefroms)
-        if __debug__: log(f'writing "where froms" extended attribute of {file}')
+        if __debug__: log(f'writing "where froms" attribute of {antiformat(file)}')
         setxattr(file, b'com.apple.metadata:kMDItemWhereFroms', binary)

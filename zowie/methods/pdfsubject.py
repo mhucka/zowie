@@ -56,12 +56,13 @@ class PDFSubject(WriterMethod):
     def write_link(self, file, uri):
         '''Write the "uri" into the Subject attribute of PDF file "file".'''
 
-        if __debug__: log(f'reading PDF file {file}')
+        fp = antiformat(file)
+        if __debug__: log(f'reading PDF file {fp}')
         trailer = PdfReader(file)
         path = antiformat(f'[grey89]{file}[/]')
         if not self.overwrite:
             subject = trailer.Info.Subject or ''
-            if __debug__: log(f'found PDF Subject value {subject} on {file}')
+            if __debug__: log(f'found PDF Subject value {subject} on {fp}')
             if uri in subject:
                 inform(f'Zotero link already present in PDF "Subject" field of {path}')
                 return
@@ -73,7 +74,7 @@ class PDFSubject(WriterMethod):
                 warn(f'Not overwriting existing PDF "Subject" value in {path}')
                 return
             else:
-                if __debug__: log(f'no prior PDF Subject field found on {file}')
+                if __debug__: log(f'no prior PDF Subject field found on {fp}')
                 inform(f'Writing Zotero link into PDF "Subject" field of {path}')
                 trailer.Info.Subject = uri
         else:
@@ -81,5 +82,5 @@ class PDFSubject(WriterMethod):
             trailer.Info.Subject = uri
 
         if not self.dry_run:
-            if __debug__: log(f'writing PDF file with new "Subject" field: {file}')
+            if __debug__: log(f'writing PDF file with new "Subject" field: {fp}')
             PdfWriter(file, trailer = trailer).write()

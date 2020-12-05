@@ -18,6 +18,7 @@ from   bun import inform, warn, alert, alert_fatal
 from   commonpy.data_utils import DATE_FORMAT, pluralized, timestamp, parsed_datetime
 from   commonpy.file_utils import filename_extension, files_in_directory
 from   commonpy.network_utils import net, network_available
+from   commonpy.string_utils import antiformat
 from   datetime import datetime
 import os
 from   os import path
@@ -160,7 +161,7 @@ class MainBody(object):
             if not record:
                 alert(f'Unable to find Zotero entry for file {pdffile}')
                 continue
-            if __debug__: log(f'{record.parent_key} is parent of {record.key}'
-                              + f' for file {pdffile}')
+            if __debug__: log(antiformat(f'{record.parent_key} is parent of'
+                                         + f' {record.key} for file {pdffile}'))
             for method in self._writers:
                 method.write_link(pdffile, record.link)

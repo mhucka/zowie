@@ -57,12 +57,13 @@ class PDFProducer(WriterMethod):
     def write_link(self, file, uri):
         '''Write the "uri" into the Producer attribute of PDF file "file".'''
 
-        if __debug__: log(f'reading PDF file {file}')
+        fp = antiformat(file)
+        if __debug__: log(f'reading PDF file {fp}')
         trailer = PdfReader(file)
         path = antiformat(f'[grey89]{file}[/]')
         if not self.overwrite:
             producer = trailer.Info.Producer or ''
-            if __debug__: log(f'found PDF Producer value {producer} on {file}')
+            if __debug__: log(f'found PDF Producer value {producer} on {fp}')
             if uri in producer:
                 inform(f'Zotero link already present in PDF "Producer" field of {path}')
                 return
@@ -74,7 +75,7 @@ class PDFProducer(WriterMethod):
                 warn(f'Not overwriting existing PDF "Producer" value in {path}')
                 return
             else:
-                if __debug__: log(f'no prior PDF Producer field found on {file}')
+                if __debug__: log(f'no prior PDF Producer field found on {fp}')
                 inform(f'Writing Zotero link into PDF "Producer" field of {path}')
                 trailer.Info.Producer = uri
         else:
@@ -82,5 +83,5 @@ class PDFProducer(WriterMethod):
             trailer.Info.Producer = uri
 
         if not self.dry_run:
-            if __debug__: log(f'writing PDF file with new "Producer" field: {file}')
+            if __debug__: log(f'writing PDF file with new "Producer" field: {fp}')
             PdfWriter(file, trailer = trailer).write()

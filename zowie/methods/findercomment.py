@@ -94,9 +94,11 @@ class FinderComment(WriterMethod):
         comments.  In either case, write the results back.
         '''
 
+        # file pathname string may contain '{' and '}', so guard against it.
+        fp = antiformat(file)
         path = antiformat(f'[grey89]{file}[/]')
         if not self.overwrite:
-            if __debug__: log(f'reading Finder comments of file {file}')
+            if __debug__: log(f'reading Finder comments of file {fp}')
             comments = _FINDER_SCRIPTS.call('get_comments', file)
             if comments and uri in comments:
                 inform(f'Zotero link already present in Finder comments of {path}')
@@ -116,7 +118,7 @@ class FinderComment(WriterMethod):
             comments = uri
 
         if not self.dry_run:
-            if __debug__: log(f'invoking AS function to clear comment on {file}')
+            if __debug__: log(f'invoking AS function to clear comment on {fp}')
             _FINDER_SCRIPTS.call('clear_comments', file)
-            if __debug__: log(f'invoking AS function to set comment on {file}')
+            if __debug__: log(f'invoking AS function to set comment on {fp}')
             _FINDER_SCRIPTS.call('set_comments', file, comments)
