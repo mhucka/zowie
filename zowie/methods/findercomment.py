@@ -67,7 +67,8 @@ class FinderComment(WriterMethod):
 
     @classmethod
     def description(self):
-        return ('Writes the Zotero select link into the Finder comments of'
+        return ('(Default method.)'
+                + ' Writes the Zotero select link into the Finder comments of'
                 + ' each file, attempting to preserve other parts of the'
                 + ' comments. If Zowie finds an existing Zotero select link in'
                 + ' the text of the Finder comments attribute, it only updates'
