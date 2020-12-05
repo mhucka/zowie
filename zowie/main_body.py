@@ -121,13 +121,19 @@ class MainBody(object):
         self._files = []
         if __debug__: log(f'gathering list of PDF files ...')
         for item in self.files:
+            # When printing, need to guard against names containing '{' or '}'.
+            fp = antiformat(item)
             if path.isfile(item) and filename_extension(item) == '.pdf':
                 self._files.append(item)
             elif path.isdir(item):
-                if __debug__: log(f'adding PDF files in subdirectory {item}')
+                if __debug__: log(f'adding PDF files in subdirectory {fp}')
                 self._files += files_in_directory(item, extensions = ['.pdf'])
             else:
-                warn(f'Not a PDF file or folder of files: "{item}"')
+                warn(f'Not a PDF file or folder of files: "{fp}"')
+        # Remove ._ files, which are not actual content files but rather are
+        # used by macOS to store extended attributes on non-HFS volumes.
+        if __debug__: log(f'filtering out ._ files')
+        self._files = [f for f in self._files if not path.basename(f).startswith('._')]
         if __debug__: log(f'gathered {pluralized("PDF file", self._files, True)}')
 
         if self.after_date:
