@@ -67,16 +67,20 @@ class FinderComment(WriterMethod):
 
     @classmethod
     def description(self):
-        return ('Prepends the Zotero select link to the Finder comments for'
-                + ' the file. Zowie tries to be careful how it does this: if it'
-                + ' finds a Zotero link as the first thing in the comments, it'
-                + ' replaces that link instead of prepending a new one,'
-                + ' keeping the rest of the comment text intact. If you use the'
-                + ' overwrite flag (-o), it will instead replace the whole'
-                + ' Finder comments with the Zotero link. (Note that Finder'
-                + ' comments are notorious for being easy to damage or get into'
-                + ' inconsistent states. If you have existing Finder comments'
-                + " that you absolutely don't want to lose, avoid this method.)")
+        return ('Writes the Zotero select link into the Finder comments of'
+                + ' each file, attempting to preserve other parts of the'
+                + ' comments. If Zowie finds an existing Zotero select link in'
+                + ' the text of the Finder comments attribute, it only updates'
+                + ' the link portion and tries to leave the rest of the'
+                + ' comment text untouched. Otherwise, Zowie ONLY writes'
+                + ' into the comments attribute if either the attribute value is'
+                + ' empty or Zowie is given the overwrite (-o) option. (Note'
+                + ' that updating the link text requires rewriting the entire'
+                + ' Finder comments attribute on a given file. Finder comments'
+                + ' have a reputation for being easy to get into inconsistent'
+                + ' states, so if you have existing Finder comments that you'
+                + " absolutely don't want to lose, it may be safest to avoid"
+                + ' this method.)')
 
 
     def write_link(self, file, uri):
@@ -104,7 +108,7 @@ class FinderComment(WriterMethod):
                 warn(f'Not overwriting existing Finder comments of {path}')
                 return
             else:
-                inform(f'Writing Zotero link into Finder comments of {path}')
+                inform(f'Writing Zotero link into empty Finder comments of {path}')
                 comments = uri
         else:
             inform(f'Ovewriting Finder comments with Zotero link for file {path}')
