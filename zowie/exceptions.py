@@ -49,9 +49,13 @@ class AuthenticationFailure(ZowieException):
     pass
 
 class InternalError(ZowieException):
-    '''Unrecoverable problem involving eprints2bags itself.'''
+    '''Unrecoverable problem involving Zowie itself.'''
     pass
 
 class NotFound(ZowieException):
     '''Item could not be found.'''
+    pass
+
+class FileError(ZowieException):
+    '''Problem reading or writing a file or its attributes.'''
     pass
