@@ -103,18 +103,16 @@ be careful to quote pathnames with spaces in them, such as in this example):
 
   zowie "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 
-Methods of writing the Zotero select link
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Zowie supports multiple methods of writing the Zotero select link.  The
-option -l will cause Zowie to print a list of all the methods available,
-then exit. The default is to write it into Finder comments for the file.
-(These comments are visible in the Finder's "Get Info" panel for the file.)
+option -l will cause Zowie to print a list of all the methods available:
 
-The option -m can be used to select one or more methods when running
-Zowie. Separate the method names with commas, without spaces. For example, the
-following command will make Zowie write the Zotero select link into the Finder
-comments as well as the "Where from" attribute:
+  zowie -l
+
+The default method is to write it into Finder comments for the file. (These
+comments are visible in the Finder's "Get Info" panel.) The option -m can be
+used to select one or more alternative methods. Separate the names with
+commas without spaces. For example, the following command will make Zowie
+write the Zotero link into the Finder comments and the "Where from" attribute:
 
   zowie -m findercomment,wherefrom ~/my-zotero/storage
 
@@ -215,6 +213,11 @@ Command-line arguments summary
         exit(int(ExitCode.success))
 
     methods_list = ['findercomment'] if method == 'M' else method.lower().split(',')
+    bad_name = next((n for n in methods_list if n not in method_names()), None)
+    if bad_name:
+        alert(f'Unrecognized method name "{bad_name}".')
+        alert('The available methods are: ' + ', '.join(method_names()) + '.')
+        exit(int(ExitCode.bad_arg))
 
     # Do the real work --------------------------------------------------------
 
