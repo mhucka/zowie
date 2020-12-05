@@ -15,4 +15,4 @@ sidetrack       >= 1.0.0
 # The following is needed by the applescript module, but because the
 # applescript module doesn't have a requirements.txt, installation
 # via pip ends up missing this dependency:
-pypobjc         >= 7.0.1
+pyobjc          >= 7.0.1
