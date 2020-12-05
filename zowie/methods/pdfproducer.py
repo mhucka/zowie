@@ -37,21 +37,21 @@ class PDFProducer(WriterMethod):
 
     @classmethod
     def description(self):
-        return ('Writes the "Producer" metadata field in the PDF file. For'
-                + ' some users, this field has not utility, and thus can be'
-                + ' usefully hijacked for the purpose of storing the Zotero'
-                + ' select link. This makes the value accessible from macOS'
+        return ('Writes the Zotero select link into the "Producer" metadata'
+                + ' field of each PDF file. If the "Producer" field is not empty'
+                + ' on a given file, Zowie looks for an existing Zotero link'
+                + ' within the value and updates the link if one is found;'
+                + ' otherwise, Zowie leaves the field untouched unless given'
+                + ' the overwrite flag (-o), in which case, it replaces the'
+                + ' entire contents of the field with the Zotero select link.'
+                + ' For some users, the "Producer" field has not utility, and'
+                + ' thus can be usefully hijacked for the purpose of storing'
+                + ' the Zotero select link. The value is accessible from macOS'
                 + ' Preview, Adobe Acrobat, DEVONthink, and presumably any'
                 + ' other application that can display the PDF metadata fields.'
                 + ' However, note that some users (archivists, forensics'
                 + ' investigators, possibly others) do use the "Producer" field,'
-                + ' and overwriting it may be undesirable. If the "Producer"'
-                + ' field is not empty on a given file, Zowie looks for an'
-                + ' existing Zotero select link within the value and updates the'
-                + ' link if one is found; otherwise, Zowie will leave the field'
-                + ' untouched unless given the overwrite flag (-o), in which'
-                + ' case, it will replace the entire contents of the field with'
-                + ' the Zotero select link.')
+                + ' and overwriting it may be undesirable.')
 
 
     def write_link(self, file, uri):

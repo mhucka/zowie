@@ -38,18 +38,19 @@ class PDFSubject(WriterMethod):
     @classmethod
     def description(self):
         return ('Writes the Zotero select link into the "Subject" metadata'
-                + ' field in the PDF file. This is not the same as the "Title"'
-                + ' field. For some users, the "Subject" field is not used for'
-                + ' any purpose and thus can be usefully hijacked for storing'
-                + ' the Zotero select link. This makes the value accessible'
+                + ' field of each PDF file. If the "Subject" field is not empty'
+                + ' on a given file, Zowie looks for an existing Zotero link'
+                + ' within the value and updates the link if one is found;'
+                + ' otherwise, Zowie leaves the field untouched unless given'
+                + ' the overwrite flag (-o), in which case, it replaces the'
+                + ' entire contents of the field with the Zotero select link.'
+                + ' Note that the PDF "Subject" field is not the same as the'
+                + ' "Title" field. For some users, the "Subject" field is not'
+                + ' used for any purpose and thus can be usefully hijacked for'
+                + ' storing the Zotero select link. The value is accessible'
                 + ' from macOS Preview, Adobe Acrobat, DEVONthink, and'
                 + ' presumably any other application that can display the PDF'
-                + ' metadata fields. If the "Subject" field is not empty on a'
-                + ' given file, Zowie looks for an existing Zotero select link'
-                + ' within the value and updates the link if one is found;'
-                + ' otherwise, Zowie will leave the field untouched unless given'
-                + ' the overwrite flag (-o), in which case, it will replace'
-                + ' the entire contents of the field with the Zotero select link.')
+                + ' metadata fields.')
 
 
     def write_link(self, file, uri):

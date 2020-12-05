@@ -40,21 +40,23 @@ class WhereFrom(WriterMethod):
 
     @classmethod
     def description(self):
-        return ('Prepends the Zotero select link to the "Where from" metadata'
-                + ' field of a file (the com.apple.metadata:kMDItemWhereFroms'
-                + ' extended attribute). This field is displayed as "Where'
-                + ' from" in Finder "Get Info" panels. It is typically used by'
-                + " web browsers to store a file's download origin. If macOS"
-                + ' Spotlight indexing is turned on for the volume containing'
-                + ' the file, the macOS Finder will display the upated "Where'
-                + ' from" values in the Get Info panel of the file; if Spotlight'
-                + ' is not turned on, the Get info panel will not be updated,'
-                + ' but commands such as xattr will correctly show changes to'
-                + ' the value. This metadata field is a list; thus, that it is'
-                + ' possible to add a value without losing previous values. If'
-                + ' you use the overwrite flag (-o), Zowie will instead'
-                + ' replace all existing values and write only the Zotero link'
-                + ' in the "Where from" attribute.')
+        return ('Writes the Zotero select link to the "Where from" metadata'
+                + ' field of each file (the com.apple.metadata:kMDItemWhereFroms'
+                + ' extended attribute). This field is displayed as "Where from"'
+                + ' in Finder "Get Info" panels; it is typically used by web'
+                + ' browsers to store a files download origin. The field is a'
+                + ' list. If Zowie finds a Zotero select link as the first item'
+                + ' in the list, it updates its value; otherwise, Zowie prepends'
+                + ' the Zotero select link to the list of existing values,'
+                + ' keeping the other values unless the overwrite option (-o) is'
+                + ' used. When the overwrite option is used, Zowie deletes the'
+                + ' existing list of values and writes only the Zotero select'
+                + ' link. Note that if macOS Spotlight indexing is turned on for'
+                + ' the volume containing the file, the macOS Finder will'
+                + ' display the upated "Where from" values in the Get Info panel'
+                + ' of the file; if Spotlight is not turned on, the Get info'
+                + ' panel will not be updated, but other applications will'
+                + ' still be able to read the updated value.')
 
 
     def write_link(self, file, uri):
@@ -71,7 +73,7 @@ class WhereFrom(WriterMethod):
                     inform(f'Updating existing Zotero link in "Where from" of {path}')
                     wherefroms[0] = uri
                 else:
-                    inform(f'Adding Zotero link to front of "Where from" of {path}')
+                    inform(f'Prepending Zotero link to front of "Where from" of {path}')
                     wherefroms.insert(0, uri)
             else:
                 if __debug__: log(f'no prior wherefroms found on {file}')
