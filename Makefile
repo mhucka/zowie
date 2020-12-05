@@ -63,7 +63,7 @@ edited := codemeta.json $(init_file)
 
 check-in-updated-files:;
 	git add $(edited)
-	git diff-index --quiet HEAD $(edited) || git commit -m"Update version" $(edited)
+	git diff-index --quiet HEAD $(edited) || git commit -m"Update stored version number" $(edited)
 
 release-on-github: | update-init-file update-codemeta-file check-in-updated-files
 	git push -v --all
