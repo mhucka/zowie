@@ -36,20 +36,14 @@ Installation
 
 The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python 2 &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
-You should be able to install `zowie` with [`pip`](https://pip.pypa.io/en/stable/installing/).  To install `zowie` from the [Python package repository (PyPI)](https://pypi.org), run the following command:
+You should be able to install `zowie` with [`pip`](https://pip.pypa.io/en/stable/installing/) for Python&nbsp;3.  To install `zowie` from the [Python package repository (PyPI)](https://pypi.org), run the following command:
 ```
-python3 -m pip install zowie --upgrade
+python3 -m pip install zowie
 ```
 
 As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `zowie` directly from GitHub, like this:
 ```sh
-python3 -m pip install git+https://github.com/caltechlibrary/zowie.git --upgrade
-```
-
-After installing it, on Linux and macOS systems you should end up with a program called `zowie` in a location normally searched by your terminal shell.  You should be able to run `zowie` from the shell like any other program.  If `zowie` ended up in a location not normally searched by your terminal shell, you should still be able to invoke the program as a Python module.  For example,
-
-```shell
-python3 -m zowie -h
+python3 -m pip install git+https://github.com/caltechlibrary/zowie.git
 ```
 
 
@@ -72,9 +66,11 @@ python3 -m zowie -h
 
 ### Credentials for Zotero access
 
-Zowie needs to know the user's personal library identifier (also known as the _userID_) and a Zotero API key. By default, it tries to get this information from the user's keychain. If the values do not exist in the keychain from a previous run, Zowie will ask the user, and (unless the `-K` option is given) store the values in the user's keychain so that it does not have to ask again in the future. It is also possible to supply the identifier and API key on the command line using the `-i` and `-a` options, respectively; the given values will then override the values stored in the keychain (unless the `-K` option is also given). This is also how you can replace previously-stored values: use `-i` and `-a` (without `-K`) and the new values will override the stored values.
+Zowie relies on the [Zotero sync API](https://www.zotero.org/support/dev/web_api/v3/start) to get information about your references. If you do not already have a [Zotero sync account](https://www.zotero.org/support/sync), it will be necessary to create one before going any further.
 
-To find out your Zotero userID and create an API key, log in to your Zotero account at Zotero.org and visit [https://www.zotero.org/settings/keys](https://www.zotero.org/settings/keys).
+To use Zowie, you will also need both an API user identifier (also known as the **userID**) and an **API key**.  To find out your Zotero userID and create a new API key, log in to your Zotero account at [Zotero.org](https://www.zotero.org) and visit the [_Feeds/API_ tab of the your _Settings_ page](https://www.zotero.org/settings/keys).  On that page you can find your userID and create a new API key for Zowie.
+
+The first time you run Zowie, it will ask for this information and (unless the `-K` option is given) store it in your macOS keychain so that it does not have to ask for it again on future occasions.  It is also possible to supply the identifier and API key directly on the command line using the `-i` and `-a` options, respectively; the given values will then override any values stored in the keychain and (unless the `-K` option is also given) will be used to update the keychain for the next time.
 
 
 ### Basic usage
@@ -96,7 +92,7 @@ zowie "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 
 ### Available methods of writing Zotero links
 
-Zowie supports multiple methods of writing the Zotero select link.  The option `-l` will cause Zowie to print a list of all the methods available, then exit.  The default method is to write it to the Finder comments, which are displayed in the Finder's "Get Info" panel for a file.
+Zowie supports multiple methods of writing the Zotero select link.  The option `-l` will cause Zowie to print a list of all the methods available, then exit.
 
 The option `-m` can be used to select one or more methods when running Zowie.  Write the method names separated with commas without spaces.  For example, the following command will make Zowie write the Zotero select link into the Finder comments as well as the PDF metadata attribute _Subject_:
 
@@ -106,15 +102,15 @@ zowie -m findercomment,pdfsubject ~/my-zotero/storage
 
 At this time, the following methods are available:
 
-*  **`findercomment`**: prepends the Zotero select link to the Finder comments for the file. Zowie tries to be careful how it does this: if it finds a Zotero link as the first thing in the comments, it _replaces_ that link instead of prepending a new one, keeping the rest of the comment text intact.  If you use the overwrite flag (`-o`), it will instead replace the whole Finder comments with the Zotero link.  (Note that Finder comments are notorious for being easy to damage or get into inconsistent states.  _If you have existing Finder comments that you absolutely don't want to lose, avoid this method_.)
+* **`findercomment`**: (**The default method**.) Writes the Zotero select link into the Finder comments of each file, attempting to preserve other parts of the comments. If Zowie finds an existing Zotero select link in the text of the Finder comments attribute, it only updates the link portion and tries to leave the rest of the comment text untouched. Otherwise, Zowie **only** writes into the comments attribute if either the attribute value is empty or Zowie is given the overwrite (`-o`) option. (Note that updating the link text requires rewriting the entire Finder comments attribute on a given file. Finder comments have a reputation for being easy to get into inconsistent states, so if you have existing Finder comments that you absolutely don't want to lose, it may be safest to avoid this method.)
 
-*  **`wherefrom`**: prepends the Zotero select link to the "Where from" metadata field of a file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute).  This field is displayed as "Where from" in Finder "Get Info" panels.  It is typically used by web browsers to store a file's download origin.  If macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but commands such as `xattr` will correctly show changes to the value.  This metadata field is a list; thus, that it is possible to add a value without losing previous values.  If you use the overwrite flag (`-o`), Zowie will instead replace all existing values and write only the Zotero link in the "Where from" attribute.
+* **`pdfproducer`**: Writes the Zotero select link into the "Producer" metadata field of each PDF file. If the "Producer" field is not empty on a given file, Zowie looks for an existing Zotero link within the value and updates the link if one is found; otherwise, Zowie leaves the field untouched unless given the overwrite flag (`-o`), in which case, it replaces the entire contents of the field with the Zotero select link.  For some users, the "Producer" field has not utility, and thus can be usefully hijacked for the purpose of storing the Zotero select link. The value is accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.  However, note that some users (archivists, forensics investigators, possibly others) do use the "Producer" field, and overwriting it may be undesirable.
 
-*  **`pdfsubject`**: writes the Zotero select link into the _Subject_ metadata field in the PDF file. This is not the same as the _Title_ field.  For some users, the _Subject_ field is not used for any purpose and thus can be usefully hijacked for storing the Zotero select link.  This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.  If the _Subject_ field is not empty on a given file, Zowie looks for an existing Zotero select link within the value and updates the link if one is found; otherwise, Zowie will leave the field untouched unless given the overwrite flag (`-o`), in which case, it will replace the entire contents of the field with the Zotero select link.
+* **`pdfsubject`**: Writes the Zotero select link into the "Subject" metadata field of each PDF file. If the "Subject" field is not empty on a given file, Zowie looks for an existing Zotero link within the value and updates the link if one is found; otherwise, Zowie leaves the field untouched unless given the overwrite flag (`-o`), in which case, it replaces the entire contents of the field with the Zotero select link.  Note that the PDF "Subject" field is not the same as the "Title" field. For some users, the "Subject" field is not used for any purpose and thus can be usefully hijacked for storing the Zotero select link. The value is accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.
 
-   **`pdfproducer`**: rewrites the _Producer_ metadata field in the PDF file. For some users, this field has not utility, and thus can be usefully hijacked for the purpose of storing the Zotero select link. This makes the value accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields. However, note that some users (archivists, forensics investigators, possibly others) do use the _Producer_ field, and overwriting it may be undesirable. If the _Producer_ field is not empty on a given file, Zowie looks for an existing Zotero select link within the value and updates the link if one is found; otherwise, Zowie will leave the field untouched unless given the overwrite flag (`-o`), in which case, it will replace the entire contents of the field with the Zotero select link.
+* **`wherefrom`**: Writes the Zotero select link to the "Where from" metadata field of each file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute). This field is displayed as "Where from" in Finder "Get Info" panels; it is typically used by web browsers to store a files download origin. The field is a list. If Zowie finds a Zotero select link as the first item in the list, it updates that value; otherwise, Zowie prepends the Zotero select link to the list of existing values, keeping the other values unless the overwrite option (`-o`) is used. When the overwrite option is used, Zowie deletes the existing list of values and writes only the Zotero select link. Note that if macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but other applications will still be able to read the updated value.
 
-Zowie avoids destroying attribute value contents where possible.  It tries to detect whether the Zotero select link is already present in the chosen metadata attribute(s) and will only update the link text if a link is found; otherwise, it will _not_ write the Zotero select link at all _unless_ given the `-o` option.  Note that, depending on the attribute, it is possible that a file has an attribute value that is not visible in the Finder or other applications.  This is especially true for "Where from" values and Finder comments.  The implication is that it may not be apparent when a file has a value for a given attribute, which can lead to confusion if Zowie thinks there is a value and refuses to change it without the `-o` option.
+Note that, depending on the attribute, it is possible that a file has an attribute value that is not visible in the Finder or other applications.  This is especially true for "Where from" values and Finder comments.  The implication is that it may not be apparent when a file has a value for a given attribute, which can lead to confusion if Zowie thinks there is a value and refuses to change it without the `-o` option.
 
 
 ### Filtering by date
@@ -209,7 +205,7 @@ Acknowledgments
 
 This work is a personal project developed by the author, using computing facilities and other resources of the [California Institute of Technology Library](https://www.library.caltech.edu).
 
-The [vector artwork](https://thenounproject.com/search/?q=soup&i=3124151) of a quiche, used as the icon for this repository, was created by [ghufronagustian](https://thenounproject.com/ghufronagustian/) from the Noun Project.  It is licensed under the Creative Commons [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license.
+The [vector artwork](https://thenounproject.com/term/tag-exclamation-point/326951/) of an exclamation point circled by a zigzag, used as the icon for this repository, was created by  [Alfredo @ IconsAlfredo.com](https://thenounproject.com/AlfredoCreates/) from the Noun Project.  It is licensed under the Creative Commons [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license.
 
 Zowie makes use of numerous open-source packages, without which Zowie could not have been developed.  I want to acknowledge this debt.  In alphabetical order, the packages are:
 
