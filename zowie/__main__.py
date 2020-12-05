@@ -248,6 +248,9 @@ Command-line arguments summary
         elif exception[0] in [KeyboardInterrupt, UserCancelled]:
             warn('Interrupted.')
             exit_code = ExitCode.user_interrupt
+        elif type(exception[0]) == FileError:
+            alert_fatal(antiformat(str(exception[1])))
+            exit_code = ExitCode.file_error
         else:
             msg = antiformat(str(exception[1]))
             alert_fatal(f'Encountered error {exception[0].__name__}: {msg}')
