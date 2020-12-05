@@ -25,6 +25,7 @@ if __debug__:
     from sidetrack import log
 
 from .base import WriterMethod
+from ..exceptions import *
 
 
 # Class definitions.
@@ -64,11 +65,16 @@ class WhereFrom(WriterMethod):
 
         path = antiformat(f'[grey89]{file}[/]')
         if not self.overwrite:
-            wherefroms = self._wherefroms(file)
+            (wherefroms, malformed) = self._wherefroms(file)
             if wherefroms:
                 if wherefroms[0] == uri:
                     inform(f'Zotero link already present in "Where from" of {path}')
-                    return
+                    # We found a link already present, but the attribute value
+                    # was malformed (maybe due to the use of a buggy previous
+                    # version of Zowie or manual experiments by the user). We
+                    # should proceed to correct it even if -o is not in effect.
+                    if not malformed:
+                        return
                 elif type(wherefroms[0]) is str and wherefroms[0].startswith('zotero://'):
                     inform(f'Updating existing Zotero link in "Where from" of {path}')
                     wherefroms[0] = uri
@@ -87,26 +93,40 @@ class WhereFrom(WriterMethod):
 
 
     def _wherefroms(self, file):
+        '''Returns a tuple (wherefroms, malformed), where the second element
+        indicates where the content was malformed in some way.'''
+
         if b'com.apple.metadata:kMDItemWhereFroms' in listxattr(file):
             wherefroms = getxattr(file, b'com.apple.metadata:kMDItemWhereFroms')
-            wherefroms = biplist.readPlistFromString(wherefroms)
-            if __debug__: log(f'found wherefroms value {wherefroms} on {file}')
-            # The value should be an array of strings. If it's a string alone,
-            # then something else wrote it incorrectly. DEVONthink will not
-            # read it unless it's an array. We could correct the format, even
-            # if ultimately we don't write a new value, but if we end up not
-            # writing a different value, does that still count as modifying the
-            # file metadata? I don't know. Let's decide based on overwrite.
-            if type(wherefroms) == str:
-                if __debug__: log(f'wherefroms is a string on {file}')
-                wherefroms = [uri]
-                if self.overwrite:
-                    if __debug__: log(f'rewriting string wherefroms on {file}')
-                    self._write_wherefroms(file, wherefroms)
-            return wherefroms
+            if not wherefroms.startswith(b'bplist'):
+                # There's content, but it's not a list. We don't know how to
+                # parse it and can't anticipate every possible variation, but
+                # we shouldn't leave it or destroy it either, if we can help it.
+                if __debug__: log(f'wherefroms {wherefroms} is not a list on {file}')
+                try:
+                    # We want to return an array of strings. Here, we have
+                    # bytes. Try to convert it, just in case we succeed.
+                    wherefroms = wherefroms.decode()
+                except UnicodeDecodeError:
+                    raise FileError(f'Malformed non-list value for attribute'
+                                    + ' com.apple.metadata:kMDItemWhereFroms'
+                                    + ' on file {file}')
+                return ([wherefroms], True)
+            try:
+                wherefroms = biplist.readPlistFromString(wherefroms)
+            except biplist.InvalidPlistException as ex:
+                if __debug__: log(f'got exception {str(ex)} parsing wherefroms of {file}')
+                # The property exists, it looks like a list, but it failed to
+                # parse. We can't treat it as preexisting content because it'll
+                # probably screw up something else. If we're going to overwrite
+                # it anyway, we won't get to this point anyway. Otherwise:
+                raise FileError(f'Unable to parse attribute'
+                                + ' com.apple.metadata:kMDItemWhereFroms'
+                                + ' on file {file}')
+            return (wherefroms, False)
         else:
             if __debug__: log(f'no kMDItemWhereFroms attribute on {file}')
-            return None
+            return (None, False)
 
 
     def _write_wherefroms(self, file, wherefroms):
