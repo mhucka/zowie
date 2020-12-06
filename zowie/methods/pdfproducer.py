@@ -69,7 +69,7 @@ class PDFProducer(WriterMethod):
                 return
             elif producer.startswith('zotero://select'):
                 inform(f'Replacing existing Zotero link in PDF "Producer" field of {path}')
-                producer = re.sub('(zotero://\S+)', uri, producer)
+                producer = re.sub(r'(zotero://\S+)', uri, producer)
                 trailer.Info.Producer = producer
             elif producer is not None:
                 warn(f'Not overwriting existing PDF "Producer" value in {path}')
