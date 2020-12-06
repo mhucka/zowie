@@ -17,6 +17,7 @@ Please see the file "LICENSE" for more information.
 from   bun import inform, warn
 from   commonpy.string_utils import antiformat
 from   pdfrw import PdfReader, PdfWriter
+import re
 
 from .base import WriterMethod
 
