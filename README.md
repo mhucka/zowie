@@ -6,7 +6,7 @@ Zowie (_"**Z**otero link **w**r**i**t**e**r"_) is a command-line program that wr
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
-[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1696)](https://data.caltech.edu/records/1696)
+[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1697)](https://data.caltech.edu/records/1697)
 [![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange)](https://pypi.org/project/zowie/)
 
 
