@@ -19,10 +19,10 @@ from   bun import inform, warn
 from   commonpy.string_utils import antiformat
 import re
 
+from .base import WriterMethod
+
 if __debug__:
     from sidetrack import log
-
-from .base import WriterMethod
 
 
 # Constants.

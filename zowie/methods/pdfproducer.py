@@ -18,10 +18,10 @@ from   bun import inform, warn
 from   commonpy.string_utils import antiformat
 from   pdfrw import PdfReader, PdfWriter
 
+from .base import WriterMethod
+
 if __debug__:
     from sidetrack import log
-
-from .base import WriterMethod
 
 
 # Class definitions.

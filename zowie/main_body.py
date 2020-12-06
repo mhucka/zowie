@@ -26,13 +26,13 @@ from   pathlib import Path
 import shutil
 import sys
 
-if __debug__:
-    from sidetrack import log
-
 from .exceptions import *
 from .exit_codes import ExitCode
 from .methods import KNOWN_METHODS, method_names
 from .zotero import Zotero
+
+if __debug__:
+    from sidetrack import log
 
 
 # Exported classes.

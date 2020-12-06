@@ -28,9 +28,6 @@ import sys
 from   sys import exit as exit
 from   textwrap import wrap
 
-if __debug__:
-    from sidetrack import set_debug, log, logr
-
 import zowie
 from zowie import print_version
 from .exceptions import *
@@ -38,6 +35,11 @@ from .exit_codes import ExitCode
 from .main_body import MainBody
 from .methods import method_names, KNOWN_METHODS
 
+if __debug__:
+    from sidetrack import set_debug, log, logr
+
+
+# Main program.
 # .............................................................................
 
 @plac.annotations(

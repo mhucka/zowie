@@ -21,11 +21,11 @@ from   commonpy.string_utils import antiformat
 import re
 from   xattr import getxattr, setxattr, listxattr
 
-if __debug__:
-    from sidetrack import log
-
 from .base import WriterMethod
 from ..exceptions import *
+
+if __debug__:
+    from sidetrack import log
 
 
 # Class definitions.
