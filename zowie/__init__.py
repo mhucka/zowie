@@ -21,12 +21,12 @@ the file "LICENSE" for more information.
 #  |    by the Makefile. Manual changes to these values will be lost.      |
 #  ╰────────────────────── Notice ── Notice ── Notice ─────────────────────╯
 
-__version__     = '0.0.1'
+__version__     = '1.0.0'
 __description__ = 'Write Zotero select links into article PDF files'
 __url__         = 'https://github.com/mhucka/zowie'
 __author__      = 'Michael Hucka'
 __email__       = 'mhucka@caltech.edu'
-__license__     = 'MIT License'
+__license__     = 'BSD 3-clause'
 
 
 # Miscellaneous utilities.
