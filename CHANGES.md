@@ -1,6 +1,12 @@
 Change log for Zowie
 ====================
 
+Version 1.0.2
+--------------
+
+This release fixes an important bug in regular expressions used to replace existing Zotero select links inside Finder comments and PDF Subject and Producer fields. It also includes some internal cleanup for some Pylint issues (a cleanup process that is not finished).
+
+
 Version 1.0.1
 --------------
 
