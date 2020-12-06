@@ -1,6 +1,12 @@
 Change log for Zowie
 ====================
 
+Version 1.0.3
+--------------
+
+This release fixes a missing Python package import in some code files, and also protects more print statements against file names that contain `{` and/or `}` characters.  (The latter have special meaning to some Python constructs.)
+
+
 Version 1.0.2
 --------------
 
