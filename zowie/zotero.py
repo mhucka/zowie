@@ -20,7 +20,7 @@ from collections import namedtuple
 from os import path as path
 from pyzotero import zotero, zotero_errors
 
-from .exceptions import *
+from .exceptions import CannotProceed
 from .exit_codes import ExitCode
 from .keyring_utils import keyring_credentials, save_keyring_credentials
 from .keyring_utils import validated_input

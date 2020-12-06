@@ -26,7 +26,7 @@ from   pathlib import Path
 import shutil
 import sys
 
-from .exceptions import *
+from .exceptions import CannotProceed
 from .exit_codes import ExitCode
 from .methods import KNOWN_METHODS, method_names
 from .zotero import Zotero

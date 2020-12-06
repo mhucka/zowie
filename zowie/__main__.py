@@ -30,7 +30,7 @@ from   textwrap import wrap
 
 import zowie
 from zowie import print_version
-from .exceptions import *
+from .exceptions import UserCancelled, FileError, CannotProceed
 from .exit_codes import ExitCode
 from .main_body import MainBody
 from .methods import method_names, KNOWN_METHODS

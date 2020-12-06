@@ -22,7 +22,7 @@ import re
 from   xattr import getxattr, setxattr, listxattr
 
 from .base import WriterMethod
-from ..exceptions import *
+from ..exceptions import FileError
 
 if __debug__:
     from sidetrack import log
