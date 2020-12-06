@@ -214,7 +214,7 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 
 * [aenum](https://pypi.org/project/aenum/) &ndash; advanced enumerations for Python
 * [biplist](https://bitbucket.org/wooster/biplist/src/master/) &ndash; A binary plist parser/writer for Python
-* [bun](https://github.com/caltechlibrary/bun) &nash; a set of basic user interface classes and functions
+* [bun](https://github.com/caltechlibrary/bun) &ndash; a set of basic user interface classes and functions
 * [commonpy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
 * [ipdb](https://github.com/gotcha/ipdb) &ndash; the IPython debugger
 * [keyring](https://github.com/jaraco/keyring) &ndash; access the system keyring service from Python
