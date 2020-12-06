@@ -278,6 +278,6 @@ Command-line arguments summary
 def console_scripts_main():
     plac.call(main)
 
-# The following allows users to invoke this using "python3 -m handprint".
+# The following allows users to invoke this using "python3 -m zowie".
 if __name__ == '__main__':
     plac.call(main)

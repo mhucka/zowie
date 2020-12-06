@@ -39,7 +39,7 @@ from .zotero import Zotero
 # .............................................................................
 
 class MainBody(object):
-    '''Main body for Handprint.'''
+    '''Main body for Zowie.'''
 
     def __init__(self, **kwargs):
         '''Initialize internal state.'''
