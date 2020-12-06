@@ -15,7 +15,7 @@ Please see the file "LICENSE" for more information.
 '''
 
 from   bun import inform, warn, alert, alert_fatal
-from   commonpy.data_utils import DATE_FORMAT, pluralized, timestamp, parsed_datetime
+from   commonpy.data_utils import DATE_FORMAT, pluralized, parsed_datetime
 from   commonpy.file_utils import filename_extension, files_in_directory
 from   commonpy.network_utils import net, network_available
 from   commonpy.string_utils import antiformat
@@ -38,7 +38,7 @@ if __debug__:
 # Exported classes.
 # .............................................................................
 
-class MainBody(object):
+class MainBody():
     '''Main body for Zowie.'''
 
     def __init__(self, **kwargs):
@@ -90,9 +90,6 @@ class MainBody(object):
 
         hint = '(Hint: use -h for help.)'
 
-        if not all(s in method_names() for s in self.methods):
-            alert_fatal(f'"{methods}" is/are not known methods. {hint}')
-            exit(int(ExitCode.bad_arg))
         if not self.use_keyring and not any([self.api_key, self.user_id]):
             alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
             raise CannotProceed(ExitCode.bad_arg)
