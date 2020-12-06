@@ -78,8 +78,9 @@ class WriterMethod(ABC):
 
 
     @property
+    @classmethod
     @abstractmethod
-    def name(self):
+    def name(cls):
         '''Returns the canonical internal name for this method.'''
         pass
 
@@ -87,7 +88,7 @@ class WriterMethod(ABC):
     @property
     @classmethod
     @abstractmethod
-    def description(self):
+    def description(cls):
         '''Returns a description what this method does.'''
         pass
 

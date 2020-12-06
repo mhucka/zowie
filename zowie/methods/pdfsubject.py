@@ -32,12 +32,12 @@ class PDFSubject(WriterMethod):
     '''Implements writing Zotero links into the PDF file's Producer property.'''
 
     @classmethod
-    def name(self):
+    def name(cls):
         return 'pdfsubject'
 
 
     @classmethod
-    def description(self):
+    def description(cls):
         return ('Writes the Zotero select link into the "Subject" metadata'
                 + ' field of each PDF file. If the "Subject" field is not empty'
                 + ' on a given file, Zowie looks for an existing Zotero link'

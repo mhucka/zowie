@@ -35,12 +35,12 @@ class WhereFrom(WriterMethod):
     '''Implements writing Zotero links into the "Where from" metadata field.'''
 
     @classmethod
-    def name(self):
+    def name(cls):
         return 'wherefrom'
 
 
     @classmethod
-    def description(self):
+    def description(cls):
         return ('Writes the Zotero select link to the "Where from" metadata'
                 + ' field of each file (the com.apple.metadata:kMDItemWhereFroms'
                 + ' extended attribute). This field is displayed as "Where from"'
