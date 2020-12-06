@@ -19,8 +19,6 @@ from   commonpy.data_utils import timestamp
 from   commonpy.interrupt import config_interrupt
 from   commonpy.string_utils import antiformat
 from   boltons.debugutils import pdb_on_signal
-import os
-from   os import path, cpu_count
 import plac
 import signal
 import shutil
@@ -279,6 +277,7 @@ Command-line arguments summary
 # function that takes zero arguments.
 def console_scripts_main():
     plac.call(main)
+
 
 # The following allows users to invoke this using "python3 -m zowie".
 if __name__ == '__main__':
