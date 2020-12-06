@@ -61,12 +61,12 @@ class FinderComment(WriterMethod):
     '''Implements writing Zotero URI into the macOS Finder comments for a file.'''
 
     @classmethod
-    def name(self):
+    def name(cls):
         return 'findercomment'
 
 
     @classmethod
-    def description(self):
+    def description(cls):
         return ('(Default method.)'
                 + ' Writes the Zotero select link into the Finder comments of'
                 + ' each file, attempting to preserve other parts of the'

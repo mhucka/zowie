@@ -161,10 +161,11 @@ class MainBody():
 
         for pdffile in self._files:
             record = self._zotero.record_for_file(pdffile)
+            path = antiformat(pdffile)
             if not record:
-                alert(f'Unable to find Zotero entry for file {pdffile}')
+                alert(f'Unable to find Zotero entry for file {path}')
                 continue
-            if __debug__: log(antiformat(f'{record.parent_key} is parent of'
-                                         + f' {record.key} for file {pdffile}'))
+            if __debug__: log(f'{record.parent_key} is parent of'
+                              + f' {record.key} for file {path}')
             for method in self._writers:
                 method.write_link(pdffile, record.link)
