@@ -19,10 +19,10 @@ from   bun import inform, warn
 from   commonpy.string_utils import antiformat
 import re
 
+from .base import WriterMethod
+
 if __debug__:
     from sidetrack import log
-
-from .base import WriterMethod
 
 
 # Constants.
@@ -106,7 +106,7 @@ class FinderComment(WriterMethod):
             elif comments and 'zotero://select' in comments:
                 inform(f'Replacing existing Zotero link in Finder comments of {path}')
                 if __debug__: log(f'overwriting existing Zotero link with {uri}')
-                comments = re.sub('(zotero://\S+)', uri, comments)
+                comments = re.sub(r'(zotero://\S+)', uri, comments)
             elif comments:
                 warn(f'Not overwriting existing Finder comments of {path}')
                 return

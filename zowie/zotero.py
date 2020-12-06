@@ -20,13 +20,13 @@ from collections import namedtuple
 from os import path as path
 from pyzotero import zotero, zotero_errors
 
-if __debug__:
-    from sidetrack import log
-
-from .exceptions import *
+from .exceptions import CannotProceed
 from .exit_codes import ExitCode
 from .keyring_utils import keyring_credentials, save_keyring_credentials
 from .keyring_utils import validated_input
+
+if __debug__:
+    from sidetrack import log
 
 
 # Data definitions.

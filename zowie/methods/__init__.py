@@ -14,9 +14,6 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
-if __debug__:
-    from sidetrack import log
-
 from .findercomment import FinderComment
 from .pdfsubject import PDFSubject
 from .pdfproducer import PDFProducer

@@ -15,7 +15,7 @@ Please see the file "LICENSE" for more information.
 '''
 
 from   bun import inform, warn, alert, alert_fatal
-from   commonpy.data_utils import DATE_FORMAT, pluralized, timestamp, parsed_datetime
+from   commonpy.data_utils import DATE_FORMAT, pluralized, parsed_datetime
 from   commonpy.file_utils import filename_extension, files_in_directory
 from   commonpy.network_utils import net, network_available
 from   commonpy.string_utils import antiformat
@@ -26,19 +26,19 @@ from   pathlib import Path
 import shutil
 import sys
 
-if __debug__:
-    from sidetrack import log
-
-from .exceptions import *
+from .exceptions import CannotProceed
 from .exit_codes import ExitCode
 from .methods import KNOWN_METHODS, method_names
 from .zotero import Zotero
+
+if __debug__:
+    from sidetrack import log
 
 
 # Exported classes.
 # .............................................................................
 
-class MainBody(object):
+class MainBody():
     '''Main body for Zowie.'''
 
     def __init__(self, **kwargs):
@@ -88,11 +88,8 @@ class MainBody(object):
 
         # Sanity-check the arguments ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        hint = f'(Hint: use -h for help.)'
+        hint = '(Hint: use -h for help.)'
 
-        if not all(s in method_names() for s in self.methods):
-            alert_fatal(f'"{methods}" is/are not known methods. {hint}')
-            exit(int(ExitCode.bad_arg))
         if not self.use_keyring and not any([self.api_key, self.user_id]):
             alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
             raise CannotProceed(ExitCode.bad_arg)
@@ -119,7 +116,7 @@ class MainBody(object):
         self._zotero = Zotero(self.api_key, self.user_id, self.use_keyring)
 
         self._files = []
-        if __debug__: log(f'gathering list of PDF files ...')
+        if __debug__: log('gathering list of PDF files ...')
         for item in self.files:
             # When printing, need to guard against names containing '{' or '}'.
             fp = antiformat(item)
@@ -132,7 +129,7 @@ class MainBody(object):
                 warn(f'Not a PDF file or folder of files: "{fp}"')
         # Remove ._ files, which are not actual content files but rather are
         # used by macOS to store extended attributes on non-HFS volumes.
-        if __debug__: log(f'filtering out ._ files')
+        if __debug__: log('filtering out ._ files')
         self._files = [f for f in self._files if not path.basename(f).startswith('._')]
         if __debug__: log(f'gathered {pluralized("PDF file", self._files, True)}')
 
@@ -154,9 +151,9 @@ class MainBody(object):
 
     def _do_main_work(self):
         if self.overwrite:
-            warn(f'Overwrite mode in effect.')
+            warn('Overwrite mode in effect.')
         if self.dry_run:
-            warn(f'Running in dry run mode – will not modify files.')
+            warn('Running in dry run mode – will not modify files.')
         inform(f'Will process {pluralized("PDF file", self._files, True)}'
                + f' using {pluralized("method", self.methods)}'
                + f' [cyan2]{", ".join(self.methods)}[/].')

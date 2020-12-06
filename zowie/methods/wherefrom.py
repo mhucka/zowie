@@ -21,11 +21,11 @@ from   commonpy.string_utils import antiformat
 import re
 from   xattr import getxattr, setxattr, listxattr
 
+from .base import WriterMethod
+from ..exceptions import FileError
+
 if __debug__:
     from sidetrack import log
-
-from .base import WriterMethod
-from ..exceptions import *
 
 
 # Class definitions.
@@ -111,9 +111,9 @@ class WhereFrom(WriterMethod):
                     # bytes. Try to convert it, just in case we succeed.
                     wherefroms = wherefroms.decode()
                 except UnicodeDecodeError:
-                    raise FileError(f'Malformed non-list value for attribute'
+                    raise FileError('Malformed non-list value for attribute'
                                     + ' com.apple.metadata:kMDItemWhereFroms'
-                                    + ' on file {fp}')
+                                    + f' on file {fp}')
                 return ([wherefroms], True)
             try:
                 wherefroms = biplist.readPlistFromString(wherefroms)
@@ -123,9 +123,9 @@ class WhereFrom(WriterMethod):
                 # parse. We can't treat it as preexisting content because it'll
                 # probably screw up something else. If we're going to overwrite
                 # it anyway, we won't get to this point anyway. Otherwise:
-                raise FileError(f'Unable to parse attribute'
+                raise FileError('Unable to parse attribute'
                                 + ' com.apple.metadata:kMDItemWhereFroms'
-                                + ' on file {fp}')
+                                + f' on file {fp}')
             return (wherefroms, False)
         else:
             if __debug__: log(f'no kMDItemWhereFroms attribute on {fp}')

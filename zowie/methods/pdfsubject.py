@@ -18,10 +18,10 @@ from   bun import inform, warn
 from   commonpy.string_utils import antiformat
 from   pdfrw import PdfReader, PdfWriter
 
+from .base import WriterMethod
+
 if __debug__:
     from sidetrack import log
-
-from .base import WriterMethod
 
 
 # Class definitions.
@@ -68,7 +68,7 @@ class PDFSubject(WriterMethod):
                 return
             elif subject.startswith('zotero://select'):
                 inform(f'Replacing existing Zotero link in PDF "Subject" field of {path}')
-                subject = re.sub('(zotero://\S+)', uri, subject)
+                subject = re.sub(r'(zotero://\S+)', uri, subject)
                 trailer.Info.Subject = subject
             elif subject is not None:
                 warn(f'Not overwriting existing PDF "Subject" value in {path}')
