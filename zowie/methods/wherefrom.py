@@ -65,7 +65,7 @@ class WhereFrom(WriterMethod):
 
         # file pathname string may contain '{' and '}', so guard against it.
         fp = antiformat(file)
-        path = antiformat(f'[grey89]{file}[/]')
+        path = antiformat(f'[steel_blue3]{file}[/]')
         if not self.overwrite:
             (wherefroms, malformed) = self._wherefroms(file)
             if wherefroms:

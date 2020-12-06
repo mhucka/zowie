@@ -59,7 +59,7 @@ class PDFSubject(WriterMethod):
         fp = antiformat(file)
         if __debug__: log(f'reading PDF file {fp}')
         trailer = PdfReader(file)
-        path = antiformat(f'[grey89]{file}[/]')
+        path = antiformat(f'[steel_blue3]{file}[/]')
         if not self.overwrite:
             subject = trailer.Info.Subject or ''
             if __debug__: log(f'found PDF Subject value {subject} on {fp}')

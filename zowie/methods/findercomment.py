@@ -96,7 +96,7 @@ class FinderComment(WriterMethod):
 
         # file pathname string may contain '{' and '}', so guard against it.
         fp = antiformat(file)
-        path = antiformat(f'[grey89]{file}[/]')
+        path = antiformat(f'[steel_blue3]{file}[/]')
         if not self.overwrite:
             if __debug__: log(f'reading Finder comments of file {fp}')
             comments = _FINDER_SCRIPTS.call('get_comments', file)
