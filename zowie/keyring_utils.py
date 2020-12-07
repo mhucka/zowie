@@ -75,7 +75,7 @@ def save_keyring_credentials(api_key, user_id):
 # Utility functions.
 # .............................................................................
 
-_sep = ''
+_SEP = ''
 '''Character used to separate multiple actual values stored as a single
 encoded value string.  This character is deliberately chosen to be something
 very unlikely to be part of a legitimate string value typed by user at a
@@ -83,11 +83,11 @@ shell prompt, because control-c is normally used to interrupt programs.
 '''
 
 def _encoded(api_key, user_id):
-    return f'{api_key}{_sep}{user_id}'
+    return f'{api_key}{_SEP}{user_id}'
 
 
 def _decoded(value_string):
-    return tuple(value_string.split(_sep))
+    return tuple(value_string.split(_SEP))
 
 
 def password(prompt):
