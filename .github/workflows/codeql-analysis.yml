@@ -34,7 +34,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: macos-10.13
+    runs-on: macos-latest
 
     strategy:
       fail-fast: false
