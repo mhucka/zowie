@@ -49,6 +49,7 @@ ZoteroRecord.__doc__ = '''Zotero data about a local file
 # maybe this should be a subclass of the pytoztero class?
 
 class Zotero():
+    '''Zotero interface class.'''
 
     def __init__(self, key, user_id, use_keyring):
         if key and (not key.isalnum() or len(key) < 20):
