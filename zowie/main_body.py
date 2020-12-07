@@ -20,10 +20,8 @@ from   commonpy.file_utils import filename_extension, files_in_directory
 from   commonpy.network_utils import net, network_available
 from   commonpy.string_utils import antiformat
 from   datetime import datetime
-import os
 from   os import path
 from   pathlib import Path
-import shutil
 import sys
 
 from .exceptions import CannotProceed
