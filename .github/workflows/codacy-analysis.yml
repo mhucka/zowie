@@ -42,7 +42,7 @@ on:
 jobs:
   codacy-security-scan:
     name: Codacy Security Scan
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       # Checkout the repository to the GitHub Actions runner.
       - name: Checkout code
