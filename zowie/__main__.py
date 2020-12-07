@@ -245,13 +245,14 @@ Command-line arguments summary
         if __debug__: log(f'main body raised exception: {antiformat(exception)}')
         if exception[0] == CannotProceed:
             exit_code = exception[1].args[0]
+        elif exception[0] == FileError:
+            alert_fatal(antiformat(exception[1]))
+            exit_code = ExitCode.file_error
         elif exception[0] in [KeyboardInterrupt, UserCancelled]:
             warn('Interrupted.')
             exit_code = ExitCode.user_interrupt
-        elif type(exception[0]) == FileError:
-            alert_fatal(antiformat(exception[1]))
-            exit_code = ExitCode.file_error
         else:
+            import pdb; pdb.set_trace()
             msg = antiformat(exception[1])
             alert_fatal(f'Encountered error {exception[0].__name__}: {msg}')
             exit_code = ExitCode.exception
