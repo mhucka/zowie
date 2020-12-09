@@ -15,10 +15,10 @@ Please see the file "LICENSE" for more information.
 '''
 
 from   bun import UI, inform, warn, alert, alert_fatal
+from   boltons.debugutils import pdb_on_signal
 from   commonpy.data_utils import timestamp
 from   commonpy.interrupt import config_interrupt
 from   commonpy.string_utils import antiformat
-from   boltons.debugutils import pdb_on_signal
 import plac
 import signal
 import shutil
@@ -57,7 +57,7 @@ if __debug__:
 )
 
 def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
-         no_keyring = False,  list = False, method = 'M', dry_run = False,
+         no_keyring = False, list = False, method = 'M', dry_run = False,
          overwrite = False, quiet = False, version = False, debug = 'OUT', *files):
     '''Zowie ("ZOtero link WrItEr") is a tool for Zotero users.
 
@@ -252,7 +252,6 @@ Command-line arguments summary
             warn('Interrupted.')
             exit_code = ExitCode.user_interrupt
         else:
-            import pdb; pdb.set_trace()
             msg = antiformat(exception[1])
             alert_fatal(f'Encountered error {exception[0].__name__}: {msg}')
             exit_code = ExitCode.exception
