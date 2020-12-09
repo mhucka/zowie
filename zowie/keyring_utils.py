@@ -50,18 +50,18 @@ _KEYRING = f'mhucka.{__package__}'
 # a single string used as the actual value stored.  The individual values are
 # separated by a character that is unlikely to be part of any user-typed value.
 
-def keyring_credentials():
+def keyring_credentials(ring = _KEYRING):
     '''Looks up the user's credentials.'''
     if sys.platform.startswith('win'):
         keyring.set_keyring(WinVaultKeyring())
     if sys.platform.startswith('darwin'):
         keyring.set_keyring(Keyring())
-    value = keyring.get_password(_KEYRING, getpass.getuser())
+    value = keyring.get_password(ring, getpass.getuser())
     if __debug__: log(f'got "{value}" from keyring {_KEYRING}')
     return _decoded(value) if value else (None, None)
 
 
-def save_keyring_credentials(api_key, user_id):
+def save_keyring_credentials(api_key, user_id, ring = _KEYRING):
     '''Saves the user's credentials.'''
     if sys.platform.startswith('win'):
         keyring.set_keyring(WinVaultKeyring())
@@ -69,7 +69,7 @@ def save_keyring_credentials(api_key, user_id):
         keyring.set_keyring(Keyring())
     value = _encoded(api_key, user_id)
     if __debug__: log(f'storing "{value}" to keyring {_KEYRING}')
-    keyring.set_password(_KEYRING, getpass.getuser(), value)
+    keyring.set_password(ring, getpass.getuser(), value)
 
 
 # Utility functions.
