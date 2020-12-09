@@ -81,15 +81,15 @@ The first time you run Zowie, it will ask for this information and (unless the `
 Zowie can operate on a folder, or one or more individual PDF files, or a mix of both. Suppose your local Zotero database is located in `~/my-zotero/`. Perhaps the simplest way to run Zowie is the following command:
 
 ```shell
-zowie ~/my-zotero
+zowie ~/Zotero
 ```
 
-If this is your first run of Zowie, it will ask you for your userID and API key, then search for PDF files recursively under `~/my-zotero/`.  For each PDF file found, Zowie will contact the Zotero servers over the network and determine the Zotero select link for the bibliographic entry containing that PDF file. Finally, it will use the default method of recording the link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
+If this is your first run of Zowie, it will ask you for your userID and API key, then search for PDF files recursively under `~/Zotero/`.  For each PDF file found, Zowie will contact the Zotero servers over the network and determine the Zotero select link for the bibliographic entry containing that PDF file. Finally, it will use the default method of recording the link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
 
 Instead of a folder, you can invoke Zowie on one or more individual files (but be careful to quote pathnames with spaces in them, such as in this example):
 
 ```shell
-zowie "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
+zowie "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 ```
 
 
@@ -100,7 +100,7 @@ Zowie supports multiple methods of writing the Zotero select link.  The option `
 The option `-m` can be used to select one or more methods when running Zowie.  Write the method names separated with commas without spaces.  For example, the following command will make Zowie write the Zotero select link into the Finder comments as well as the PDF metadata attribute _Subject_:
 
 ```shell
-zowie -m findercomment,pdfsubject ~/my-zotero/storage
+zowie -m findercomment,pdfsubject ~/Zotero/storage
 ```
 
 At this time, the following methods are available:
