@@ -84,8 +84,8 @@ class FinderComment(WriterMethod):
                 + ' this method.)')
 
 
-    def write_link(self, file, uri):
-        '''Writes the "uri" into the Finder comments of file "file".
+    def write_link(self, file_path, uri):
+        '''Writes the "uri" into the Finder comments of file "file_path".
 
         If there's an existing comment, read it.  If there's a Zotero select
         link as the first thing in the comment, replace that URI with this one,
@@ -95,30 +95,30 @@ class FinderComment(WriterMethod):
         '''
 
         # file pathname string may contain '{' and '}', so guard against it.
-        fp = antiformat(file)
-        path = antiformat(f'[steel_blue3]{file}[/]')
+        fp = antiformat(file_path)
+        file = antiformat(f'[steel_blue3]{file_path}[/]')
         if not self.overwrite:
-            if __debug__: log(f'reading Finder comments of file {fp}')
-            comments = _FINDER_SCRIPTS.call('get_comments', file)
+            if __debug__: log(f'reading Finder comments of {fp}')
+            comments = _FINDER_SCRIPTS.call('get_comments', file_path)
             if comments and uri in comments:
-                inform(f'Zotero link already present in Finder comments of {path}')
+                inform(f'Zotero link already present in Finder comments of {file}')
                 return
             elif comments and 'zotero://select' in comments:
-                inform(f'Replacing existing Zotero link in Finder comments of {path}')
+                inform(f'Replacing existing Zotero link in Finder comments of {file}')
                 if __debug__: log(f'overwriting existing Zotero link with {uri}')
                 comments = re.sub(r'(zotero://\S+)', uri, comments)
             elif comments:
-                warn(f'Not overwriting existing Finder comments of {path}')
+                warn(f'Not overwriting existing Finder comments of {file}')
                 return
             else:
-                inform(f'Writing Zotero link into empty Finder comments of {path}')
+                inform(f'Writing Zotero link into empty Finder comments of {file}')
                 comments = uri
         else:
-            inform(f'Ovewriting Finder comments with Zotero link for file {path}')
+            inform(f'Ovewriting Finder comments with Zotero link for {file}')
             comments = uri
 
         if not self.dry_run:
             if __debug__: log(f'invoking AS function to clear comment on {fp}')
-            _FINDER_SCRIPTS.call('clear_comments', file)
+            _FINDER_SCRIPTS.call('clear_comments', file_path)
             if __debug__: log(f'invoking AS function to set comment on {fp}')
-            _FINDER_SCRIPTS.call('set_comments', file, comments)
+            _FINDER_SCRIPTS.call('set_comments', file_path, comments)

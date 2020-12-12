@@ -60,17 +60,17 @@ class WhereFrom(WriterMethod):
                 + ' still be able to read the updated value.')
 
 
-    def write_link(self, file, uri):
-        '''Write the "uri" into the "Where From" metadata attribute of "file".'''
+    def write_link(self, file_path, uri):
+        '''Write the "uri" into the "Where From" metadata attribute of "file_path".'''
 
         # file pathname string may contain '{' and '}', so guard against it.
-        fp = antiformat(file)
-        path = antiformat(f'[steel_blue3]{file}[/]')
+        fp = antiformat(file_path)
+        file = antiformat(f'[steel_blue3]{file_path}[/]')
         if not self.overwrite:
-            (wherefroms, malformed) = self._wherefroms(file)
+            (wherefroms, malformed) = self._wherefroms(file_path)
             if wherefroms:
                 if wherefroms[0] == uri:
-                    inform(f'Zotero link already present in "Where from" of {path}')
+                    inform(f'Zotero link already present in "Where from" of {file}')
                     # We found a link already present, but the attribute value
                     # was malformed (maybe due to the use of a buggy previous
                     # version of Zowie or manual experiments by the user). We
@@ -78,29 +78,29 @@ class WhereFrom(WriterMethod):
                     if not malformed:
                         return
                 elif type(wherefroms[0]) is str and wherefroms[0].startswith('zotero://'):
-                    inform(f'Updating existing Zotero link in "Where from" of {path}')
+                    inform(f'Updating existing Zotero link in "Where from" of {file}')
                     wherefroms[0] = uri
                 else:
-                    inform(f'Prepending Zotero link to front of "Where from" of {path}')
+                    inform(f'Prepending Zotero link to front of "Where from" of {file}')
                     wherefroms.insert(0, uri)
             else:
                 if __debug__: log(f'no prior wherefroms found on {fp}')
-                inform(f'Writing Zotero link into "Where From" metadata of {path}')
+                inform(f'Writing Zotero link into "Where From" metadata of {file}')
                 wherefroms = [uri]
         else:
-            inform(f'Overwriting "Where From" metadata with Zotero link in {path}')
+            inform(f'Overwriting "Where From" metadata with Zotero link in {file}')
             wherefroms = [uri]
 
-        self._write_wherefroms(file, wherefroms)
+        self._write_wherefroms(file_path, wherefroms)
 
 
-    def _wherefroms(self, file):
+    def _wherefroms(self, file_path):
         '''Returns a tuple (wherefroms, malformed), where the second element
         indicates where the content was malformed in some way.'''
 
-        fp = antiformat(file)
-        if b'com.apple.metadata:kMDItemWhereFroms' in listxattr(file):
-            wherefroms = getxattr(file, b'com.apple.metadata:kMDItemWhereFroms')
+        fp = antiformat(file_path)
+        if b'com.apple.metadata:kMDItemWhereFroms' in listxattr(file_path):
+            wherefroms = getxattr(file_path, b'com.apple.metadata:kMDItemWhereFroms')
             if not wherefroms.startswith(b'bplist'):
                 # There's content, but it's not a list. We don't know how to
                 # parse it and can't anticipate every possible variation, but
@@ -132,7 +132,7 @@ class WhereFrom(WriterMethod):
             return (None, False)
 
 
-    def _write_wherefroms(self, file, wherefroms):
+    def _write_wherefroms(self, file_path, wherefroms):
         binary = biplist.writePlistToString(wherefroms)
-        if __debug__: log(f'writing "where froms" attribute of {antiformat(file)}')
-        setxattr(file, b'com.apple.metadata:kMDItemWhereFroms', binary)
+        if __debug__: log(f'writing "where froms" attribute of {antiformat(file_path)}')
+        setxattr(file_path, b'com.apple.metadata:kMDItemWhereFroms', binary)

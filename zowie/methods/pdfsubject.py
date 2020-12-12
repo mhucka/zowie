@@ -54,34 +54,34 @@ class PDFSubject(WriterMethod):
                 + ' metadata fields.')
 
 
-    def write_link(self, file, uri):
-        '''Write the "uri" into the Subject attribute of PDF file "file".'''
+    def write_link(self, file_path, uri):
+        '''Write the "uri" into the Subject attribute of PDF file "file_path".'''
 
-        fp = antiformat(file)
+        fp = antiformat(file_path)
         if __debug__: log(f'reading PDF file {fp}')
-        trailer = PdfReader(file)
-        path = antiformat(f'[steel_blue3]{file}[/]')
+        trailer = PdfReader(file_path)
+        file = antiformat(f'[steel_blue3]{file_path}[/]')
         if not self.overwrite:
             subject = trailer.Info.Subject or ''
             if __debug__: log(f'found PDF Subject value {subject} on {fp}')
             if uri in subject:
-                inform(f'Zotero link already present in PDF "Subject" field of {path}')
+                inform(f'Zotero link already present in PDF "Subject" field of {file}')
                 return
             elif subject.startswith('zotero://select'):
-                inform(f'Replacing existing Zotero link in PDF "Subject" field of {path}')
+                inform(f'Replacing existing Zotero link in PDF "Subject" field of {file}')
                 subject = re.sub(r'(zotero://\S+)', uri, subject)
                 trailer.Info.Subject = subject
             elif subject is not None:
-                warn(f'Not overwriting existing PDF "Subject" value in {path}')
+                warn(f'Not overwriting existing PDF "Subject" value in {file}')
                 return
             else:
                 if __debug__: log(f'no prior PDF Subject field found on {fp}')
-                inform(f'Writing Zotero link into PDF "Subject" field of {path}')
+                inform(f'Writing Zotero link into PDF "Subject" field of {file}')
                 trailer.Info.Subject = uri
         else:
-            inform(f'Overwriting PDF "Subject" field of {path}')
+            inform(f'Overwriting PDF "Subject" field of {file}')
             trailer.Info.Subject = uri
 
         if not self.dry_run:
             if __debug__: log(f'writing PDF file with new "Subject" field: {fp}')
-            PdfWriter(file, trailer = trailer).write()
+            PdfWriter(file_path, trailer = trailer).write()
