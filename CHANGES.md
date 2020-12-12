@@ -1,6 +1,17 @@
 Change log for Zowie
 ====================
 
+Version 1.0.4
+--------------
+
+* Fixed issue #2: errors about database lookups were unclear about which file was involved.
+* Added info to installation instructions about using `--upgrade` option to `pip`.
+* Fixed some minor code errors that had few, if any, external implications.
+* Made some very minor documentation changes and elaborations.
+* Started adding unit tests.
+* Made other minor internal fixes and changes.
+
+
 Version 1.0.3
 --------------
 

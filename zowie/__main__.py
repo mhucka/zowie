@@ -15,10 +15,10 @@ Please see the file "LICENSE" for more information.
 '''
 
 from   bun import UI, inform, warn, alert, alert_fatal
+from   boltons.debugutils import pdb_on_signal
 from   commonpy.data_utils import timestamp
 from   commonpy.interrupt import config_interrupt
 from   commonpy.string_utils import antiformat
-from   boltons.debugutils import pdb_on_signal
 import plac
 import signal
 import shutil
@@ -57,7 +57,7 @@ if __debug__:
 )
 
 def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
-         no_keyring = False,  list = False, method = 'M', dry_run = False,
+         no_keyring = False, list = False, method = 'M', dry_run = False,
          overwrite = False, quiet = False, version = False, debug = 'OUT', *files):
     '''Zowie ("ZOtero link WrItEr") is a tool for Zotero users.
 
@@ -86,22 +86,22 @@ Basic usage
 ~~~~~~~~~~~
 
 Zowie can operate on a folder, or one or more individual PDF files, or a mix
-of both. Suppose your local Zotero database is located in ~/my-zotero/. Perhaps
+of both. Suppose your local Zotero database is located in ~/Zotero/. Perhaps
 the simplest way to run Zowie is the following command:
 
-  zowie ~/my-zotero
+  zowie ~/Zotero
 
 If this is your first run of Zowie, it will ask you for your userID and API
-key, then search for PDF files recursively under ~/my-zotero/.  For each PDF
+key, then search for PDF files recursively under ~/Zotero/.  For each PDF
 file found, Zowie will contact the Zotero servers over the network and
 determine the Zotero URI for the bibliographic entry containing that PDF
 file. Finally, it will use its default method of writing the Zotero select
 link, which is to write it into the macOS Finder comments for the file.
 
-Instead of a folder, you can invoke zowie on one or more individual files (but
+Instead of a folder, you can invoke Zowie on one or more individual files (but
 be careful to quote pathnames with spaces in them, such as in this example):
 
-  zowie "~/my-zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
+  zowie "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 
 Zowie supports multiple methods of writing the Zotero select link.  The
 option -l will cause Zowie to print a list of all the methods available:
@@ -114,7 +114,7 @@ used to select one or more alternative methods. Separate the names with
 commas without spaces. For example, the following command will make Zowie
 write the Zotero link into the Finder comments and the "Where from" attribute:
 
-  zowie -m findercomment,wherefrom ~/my-zotero/storage
+  zowie -m findercomment,wherefrom ~/Zotero/storage
 
 Where possible, Zowie tries to preserve the previous contents of metadata
 attributes.  For example, In the case of Finder comments and "Where from", it
@@ -245,12 +245,12 @@ Command-line arguments summary
         if __debug__: log(f'main body raised exception: {antiformat(exception)}')
         if exception[0] == CannotProceed:
             exit_code = exception[1].args[0]
+        elif exception[0] == FileError:
+            alert_fatal(antiformat(exception[1]))
+            exit_code = ExitCode.file_error
         elif exception[0] in [KeyboardInterrupt, UserCancelled]:
             warn('Interrupted.')
             exit_code = ExitCode.user_interrupt
-        elif type(exception[0]) == FileError:
-            alert_fatal(antiformat(exception[1]))
-            exit_code = ExitCode.file_error
         else:
             msg = antiformat(exception[1])
             alert_fatal(f'Encountered error {exception[0].__name__}: {msg}')

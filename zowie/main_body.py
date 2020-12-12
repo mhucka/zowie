@@ -20,10 +20,8 @@ from   commonpy.file_utils import filename_extension, files_in_directory
 from   commonpy.network_utils import net, network_available
 from   commonpy.string_utils import antiformat
 from   datetime import datetime
-import os
 from   os import path
 from   pathlib import Path
-import shutil
 import sys
 
 from .exceptions import CannotProceed
@@ -160,12 +158,9 @@ class MainBody():
         num_targets = len(self._files)
 
         for pdffile in self._files:
-            record = self._zotero.record_for_file(pdffile)
-            path = antiformat(pdffile)
-            if not record:
-                alert(f'Unable to find Zotero entry for file {path}')
+            (record, error) = self._zotero.record_for_file(pdffile)
+            if error:
+                alert(error)
                 continue
-            if __debug__: log(f'{record.parent_key} is parent of'
-                              + f' {record.key} for file {path}')
             for method in self._writers:
                 method.write_link(pdffile, record.link)
