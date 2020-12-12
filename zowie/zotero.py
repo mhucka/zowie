@@ -33,13 +33,12 @@ if __debug__:
 # Data definitions.
 # .............................................................................
 
-ZoteroRecord = namedtuple('ZoteroRecord', 'key parent_key type link file record')
+ZoteroRecord = namedtuple('ZoteroRecord', 'key parent_key file link record')
 ZoteroRecord.__doc__ = '''Zotero data about a local file
   'key' is the Zotero key for the file attachment
   'parent_key' is the top-level record that contains the file attachment
-  'type' is the type of library containing it, either "user", or "group"
-  'link' is a Zotero select link of the form "zotero://select/..."
   'file' is the path to the file on the local file system
+  'link' is a Zotero select link of the form "zotero://select/..."
   'record' is the entire record from Zotero
 '''
 
@@ -153,15 +152,13 @@ class Zotero():
         if not record:
             if __debug__: log(f'could not find a record for item key "{itemkey}"')
             return (None, f'Unable to retrieve Zotero record for {f}')
-        libtype = record['library']['type']
         parentkey = self.parent_key(record, file)
         if not parentkey:
             if __debug__: log(f'could not get parent key for {f}')
             return (None, f'Zotero record lacks parent entry for {f}')
         if __debug__: log(f'{parentkey} is parent of {itemkey} for {f}')
-        r = ZoteroRecord(key = itemkey, parent_key = parentkey, type = libtype,
-                         link = self.item_link(record, file),
-                         file = file, record = record)
+        r = ZoteroRecord(key = itemkey, parent_key = parentkey, file = file,
+                         link = self.item_link(record, file), record = record)
         return (r, None)
 
 
@@ -183,6 +180,7 @@ class Zotero():
 
 
     def parent_key(self, record, file):
+        '''Safely returns the parent key of the record item, or None.'''
         f = antiformat(file)
         if 'data' not in record:
             if __debug__: log(f'no "data" in record for {f}')
