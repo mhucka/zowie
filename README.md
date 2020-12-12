@@ -36,7 +36,7 @@ Zowie uses the Zotero API to discover the user's shared libraries and groups.  T
 Installation
 ------------
 
-The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python 2 &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
+The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python **2** &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
 You should be able to install `zowie` with [`pip`](https://pip.pypa.io/en/stable/installing/) for Python&nbsp;3.  To install `zowie` from the [Python package repository (PyPI)](https://pypi.org), run the following command:
 ```
@@ -47,6 +47,8 @@ As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip`
 ```sh
 python3 -m pip install git+https://github.com/mhucka/zowie.git
 ```
+
+_If you already installed Zowie once before_, and want to update to the latest version, add `--upgrade` to the end of either command line above.
 
 
 Usage
