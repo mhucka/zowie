@@ -16,6 +16,7 @@ Please see the file "LICENSE" for more information.
 
 from bun import inform, warn, alert, alert_fatal
 from commonpy.interrupt import raise_for_interrupts
+from commonpy.string_utils import antiformat
 from collections import namedtuple
 from os import path as path
 from pyzotero import zotero, zotero_errors
@@ -26,7 +27,7 @@ from .keyring_utils import keyring_credentials, save_keyring_credentials
 from .keyring_utils import validated_input
 
 if __debug__:
-    from sidetrack import log
+    from sidetrack import log, logr
 
 
 # Data definitions.
@@ -123,8 +124,9 @@ class Zotero():
 
     def record_for_file(self, file):
         '''Returns a ZoteroRecord corresponding to the given local PDF file.'''
+        f = antiformat(file)
         if not path.exists(file):
-            raise ValueError(f'File not found: {file}')
+            raise ValueError(f'File not found: {f}')
         itemkey = path.basename(path.dirname(file))
         # We don't know whether it's a user library or a group library, so
         # we have to iterate over the options.
@@ -150,24 +152,42 @@ class Zotero():
             raise_for_interrupts()
         if not record:
             if __debug__: log(f'could not find a record for item key "{itemkey}"')
-            return None
+            return (None, f'Unable to retrieve Zotero record for {f}')
         libtype = record['library']['type']
-        parentkey = record['data']['parentItem']
-        link = self.item_link(record)
-        return ZoteroRecord(key = itemkey, parent_key = parentkey, type = libtype,
-                            link = link, file = file, record = record)
+        parentkey = self.parent_key(record, file)
+        if not parentkey:
+            if __debug__: log(f'could not get parent key for {f}')
+            return (None, f'Zotero record lacks parent entry for {f}')
+        if __debug__: log(f'{parentkey} is parent of {itemkey} for {f}')
+        r = ZoteroRecord(key = itemkey, parent_key = parentkey, type = libtype,
+                         link = self.item_link(record, file),
+                         file = file, record = record)
+        return (r, None)
 
 
-    # For the format of the URIs, see thes discussions in the Zotero forums:
+    # For the format of the URIs, see these discussions in the Zotero forums:
     # https://forums.zotero.org/discussion/comment/335046/#Comment_335046
     # https://forums.zotero.org/discussion/78312/zotero-uri-vs-select-item
 
-    def item_link(self, record):
+    def item_link(self, record, file):
         '''Given a record, returns an item link (i.e., "zotero://select/...)'''
-        parentkey = record['data']['parentItem']
         libtype = record['library']['type']
+        parentkey = self.parent_key(record, file)
+        if not parentkey:
+            return None
         if libtype == 'user':
             return f'zotero://select/library/items/{parentkey}'
         else:
             groupid = record['library']['id']
             return f'zotero://select/groups/{groupid}/items/{parentkey}'
+
+
+    def parent_key(self, record, file):
+        f = antiformat(file)
+        if 'data' not in record:
+            if __debug__: log(f'no "data" in record for {f}')
+            return None
+        if 'parentItem' not in record['data']:
+            if __debug__: logr(f'unexpected record for {f}: ' + str(record["data"]))
+            return None
+        return record['data']['parentItem']
