@@ -125,10 +125,15 @@ class Zotero():
         '''Returns a ZoteroRecord corresponding to the given local PDF file.'''
         f = antiformat(file)
         if not path.exists(file):
+            # The file should always exist, because of how the list of files is
+            # gathered, so something is wrong but we don't know what. Give up.
             raise ValueError(f'File not found: {f}')
+
+        # Zotero stores content in the subdirectory like .../storage/N743ZXDF.
+        # The item key is the alphanumeric directory name.
+        # Given the key, there's no way to know whether the record is in a user
+        # library or a group library, so we have to iterate over the options.
         itemkey = path.basename(path.dirname(file))
-        # We don't know whether it's a user library or a group library, so
-        # we have to iterate over the options.
         record = None
         for library in self._libraries:
             try:
@@ -152,10 +157,14 @@ class Zotero():
         if not record:
             if __debug__: log(f'could not find a record for item key "{itemkey}"')
             return (None, f'Unable to retrieve Zotero record for {f}')
+
+        # If the PDF isn't associated with a bib record, it won't have a parent.
         parentkey = self.parent_key(record, file)
         if not parentkey:
-            if __debug__: log(f'could not get parent key for {f}')
-            return (None, f'Zotero record lacks parent entry for {f}')
+            if __debug__: log(f'file not associated with a parent record: {f}')
+            return (None, f'File lacks a parent Zotero record: {f}')
+
+        # We have an item record and a parent. We are happy campers.
         if __debug__: log(f'{parentkey} is parent of {itemkey} for {f}')
         r = ZoteroRecord(key = itemkey, parent_key = parentkey, file = file,
                          link = self.item_link(record, file), record = record)

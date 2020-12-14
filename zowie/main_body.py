@@ -155,12 +155,15 @@ class MainBody():
         inform(f'Will process {pluralized("PDF file", self._files, True)}'
                + f' using {pluralized("method", self.methods)}'
                + f' [cyan2]{", ".join(self.methods)}[/].')
-        num_targets = len(self._files)
+        if len(self._files) > 10000:
+            inform("(That's a huge number of files – this will take a long time.)")
+        elif len(self._files) > 1000:
+            inform("(That's a lot of files – this will take some time.)")
 
         for pdffile in self._files:
-            (record, error) = self._zotero.record_for_file(pdffile)
-            if error:
-                alert(error)
+            (record, failure) = self._zotero.record_for_file(pdffile)
+            if failure:
+                warn(failure)
                 continue
             for method in self._writers:
                 method.write_link(pdffile, record.link)

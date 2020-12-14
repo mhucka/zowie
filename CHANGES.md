@@ -1,6 +1,12 @@
 Change log for Zowie
 ====================
 
+Version 1.0.5
+--------------
+
+Fixed issue #1: PDF files that have no parent records are not necessarily an error. Print warnings, not errors, for those cases.
+
+
 Version 1.0.4
 --------------
 
