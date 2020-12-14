@@ -158,9 +158,9 @@ class MainBody():
         num_targets = len(self._files)
 
         for pdffile in self._files:
-            (record, error) = self._zotero.record_for_file(pdffile)
-            if error:
-                alert(error)
+            (record, failure) = self._zotero.record_for_file(pdffile)
+            if failure:
+                warn(failure)
                 continue
             for method in self._writers:
                 method.write_link(pdffile, record.link)
