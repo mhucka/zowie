@@ -1,6 +1,12 @@
 Change log for Zowie
 ====================
 
+Version 1.0.6
+--------------
+
+This update limits the parts of the [PyObjC](https://pypi.org/project/pyobjc/) package that are required in `requirements.txt`, to improve installation time as well as avoid a conflict between `pyobjc-framework-PubSub` and the Python [PyPubSub](https://pypi.org/project/PyPubSub/) package used by [Bun](https://pypi.org/project/bun/).
+
+
 Version 1.0.5
 --------------
 

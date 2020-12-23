@@ -12,7 +12,9 @@ pyxattr         >= 0.7.1
 setuptools      >= 41.0.1
 sidetrack       >= 1.0.0
 
-# The following is needed by the applescript module, but because the
-# applescript module doesn't have a requirements.txt, installation
-# via pip ends up missing this dependency:
-pyobjc          >= 7.0.1
+# The following are needed by the py-applescript module, but because the
+# py-applescript module doesn't have a requirements.txt, installation via pip
+# ends up missing these dependencies.
+pyobjc-core                      >= 7.0.1
+pyobjc-framework-AppleScriptKit  >= 7.0.1
+pyobjc-framework-AppleScriptObjC >= 7.0.1
