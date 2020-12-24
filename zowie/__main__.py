@@ -1,5 +1,5 @@
 '''
-Zowie: a program to write Zotero select links into article PDF files
+Zowie: a program to write Zotero select links into attachment files
 
 Authors
 -------
@@ -28,10 +28,10 @@ from   textwrap import wrap
 
 import zowie
 from zowie import print_version
-from .exceptions import UserCancelled, FileError, CannotProceed
-from .exit_codes import ExitCode
-from .main_body import MainBody
-from .methods import method_names, KNOWN_METHODS
+from zowie.exceptions import UserCancelled, FileError, CannotProceed
+from zowie.exit_codes import ExitCode
+from zowie.main_body import MainBody
+from zowie.methods import method_names, KNOWN_METHODS
 
 if __debug__:
     from sidetrack import set_debug, log, logr
@@ -41,10 +41,11 @@ if __debug__:
 # .............................................................................
 
 @plac.annotations(
-    api_key    = ('API key to access the Zotero API service',                'option', 'a'),
+    api_key    = ('use API key "A" to access the Zotero API service',        'option', 'a'),
     no_color   = ('do not color-code terminal output',                       'flag',   'C'),
     after_date = ('only act on files created or modified after date "D"',    'option', 'd'),
-    identifier = ('Zotero user ID for API calls',                            'option', 'i'),
+    file_ext   = ('only act on files with extensions in "F" (default: all)', 'option', 'f'),
+    identifier = ('use Zotero user ID "I" for API calls',                    'option', 'i'),
     no_keyring = ('do not store credentials in the keyring service',         'flag',   'K'),
     list       = ('print list of known methods',                             'flag',   'l'),
     method     = ('select method to store links (default: finder comments)', 'option', 'm'),
@@ -53,17 +54,19 @@ if __debug__:
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
     version    = ('print version info and exit',                             'flag',   'V'),
     debug      = ('write detailed trace to "OUT" ("-" means console)',       'option', '@'),
-    files      = 'file(s) and/or folder(s) containing Zotero article PDF files',
+    files      = 'file(s) and/or folder(s) containing Zotero attachment files',
 )
 
-def main(api_key = 'A', no_color = False, after_date = 'D', identifier = 'I',
-         no_keyring = False, list = False, method = 'M', dry_run = False,
-         overwrite = False, quiet = False, version = False, debug = 'OUT', *files):
+def main(api_key = 'A', no_color = False, after_date = 'D', file_ext = 'F',
+         identifier = 'I', no_keyring = False, list = False, method = 'M',
+         dry_run = False, overwrite = False, quiet = False, version = False,
+         debug = 'OUT', *files):
     '''Zowie ("ZOtero link WrItEr") is a tool for Zotero users.
 
-Zowie writes Zotero select links into the PDF files and/or the macOS Finder
-metadata attributes of PDF files in the user's Zotero database. This makes it
-possible to look up the Zotero entry of a PDF file from outside of Zotero.
+Zowie writes Zotero select links into the files and/or the macOS Finder
+metadata attributes of files in the user's local Zotero database. This makes
+it possible to jump to the Zotero bibliographic record corresponding to a
+Zotero file attachment when viewing the file from outside of Zotero.
 
 Credentials for Zotero access
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,17 +88,17 @@ account at Zotero.org and visit https://www.zotero.org/settings/keys
 Basic usage
 ~~~~~~~~~~~
 
-Zowie can operate on a folder, or one or more individual PDF files, or a mix
-of both. Suppose your local Zotero database is located in ~/Zotero/. Perhaps
+Zowie can operate on a folder, or one or more individual files, or a mix of
+both. Suppose your local Zotero database is located in ~/Zotero/. Perhaps
 the simplest way to run Zowie is the following command:
 
   zowie ~/Zotero
 
 If this is your first run of Zowie, it will ask you for your userID and API
-key, then search for PDF files recursively under ~/Zotero/.  For each PDF
+key, then search for files recursively under ~/Zotero/storage/.  For each
 file found, Zowie will contact the Zotero servers over the network and
-determine the Zotero URI for the bibliographic entry containing that PDF
-file. Finally, it will use its default method of writing the Zotero select
+determine the Zotero URI for the bibliographic entry containing that file.
+Finally, it will use its default method of writing the Zotero select
 link, which is to write it into the macOS Finder comments for the file.
 
 Instead of a folder, you can invoke Zowie on one or more individual files (but
@@ -108,11 +111,12 @@ option -l will cause Zowie to print a list of all the methods available:
 
   zowie -l
 
-The default method is to write it into Finder comments for the file. (These
-comments are visible in the Finder's "Get Info" panel.) The option -m can be
-used to select one or more alternative methods. Separate the names with
-commas without spaces. For example, the following command will make Zowie
-write the Zotero link into the Finder comments and the "Where from" attribute:
+(Note that some methods only work for some file types.) The default method is
+to write it into Finder comments for the file. (These comments are visible in
+the Finder's "Get Info" panel.) The option -m can be used to select one or
+more alternative methods. Separate the names with commas without spaces. For
+example, the following command will make Zowie write the Zotero link into the
+Finder comments and the "Where from" attribute:
 
   zowie -m findercomment,wherefrom ~/Zotero/storage
 
@@ -128,10 +132,25 @@ overwrite (-o) option.  The overwrite option (-o) makes Zowie replace values
 completely.  Check the description of the methods for more details about what
 they do by default and the impact of the -o option.
 
+Filtering by file type
+~~~~~~~~~~~~~~~~~~~~~~
+
+By default, Zowie acts on all files it finds in the .../storage/ folder of a
+Zotero database, unless the method chosen using -m only applies to certain
+file types.  You can use the option -f to make Zowie limit its actions to
+particular file types based on the file name extensions.  For example,
+
+  zowie -f pdf,mp4,mov ~/Zotero
+
+will cause it to only work on .pdf, .mp4, and .mov files.  You can provide
+multiple file extensions separated by commas, without spaces and without the
+leading periods.  Note that Zowie always ignores certain files, such as
+those with extensions .sqlite, .bak, .js, .csl, and a few others.
+
 Filtering by date
 ~~~~~~~~~~~~~~~~~
 
-If the -d option is given, the PDF files will be filtered to use only those
+If the -d option is given, the files will be filtered to use only those
 whose last-modified date/time stamp is no older than the given date/time
 description. Valid descriptors are those accepted by the Python dateparser
 package. Make sure to enclose descriptions within single or double
@@ -225,6 +244,7 @@ Command-line arguments summary
     body = exception = None
     try:
         body = MainBody(files       = files,
+                        file_ext    = None if file_ext == 'F' else file_ext,
                         api_key     = None if api_key == 'A' else api_key,
                         user_id     = None if identifier == 'I' else identifier,
                         use_keyring = not no_keyring,
