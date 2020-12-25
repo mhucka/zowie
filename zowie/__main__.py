@@ -135,17 +135,24 @@ they do by default and the impact of the -o option.
 Filtering by file type
 ~~~~~~~~~~~~~~~~~~~~~~
 
-By default, Zowie acts on all files it finds in the .../storage/ folder of a
-Zotero database, unless the method chosen using -m only applies to certain
-file types.  You can use the option -f to make Zowie limit its actions to
-particular file types based on the file name extensions.  For example,
+By default, Zowie acts on all files it finds on the command line, except for
+certain files that it always ignores: hidden files and files with extensions
+.sqlite, .bak, .csl, .css, .js, .json, .pl, and a few others.  If the -m
+option is used to select methods that only apply to specific file types,
+Zowie will examine each file it finds in turn and only apply the methods that
+match that particular file's type.
+
+You can use the option -f to make Zowie filter the files it finds based on
+file name extensions.  This is useful if you want it to concentrate only on
+particular file types and ignore other files it might find while scanning
+folders.  For example,
 
   zowie -f pdf,mp4,mov ~/Zotero
 
 will cause it to only work on .pdf, .mp4, and .mov files.  You can provide
 multiple file extensions separated by commas, without spaces and without the
 leading periods.  Note that Zowie always ignores certain files, such as
-those with extensions .sqlite, .bak, .js, .csl, and a few others.
+
 
 Filtering by date
 ~~~~~~~~~~~~~~~~~
