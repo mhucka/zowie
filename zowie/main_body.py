@@ -159,11 +159,11 @@ class MainBody():
             if __debug__: log(f'filtering files by date {self.after_date_str}')
             kept = []
             tzinfo = self.after_date.tzinfo
-            for pdffile in self.files:
-                mtime = datetime.fromtimestamp(Path(pdffile).stat().st_mtime)
+            for file in self.files:
+                mtime = datetime.fromtimestamp(Path(file).stat().st_mtime)
                 if mtime.replace(tzinfo = tzinfo) >= self.after_date:
-                    if __debug__: log(f'keeping {pdffile}')
-                    kept.append(pdffile)
+                    if __debug__: log(f'keeping {file}')
+                    kept.append(file)
             self._targets = kept
 
         if not self._targets:
@@ -201,7 +201,7 @@ class MainBody():
 # Misc. utilities
 # .............................................................................
 
-_workspace = NSWorkspace.sharedWorkspace()
+_WORKSPACE = NSWorkspace.sharedWorkspace()
 
 # The code below is based in part on code posted by user "kuzzoooroo" on
 # 2014-01-23 to Stack Overflow at https://stackoverflow.com/a/21245832/743730
@@ -211,7 +211,7 @@ def file_is_alias(item):
     # mac alias files test positive as files but negative as links.
     if path.islink(item) or not path.isfile(item):
         return False
-    uti, err = _workspace.typeOfFile_error_(path.realpath(item), None)
+    uti, err = _WORKSPACE.typeOfFile_error_(path.realpath(item), None)
     if err:
         return False
     else:
