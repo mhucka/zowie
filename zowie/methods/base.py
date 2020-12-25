@@ -93,6 +93,16 @@ class WriterMethod(ABC):
         pass
 
 
+    @property
+    @classmethod
+    @abstractmethod
+    def file_extension(cls):
+        '''Returns the file extension to which this method is limited
+        A value of None means it is not limited to any particular file type.
+        '''
+        pass
+
+
     @abstractmethod
     def write_link(self, file, uri):
         '''Write the link into the file.'''
