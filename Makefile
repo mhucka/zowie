@@ -56,7 +56,7 @@ dist/$(name):
 
 # make release ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-release: | test-branch release-on-github print-instructions
+release: | test-branch binary release-on-github print-instructions
 
 test-branch:
 ifneq ($(branch),main)
@@ -90,6 +90,7 @@ release-on-github: | update-init-file update-codemeta-file check-in-updated-file
 	sleep 2
 	$(EDITOR) $(tmp_file)
 	gh release create v$(version) -t "Release $(version)" -F $(tmp_file)
+	gh release upload v$(version) dist/$(name)
 
 print-instructions:;
 	$(info ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓)
