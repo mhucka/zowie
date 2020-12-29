@@ -4,7 +4,9 @@ Change log for Zowie
 Version 1.1.0
 --------------
 
-Zowie now operates on all types of files by default, not just PDF files. After all, a Zotero library can contain more than just PDFs and you may want to jump from other file types to their Zotero records.  Along with this, Zowie has a new command-line option, `-f`, to allow you to filter files by their extensions and limit its operation to specific file types instead of all files, if you wish.
+* Zowie now operates on all types of files by default, not just PDF files. 
+* Zowie has a new command-line option: `-f`, to allow you to filter files by their extensions and limit its operation to specific file types instead of all files, if you wish.
+* A ready-to-run binary executable for macOS is now available for downloading from GitHub.
 
 
 Version 1.0.6
