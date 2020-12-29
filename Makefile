@@ -11,11 +11,11 @@
 # The following is based on the approach posted by Jonathan Ben-Avraham to
 # Stack Overflow in 2014 at https://stackoverflow.com/a/25668869
 
-PROGRAMS_NEEDED = curl gh git jq sed
+PROGRAMS_NEEDED = curl gh git jq sed pyinstaller
 TEST := $(foreach p,$(PROGRAMS_NEEDED),\
 	  $(if $(shell which $(p)),_,$(error Cannot find program "$(p)")))
 
-# Gather values that we need further below.
+# Gather values that we need ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 $(info Gathering data -- this takes a few moments ...)
 
@@ -37,11 +37,26 @@ doi_tail  := $(lastword $(subst ., ,$(doi)))
 init_file := $(name)/__init__.py
 tmp_file  := $(shell mktemp /tmp/release-notes-$(name).XXXXXX)
 
+app_name  := $(shell python3 -c 'import sys; print("$(name)".title())')
+platform  := $(shell python3 -c 'import sys; print(sys.platform)')
+
 $(info Gathering data ... Done.)
 
-# The main action is "make release".
 
-release: | test-branch release-on-github print-instructions
+# make binary ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+binary: | dependencies dist/$(name)
+
+dependencies:;
+	pip3 install -r requirements.txt
+
+dist/$(name):
+	pyinstaller --clean pyinstaller-$(platform).spec
+
+
+# make release ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+release: | test-branch binary release-on-github print-instructions
 
 test-branch:
 ifneq ($(branch),main)
@@ -75,6 +90,7 @@ release-on-github: | update-init-file update-codemeta-file check-in-updated-file
 	sleep 2
 	$(EDITOR) $(tmp_file)
 	gh release create v$(version) -t "Release $(version)" -F $(tmp_file)
+	gh release upload v$(version) dist/$(name)
 
 print-instructions:;
 	$(info ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓)
@@ -106,9 +122,24 @@ test-pypi: create-dist
 pypi: create-dist
 	python3 -m twine upload --verbose dist/*
 
-clean:;
-	-rm -rf dist build $(name).egg-info codemeta.json.bak $(init_file).bak \
-	README.md.bak
+
+# Cleanup and miscellaneous directives ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+clean: clean-dist clean-build clean-release clean-other
+
+clean-dist:;
+	-rm -fr dist/$(name) dist/$(name)-$(version).tar.gz \
+	    dist/$(name)-$(version)-py3-none-any.whl
+
+clean-build:;
+	-rm -rf build
+
+clean-release:;
+	-rm -rf $(name).egg-info codemeta.json.bak $(init_file).bak README.md.bak
+
+clean-other:;
+	-rm -fr $(name)/__pycache__
 
 .PHONY: release release-on-github update-init-file update-codemeta-file \
-	print-instructions create-dist clean test-pypi pypi
+	print-instructions test-pypi pypi build build-darwin \
+	clean clean-dist clean-other clean-release

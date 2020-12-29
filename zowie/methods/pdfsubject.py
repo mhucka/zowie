@@ -54,6 +54,11 @@ class PDFSubject(WriterMethod):
                 + ' metadata fields.')
 
 
+    @classmethod
+    def file_extension(cls):
+        return '.pdf'
+
+
     def write_link(self, file_path, uri):
         '''Write the "uri" into the Subject attribute of PDF file "file_path".'''
 

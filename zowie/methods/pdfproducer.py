@@ -55,6 +55,11 @@ class PDFProducer(WriterMethod):
                 + ' and overwriting it may be undesirable.')
 
 
+    @classmethod
+    def file_extension(cls):
+        return '.pdf'
+
+
     def write_link(self, file_path, uri):
         '''Write the "uri" into the Producer attribute of PDF file "file_path".'''
 

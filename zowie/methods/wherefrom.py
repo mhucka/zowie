@@ -60,6 +60,14 @@ class WhereFrom(WriterMethod):
                 + ' still be able to read the updated value.')
 
 
+    @classmethod
+    def file_extension(cls):
+        '''Returns the file extension to which this method is limited
+        A value of None means it is not limited to any particular file type.
+        '''
+        return None
+
+
     def write_link(self, file_path, uri):
         '''Write the "uri" into the "Where From" metadata attribute of "file_path".'''
 

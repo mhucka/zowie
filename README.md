@@ -1,12 +1,12 @@
 Zowie<img width="10%" align="right" src="https://github.com/mhucka/zowie/raw/main/.graphics/zowie-icon.png">
 ======
 
-Zowie (_"**Zo**tero link **w**r**i**t**e**r"_) is a command-line program that writes Zotero _select_ links into the PDF files of a Zotero database.  Zowie is written in Python and runs on macOS.
+Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS that writes Zotero _select_ links into the file attachments contained in a Zotero database.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
-[![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
 [![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1795)](https://data.caltech.edu/records/1795)
+[![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
 [![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange)](https://pypi.org/project/zowie/)
 
 
@@ -16,6 +16,7 @@ Table of contents
 * [Introduction](#introduction)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Known issues and limitations](#known-issues-and-limitations)
 * [Getting help](#getting-help)
 * [Contributing](#contributing)
 * [License](#license)
@@ -26,15 +27,37 @@ Table of contents
 Introduction
 ------------
 
-When using [Zotero](https://zotero.org), you may on occasion want to work with the PDF files from outside of Zotero.  For example, if you're a [DEVONthink](https://www.devontechnologies.com/apps/devonthink) user, you will at some point discover the power of indexing your local Zotero database from DEVONthink.  However, when viewing or manipulating the PDF files from outside of Zotero, you may run into the following problem: when looking at a given PDF file, _how do you find out which Zotero entry it belongs to_?
+When using [Zotero](https://zotero.org), you may on occasion want to work with PDF files and other attachment files outside of Zotero.  For example, if you're a [DEVONthink](https://www.devontechnologies.com/apps/devonthink) user, you will at some point discover the power of indexing your local Zotero database from DEVONthink.  However, when viewing or manipulating the attachments from outside of Zotero, you may run into the following problem: when looking at a given file, _how do you find out which Zotero entry it belongs to_?
 
-Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pronounced like [the interjection](https://www.merriam-webster.com/dictionary/zowie)).  Zowie scans through the files in a local Zotero database, looks up the Zotero bibliographic record corresponding to each PDF file found, and writes a [Zotero select link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into the PDF file and/or certain macOS Finder/Spotlight metadata fields (depending on the user's choice).  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a PDF file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that PDF file.
+Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pronounced like [the interjection](https://www.merriam-webster.com/dictionary/zowie)).  Zowie scans through the files in a local Zotero database, looks up the Zotero bibliographic record corresponding to each attachment file found, and writes a [Zotero select link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into the file and/or certain macOS Finder/Spotlight metadata fields (depending on the user's choice).  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that file.
 
-Zowie uses the Zotero API to discover the user's shared libraries and groups.  This allows it to look up Zotero item URIs for PDFs regardless of whether they belong to the user's personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files.
+Zowie uses the Zotero network API to discover the user's shared libraries and groups.  This allows it to look up Zotero item URIs for files regardless of whether they belong to the user's personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files.
 
 
 Installation
 ------------
+
+Zowie is available as a self-contained executable program for macOS, as well as a program for running within a Python interpreter. The following are alternative ways of installing it.
+
+
+### _Alternative 1: Zowie as a self-contained ready-to-run executable_
+
+The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
+
+1. Go to the [releases page](https://github.com/mhucka/zowie/releases).
+2. Find the latest release (normally the first one on the page).
+3.  <img align="right" width="400px" src=".graphics/binary-release.png"/>Find the **Assets** section of the release.
+4. Click on `zowie` to download it.
+5. Move the program from wherever you downloaded it on your computer to a folder where you put other command-line programs, such as `/usr/local/bin`. 
+
+If there is no `/usr/local/bin` on your computer yet, you can create one by opening a terminal window and typing the following command in it:
+
+```shell
+sudo mkdir /usr/local/bin
+```
+
+
+### _Alternative 2: Zowie as a Python package_
 
 The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python **2** &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
@@ -43,7 +66,7 @@ You should be able to install `zowie` with [`pip`](https://pip.pypa.io/en/stable
 python3 -m pip install zowie
 ```
 
-As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `zowie` directly from GitHub, like this:
+As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `zowie` directly from GitHub:
 ```sh
 python3 -m pip install git+https://github.com/mhucka/zowie.git
 ```
@@ -62,14 +85,14 @@ The `zowie` command-line program should end up installed in a location where sof
 zowie -h
 ```
 
-If that fails for some reason, you should be able to run Zowie from anywhere using the normal approach for running Python modules:
+If you installed it as a Python package, then an alternative method is available to run Zowie from anywhere, namely to use the normal approach for running Python modules:
 
 ```shell
 python3 -m zowie -h
 ```
 
 
-### Credentials for Zotero access
+### _Credentials for Zotero access_
 
 Zowie relies on the [Zotero sync API](https://www.zotero.org/support/dev/web_api/v3/start) to get information about your references. If you do not already have a [Zotero sync account](https://www.zotero.org/support/sync), it will be necessary to create one before going any further.
 
@@ -78,15 +101,15 @@ To use Zowie, you will also need both an API user identifier (also known as the 
 The first time you run Zowie, it will ask for this information and (unless the `-K` option is given) store it in your macOS keychain so that it does not have to ask for it again on future occasions.  It is also possible to supply the identifier and API key directly on the command line using the `-i` and `-a` options, respectively; the given values will then override any values stored in the keychain and (unless the `-K` option is also given) will be used to update the keychain for the next time.
 
 
-### Basic usage
+### _Basic usage_
 
-Zowie can operate on a folder, or one or more individual PDF files, or a mix of both. Suppose your local Zotero database is located in `~/my-zotero/`. Perhaps the simplest way to run Zowie is the following command:
+Zowie can operate on a folder, or one or more individual files, or a mix of both. Suppose your local Zotero database is located in `~/my-zotero/`. Perhaps the simplest way to run Zowie is the following command:
 
 ```shell
 zowie ~/Zotero
 ```
 
-If this is your first run of Zowie, it will ask you for your userID and API key, then search for PDF files recursively under `~/Zotero/`.  For each PDF file found, Zowie will contact the Zotero servers over the network and determine the Zotero select link for the bibliographic entry containing that PDF file. Finally, it will use the default method of recording the link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
+If this is your first run of Zowie, it will ask you for your userID and API key, then search for files recursively under `~/Zotero/`.  For each file found, Zowie will contact the Zotero servers over the network and determine the Zotero select link for the bibliographic entry containing that file. Finally, it will use the default method of recording the link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
 
 Instead of a folder, you can invoke Zowie on one or more individual files (but be careful to quote pathnames with spaces in them, such as in this example):
 
@@ -95,7 +118,7 @@ zowie "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 ```
 
 
-### Available methods of writing Zotero links
+### _Available methods of writing Zotero links_
 
 Zowie supports multiple methods of writing the Zotero select link.  The option `-l` will cause Zowie to print a list of all the methods available, then exit.
 
@@ -109,18 +132,31 @@ At this time, the following methods are available:
 
 * **`findercomment`**: (**The default method**.) Writes the Zotero select link into the Finder comments of each file, attempting to preserve other parts of the comments. If Zowie finds an existing Zotero select link in the text of the Finder comments attribute, it only updates the link portion and tries to leave the rest of the comment text untouched. Otherwise, Zowie **only** writes into the comments attribute if either the attribute value is empty or Zowie is given the overwrite (`-o`) option. (Note that updating the link text requires rewriting the entire Finder comments attribute on a given file. Finder comments have a reputation for being easy to get into inconsistent states, so if you have existing Finder comments that you absolutely don't want to lose, it may be safest to avoid this method.)
 
-* **`pdfproducer`**: Writes the Zotero select link into the "Producer" metadata field of each PDF file. If the "Producer" field is not empty on a given file, Zowie looks for an existing Zotero link within the value and updates the link if one is found; otherwise, Zowie leaves the field untouched unless given the overwrite flag (`-o`), in which case, it replaces the entire contents of the field with the Zotero select link.  For some users, the "Producer" field has not utility, and thus can be usefully hijacked for the purpose of storing the Zotero select link. The value is accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.  However, note that some users (archivists, forensics investigators, possibly others) do use the "Producer" field, and overwriting it may be undesirable.
+* **`pdfproducer`**: (Only applicable to PDF files.) Writes the Zotero select link into the "Producer" metadata field of each PDF file. If the "Producer" field is not empty on a given file, Zowie looks for an existing Zotero link within the value and updates the link if one is found; otherwise, Zowie leaves the field untouched unless given the overwrite flag (`-o`), in which case, it replaces the entire contents of the field with the Zotero select link.  For some users, the "Producer" field has not utility, and thus can be usefully hijacked for the purpose of storing the Zotero select link. The value is accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.  However, note that some users (archivists, forensics investigators, possibly others) do use the "Producer" field, and overwriting it may be undesirable.
 
-* **`pdfsubject`**: Writes the Zotero select link into the "Subject" metadata field of each PDF file. If the "Subject" field is not empty on a given file, Zowie looks for an existing Zotero link within the value and updates the link if one is found; otherwise, Zowie leaves the field untouched unless given the overwrite flag (`-o`), in which case, it replaces the entire contents of the field with the Zotero select link.  Note that the PDF "Subject" field is not the same as the "Title" field. For some users, the "Subject" field is not used for any purpose and thus can be usefully hijacked for storing the Zotero select link. The value is accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.
+* **`pdfsubject`**: (Only applicable to PDF files.) Writes the Zotero select link into the "Subject" metadata field of each PDF file. If the "Subject" field is not empty on a given file, Zowie looks for an existing Zotero link within the value and updates the link if one is found; otherwise, Zowie leaves the field untouched unless given the overwrite flag (`-o`), in which case, it replaces the entire contents of the field with the Zotero select link.  Note that the PDF "Subject" field is not the same as the "Title" field. For some users, the "Subject" field is not used for any purpose and thus can be usefully hijacked for storing the Zotero select link. The value is accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.
 
-* **`wherefrom`**: Writes the Zotero select link to the "Where from" metadata field of each file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute). This field is displayed as "Where from" in Finder "Get Info" panels; it is typically used by web browsers to store a files download origin. The field is a list. If Zowie finds a Zotero select link as the first item in the list, it updates that value; otherwise, Zowie prepends the Zotero select link to the list of existing values, keeping the other values unless the overwrite option (`-o`) is used. When the overwrite option is used, Zowie deletes the existing list of values and writes only the Zotero select link. Note that if macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but other applications will still be able to read the updated value.
+* **`wherefrom`**: Writes the Zotero select link to the "Where from" metadata field of each file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute). This field is displayed as "Where from" in Finder "Get Info" panels; it is typically used by web browsers to store a files download origin. The field is a list. If Zowie finds a Zotero select link as the first item in the list, it updates that value; otherwise, Zowie prepends the Zotero select link to the list of existing values, keeping the other values unless the overwrite option (`-o`) is used. When the overwrite option is used, Zowie deletes the existing list of values and writes only the Zotero select link. Note that if macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the updated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but other applications will still be able to read the updated value.
 
 Note that, depending on the attribute, it is possible that a file has an attribute value that is not visible in the Finder or other applications.  This is especially true for "Where from" values and Finder comments.  The implication is that it may not be apparent when a file has a value for a given attribute, which can lead to confusion if Zowie thinks there is a value and refuses to change it without the `-o` option.
 
 
-### Filtering by date
+### _Filtering by file type_
 
-If the `-d` option is given, the PDF files will be filtered to use only those whose last-modified date/time stamp is no older than the given date/time description. Valid descriptors are those accepted by the Python dateparser library. Make sure to enclose descriptions within single or double quotes. Examples:
+By default, Zowie acts on all files it finds on the command line, except for certain files that it always ignores: hidden files and files with extensions `.sqlite`, `.bak`, `.csl`, `.css`, `.js`, `.json`, `.pl`, and a few others.  If the `-m` option is used to select methods that only apply to specific file types, Zowie will examine each file it finds in turn and only apply the methods that match that particular file's type, but it will still consider every file it finds in the directories it scans and apply the methods that are not limited to specific types.
+
+You can use the option `-f` to make Zowie filter the files it finds based on file name extensions.  This is useful if you want it to concentrate only on particular file types and ignore other files it might find while scanning folders. For example,
+
+```shell
+zowie -f pdf,mp4,mov ~/Zotero
+```
+
+will cause it to only work on PDF, MP4, and QuickTime format files.  You can provide multiple file extensions separated by commas, without spaces and without the leading periods.
+
+
+### _Filtering by date_
+
+If the `-d` option is given, the files will be filtered to use only those whose last-modified date/time stamp is no older than the given date/time description. Valid descriptors are those accepted by the Python dateparser library. Make sure to enclose descriptions within single or double quotes. Examples:
 
 ```shell
 zowie -d "2 weeks ago" ....
@@ -130,7 +166,7 @@ zowie -d "July 4, 2013" ....
 ```
 
 
-### Additional command-line arguments
+### _Additional command-line arguments_
 
 To make Zowie only print what it would do without actually doing it, use the `-n` "dry run" option.
 
@@ -151,9 +187,10 @@ The following table summarizes all the command line options available.
 |---------- |-------------------|--------------------------------------|---------|---|
 | `-a`_A_   | `--api-key`_A_    | API key to access the Zotero API service | | |
 | `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | | |
-| `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | Act on all PDF files found | |
+| `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | Act on all files found | |
+| `-f`      | `--file-ext`_F_   | Only act on files with extensions in "F" | Act on all files found | ⚑ |
 | `-h`      | `--help`          | Display help text and exit | | |
-| `-i`      | `--identifer`_I_  | Zotero user ID for API calls | | |
+| `-i`      | `--identifier`_I_ | Zotero user ID for API calls | | |
 | `-K`      | `--no-keyring`    | Don't use a keyring/keychain | Store login info in keyring | |
 | `-l`      | `--list`          | Display known services and exit | | | 
 | `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
@@ -163,6 +200,7 @@ The following table summarizes all the command line options available.
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
+⚑ &nbsp; Certain files are always ignored: hidden files, macOS aliases, and files with extensions `.sqlite`, `.sqlite-journal`, `.bak`, `.csl`, `.css`, `.js`, `.json`, `.pl`, and `.config_resp`.<br>
 ⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.
 
 
@@ -179,6 +217,12 @@ This program exits with a return code of 0 if no problems are encountered.  It r
 | 4    | file error &ndash; encountered a problem with a file     |
 | 5    | server error &ndash; encountered a problem with a server |
 | 6    | an exception or fatal error occurred                     |
+
+
+Known issues and limitations
+----------------------------
+
+For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
 
 
 Getting help
@@ -223,6 +267,8 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [pdfrw](https://github.com/pmaupin/pdfrw) &ndash; a pure Python library for reading and writing PDFs
 * [plac](http://micheles.github.io/plac/) &ndash; a command line argument parser
 * [py-applescript](https://pypi.org/project/py-applescript/) &ndash; a Python interface to AppleScript
+* [PyInstaller](http://www.pyinstaller.org) &ndash; a packaging program that creates standalone applications from Python programs
+* [pyobjc](https://github.com/ronaldoussoren/pyobjc) &ndash; Python &rlhar; Objective-C and macOS frameworks bridge
 * [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
 * [pyxattr](https://github.com/iustin/pyxattr) &ndash; access extended file attributes from Python
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
