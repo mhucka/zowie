@@ -46,7 +46,7 @@ The binary is created using [PyInstaller](http://www.pyinstaller.org); it works 
 
 1. Go to the [releases page](https://github.com/mhucka/zowie/releases).
 2. Find the latest release (normally the first one on the page).
-3.  <img align="right" width="400px" src=".graphics/binary-release.png"/>Find the **Assets** section of the release.
+3.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the release.
 4. Click on `zowie` to download it.
 5. Move the program from wherever you downloaded it on your computer to a folder where you put other command-line programs, such as `/usr/local/bin`. 
 
