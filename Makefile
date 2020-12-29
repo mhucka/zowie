@@ -43,7 +43,7 @@ platform  := $(shell python3 -c 'import sys; print(sys.platform)')
 $(info Gathering data ... Done.)
 
 
-# make binary & make installer ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# make binary ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 binary: | dependencies dist/$(name)
 
