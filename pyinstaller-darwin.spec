@@ -58,18 +58,8 @@ executable         = EXE(application_pyz,
                          configuration.datas,
                          name = 'zowie',
                          debug = False,
-                         strip = False,
-                         upx = True,
+                         strip = True,
+                         upx = False,
                          runtime_tmpdir = None,
                          console = False,
                         )
-
-# No GUI yet, so this isn't needed.
-#
-# app             = BUNDLE(executable,
-#                          name = 'Zowie.app',
-#                          icon = 'dev/icon/zowie-icon.icns',
-#                          bundle_identifier = None,
-#                          info_plist = {'NSHighResolutionCapable': 'True',
-#                                        'NSAppleScriptEnabled': False},
-#                         )
