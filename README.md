@@ -40,7 +40,7 @@ Installation
 Zowie is available as a self-contained executable program for macOS, as well as a program for running within a Python interpreter. The following are alternative ways of installing it.
 
 
-### _Alternative 1: Self-contained ready-to-run executable_
+### _Alternative 1: Zowie as a self-contained ready-to-run executable_
 
 The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
 
@@ -57,7 +57,7 @@ sudo mkdir /usr/local/bin
 ```
 
 
-### _Alternative 2: Python package_
+### _Alternative 2: Zowie as a Python package_
 
 The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python **2** &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
@@ -66,7 +66,7 @@ You should be able to install `zowie` with [`pip`](https://pip.pypa.io/en/stable
 python3 -m pip install zowie
 ```
 
-As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `zowie` directly from GitHub, like this:
+As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `zowie` directly from GitHub:
 ```sh
 python3 -m pip install git+https://github.com/mhucka/zowie.git
 ```
@@ -136,7 +136,7 @@ At this time, the following methods are available:
 
 * **`pdfsubject`**: (Only applicable to PDF files.) Writes the Zotero select link into the "Subject" metadata field of each PDF file. If the "Subject" field is not empty on a given file, Zowie looks for an existing Zotero link within the value and updates the link if one is found; otherwise, Zowie leaves the field untouched unless given the overwrite flag (`-o`), in which case, it replaces the entire contents of the field with the Zotero select link.  Note that the PDF "Subject" field is not the same as the "Title" field. For some users, the "Subject" field is not used for any purpose and thus can be usefully hijacked for storing the Zotero select link. The value is accessible from macOS Preview, Adobe Acrobat, DEVONthink, and presumably any other application that can display the PDF metadata fields.
 
-* **`wherefrom`**: Writes the Zotero select link to the "Where from" metadata field of each file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute). This field is displayed as "Where from" in Finder "Get Info" panels; it is typically used by web browsers to store a files download origin. The field is a list. If Zowie finds a Zotero select link as the first item in the list, it updates that value; otherwise, Zowie prepends the Zotero select link to the list of existing values, keeping the other values unless the overwrite option (`-o`) is used. When the overwrite option is used, Zowie deletes the existing list of values and writes only the Zotero select link. Note that if macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the upated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but other applications will still be able to read the updated value.
+* **`wherefrom`**: Writes the Zotero select link to the "Where from" metadata field of each file (the [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute). This field is displayed as "Where from" in Finder "Get Info" panels; it is typically used by web browsers to store a files download origin. The field is a list. If Zowie finds a Zotero select link as the first item in the list, it updates that value; otherwise, Zowie prepends the Zotero select link to the list of existing values, keeping the other values unless the overwrite option (`-o`) is used. When the overwrite option is used, Zowie deletes the existing list of values and writes only the Zotero select link. Note that if macOS Spotlight indexing is turned on for the volume containing the file, the macOS Finder will display the updated "Where from" values in the Get Info panel of the file; if Spotlight is not turned on, the Get info panel will not be updated, but other applications will still be able to read the updated value.
 
 Note that, depending on the attribute, it is possible that a file has an attribute value that is not visible in the Finder or other applications.  This is especially true for "Where from" values and Finder comments.  The implication is that it may not be apparent when a file has a value for a given attribute, which can lead to confusion if Zowie thinks there is a value and refuses to change it without the `-o` option.
 
@@ -190,7 +190,7 @@ The following table summarizes all the command line options available.
 | `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | Act on all files found | |
 | `-f`      | `--file-ext`_F_   | Only act on files with extensions in "F" | Act on all files found | ⚑ |
 | `-h`      | `--help`          | Display help text and exit | | |
-| `-i`      | `--identifer`_I_  | Zotero user ID for API calls | | |
+| `-i`      | `--identifier`_I_ | Zotero user ID for API calls | | |
 | `-K`      | `--no-keyring`    | Don't use a keyring/keychain | Store login info in keyring | |
 | `-l`      | `--list`          | Display known services and exit | | | 
 | `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
