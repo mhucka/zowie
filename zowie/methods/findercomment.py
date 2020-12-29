@@ -41,7 +41,7 @@ end run
 
 on set_comments{f, c}
     tell application "Finder"
-        set comment of (POSIX file f as alias) to c as Unicode text
+        set comment of (POSIX file f as alias) to c
     end tell
 end run
 
@@ -82,6 +82,14 @@ class FinderComment(WriterMethod):
                 + ' states, so if you have existing Finder comments that you'
                 + " absolutely don't want to lose, it may be safest to avoid"
                 + ' this method.)')
+
+
+    @classmethod
+    def file_extension(cls):
+        '''Returns the file extension to which this method is limited
+        A value of None means it is not limited to any particular file type.
+        '''
+        return None
 
 
     def write_link(self, file_path, uri):
