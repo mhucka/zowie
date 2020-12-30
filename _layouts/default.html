@@ -15,10 +15,13 @@
   <body>
     <div class="wrapper">
       <header>
+        <h1 class="header">{{ site.title | default: site.github.repository_name }}</h1>
         <p class="header">{{ site.description | default: site.github.project_tagline }}</p>
 
         <ul>
-          <li class="download"><a class="buttons" href="https://github.com/mhucka/zowie/releases/latest">Download latest release</a></li>
+          {% if site.show_downloads %}
+          <li class="download"><a class="buttons" href="https://github.com/mhucka/zowie/releases/latest">Download latest</a></li>
+          {% endif %}
           <li><a class="buttons github" href="{{ site.github.repository_url }}">View On GitHub</a></li>
         </ul>
 
