@@ -186,7 +186,7 @@ The following table summarizes all the command line options available.
 | Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp;&nbsp;&nbsp; | Meaning | Default |  |
 |---------- |-------------------|--------------------------------------|---------|---|
 | `-a`_A_   | `--api-key`_A_    | API key to access the Zotero API service | | |
-| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | | |
+| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | |
 | `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | Act on all files found | |
 | `-f`      | `--file-ext`_F_   | Only act on files with extensions in "F" | Act on all files found | ⚑ |
 | `-h`      | `--help`          | Display help text and exit | | |
@@ -196,7 +196,7 @@ The following table summarizes all the command line options available.
 | `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
 | `-n`      | `--dry-run`       | Report what would be done but don't do it | Do it | | 
 | `-o`      | `--overwrite`     | Overwrite previous metadata content | Don't write if already present | |
-| `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working |
+| `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working | |
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
