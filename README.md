@@ -48,7 +48,7 @@ A self-contained, ready-to-run binary version is available for macOS 10.13 (High
 2. Find the latest release (normally the first one on the page).
 3.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the release.
 4. Click on `zowie.zip` to download it.
-5. Unzip the file that is downloaded to your computer.
+5. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
 6. Move `zowie` from wherever you downloaded it on your computer to a folder where you put other command-line programs, such as `/usr/local/bin`. 
 
 If you want to put it in `/usr/local/bin` but it does not exist on your computer yet, you can create it by opening a terminal window and running the following command in it (_prior_ to moving `zowie` into `/usr/local/bin`):
