@@ -4,6 +4,7 @@ Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
 [![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1834)](https://data.caltech.edu/records/1834)
 [![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange)](https://pypi.org/project/zowie/)
+[![GitHub stars](https://img.shields.io/github/stars/mhucka/zowie?style=flat-square&color=purple&label=GitHub%20stars)](https://github.com/mhucka/zowie)
 
 
 Table of contents
