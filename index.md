@@ -38,14 +38,13 @@ Zowie is available as a self-contained executable program for macOS, as well as 
 
 ### _Alternative 1: ready-to-run executable (for macOS <ins>before</ins> 10.15)_
 
-A self-contained, ready-to-run binary version is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
+A self-contained, ready-to-run executable is available for macOS 10.13 (High Sierra) and 10.14 (Mojave), though it **does not run on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
 
-1. Go to the [releases page](https://github.com/mhucka/zowie/releases).
-2. Find the latest release (normally the first one on the page).
-3.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the release.
-4. Click on `zowie.zip` to download it.
-5. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
-6. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
+1. Go to the page on GitHub for [the latest release](https://github.com/mhucka/zowie/releases/latest).
+2.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the release.
+3. Click on `zowie.zip` to download it.
+4. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
+5. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
 
 If you want to put it in `/usr/local/bin` but it does not exist on your computer yet, you can create it by opening a terminal window and running the following command in it (_prior_ to moving `zowie` into `/usr/local/bin`):
 
