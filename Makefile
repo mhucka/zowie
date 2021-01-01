@@ -96,7 +96,7 @@ print-instructions:;
 	$(info ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓)
 	$(info ┃ Next steps:                                                        ┃)
 	$(info ┃ 1. Visit https://github.com/$(repo)/releases )
-	$(info ┃ 2. Double-check the draft release, and click "Publish" if ready    ┃)
+	$(info ┃ 2. Double-check the release                                        ┃)
 	$(info ┃ 3. Wait a few seconds to let web services do their work            ┃)
 	$(info ┃ 4. Run "make update-doi" to update the DOI in README.md            ┃)
 	$(info ┃ 5. Run "make create-dist" and check the distribution for problems  ┃)

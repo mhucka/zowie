@@ -5,7 +5,7 @@ Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
-[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1795)](https://data.caltech.edu/records/1795)
+[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1834)](https://data.caltech.edu/records/1834)
 [![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
 [![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange)](https://pypi.org/project/zowie/)
 
@@ -40,17 +40,18 @@ Installation
 Zowie is available as a self-contained executable program for macOS, as well as a program for running within a Python interpreter. The following are alternative ways of installing it.
 
 
-### _Alternative 1: Zowie as a self-contained ready-to-run executable_
+### _Alternative 1: ready-to-run executable (for macOS <ins>before</ins> 10.15)_
 
-The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
+A self-contained, ready-to-run binary version is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
 
 1. Go to the [releases page](https://github.com/mhucka/zowie/releases).
 2. Find the latest release (normally the first one on the page).
-3.  <img align="right" width="400px" src=".graphics/binary-release.png"/>Find the **Assets** section of the release.
-4. Click on `zowie` to download it.
-5. Move the program from wherever you downloaded it on your computer to a folder where you put other command-line programs, such as `/usr/local/bin`. 
+3.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the release.
+4. Click on `zowie.zip` to download it.
+5. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
+6. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
 
-If there is no `/usr/local/bin` on your computer yet, you can create one by opening a terminal window and typing the following command in it:
+If you want to put it in `/usr/local/bin` but it does not exist on your computer yet, you can create it by opening a terminal window and running the following command in it (_prior_ to moving `zowie` into `/usr/local/bin`):
 
 ```shell
 sudo mkdir /usr/local/bin
