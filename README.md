@@ -42,7 +42,7 @@ Zowie is available as a self-contained executable program for macOS, as well as 
 
 ### _Alternative 1: ready-to-run executable (for macOS <ins>before</ins> 10.15)_
 
-A self-contained, ready-to-run binary version is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
+A self-contained, ready-to-run binary version is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not run on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
 
 1. Go to the [releases page](https://github.com/mhucka/zowie/releases).
 2. Find the latest release (normally the first one on the page).
@@ -104,7 +104,7 @@ The first time you run Zowie, it will ask for this information and (unless the `
 
 ### _Basic usage_
 
-Zowie can operate on a folder, or one or more individual files, or a mix of both. Suppose your local Zotero database is located in `~/my-zotero/`. Perhaps the simplest way to run Zowie is the following command:
+Zowie can operate on a folder, or one or more individual files, or a mix of both. Suppose your local Zotero database is located in `~/Zotero/`. Perhaps the simplest way to run Zowie is the following command:
 
 ```shell
 zowie ~/Zotero
