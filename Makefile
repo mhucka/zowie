@@ -15,6 +15,7 @@ PROGRAMS_NEEDED = curl gh git jq sed pyinstaller
 TEST := $(foreach p,$(PROGRAMS_NEEDED),\
 	  $(if $(shell which $(p)),_,$(error Cannot find program "$(p)")))
 
+
 # Gather values that we need ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 $(info Gathering data -- this takes a few moments ...)
@@ -78,7 +79,8 @@ edited := codemeta.json $(init_file)
 
 check-in-updated-files:;
 	git add $(edited)
-	git diff-index --quiet HEAD $(edited) || git commit -m"Update stored version number" $(edited)
+	git diff-index --quiet HEAD $(edited) || \
+	    git commit -m"Update stored version number" $(edited)
 
 release-on-github: | update-init-file update-codemeta-file check-in-updated-files
 	git push -v --all
@@ -108,19 +110,20 @@ print-instructions:;
 
 update-doi: 
 	sed -i .bak -e 's|/api/record/[0-9]\{1,\}|/api/record/$(doi_tail)|' README.md
-	sed -i .bak -e 's|caltech.edu/records/[0-9]\{1,\}|caltech.edu/records/$(doi_tail)|' README.md
+	sed -i .bak -e 's|edu/records/[0-9]\{1,\}|edu/records/$(doi_tail)|' README.md
 	git add README.md
-	git diff-index --quiet HEAD README.md || git commit -m"Update DOI" README.md && git push -v --all
+	git diff-index --quiet HEAD README.md || \
+	    (git commit -m"Update DOI" README.md && git push -v --all)
 
 create-dist: clean
 	python3 setup.py sdist bdist_wheel
 	python3 -m twine check dist/*
 
 test-pypi: create-dist
-	python3 -m twine upload --verbose --repository-url https://test.pypi.org/legacy/ dist/*
+	python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 pypi: create-dist
-	python3 -m twine upload --verbose dist/*
+	python3 -m twine upload dist/*
 
 
 # Cleanup and miscellaneous directives ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
