@@ -100,7 +100,7 @@ The first time you run Zowie, it will ask for this information and (unless the `
 
 ### _Basic usage_
 
-Zowie can operate on a folder, or one or more individual files, or a mix of both. Suppose your local Zotero database is located in `~/my-zotero/`. Perhaps the simplest way to run Zowie is the following command:
+Zowie can operate on a folder, or one or more individual files, or a mix of both. Suppose your local Zotero database is located in `~/Zotero/`. Perhaps the simplest way to run Zowie is the following command:
 
 ```shell
 zowie ~/Zotero
