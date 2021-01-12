@@ -97,12 +97,15 @@ class MainBody():
 
         hint = '(Hint: use -h for help.)'
 
-        if not self.use_keyring and not any([self.api_key, self.user_id]):
-            alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
+        if not self.files:
+            alert_fatal(f'Need at least one folder path or file as argument. {hint}')
             raise CannotProceed(ExitCode.bad_arg)
         if any(item.startswith('-') for item in self.files):
             bad = next(item for item in self.files if item.startswith('-'))
             alert_fatal(f'Unrecognized option "{bad}" in arguments. {hint}')
+            raise CannotProceed(ExitCode.bad_arg)
+        if not self.use_keyring and not any([self.api_key, self.user_id]):
+            alert_fatal(f"Need Zotero credentials if not using keyring. {hint}")
             raise CannotProceed(ExitCode.bad_arg)
 
         if self.after_date:

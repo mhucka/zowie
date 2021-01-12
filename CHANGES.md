@@ -1,6 +1,12 @@
 Change log for Zowie
 ====================
 
+Version 1.1.1
+--------------
+
+* Fix for issue #4, caused by not checking that a path has been provided on the command line.
+
+
 Version 1.1.0
 --------------
 
