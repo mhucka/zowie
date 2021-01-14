@@ -46,13 +46,14 @@ $(info Gathering data ... Done.)
 
 # make binary ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-binary: | dependencies dist/$(name)
+binary: | dependencies dist/$(name).zip
 
 dependencies:;
 	pip3 install -r requirements.txt
 
-dist/$(name):
+dist/$(name).zip:
 	pyinstaller --clean pyinstaller-$(platform).spec
+	zip dist/$(name).zip dist/$(name)
 
 
 # make release ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,7 +93,7 @@ release-on-github: | update-init-file update-codemeta-file check-in-updated-file
 	sleep 2
 	$(EDITOR) $(tmp_file)
 	gh release create v$(version) -t "Release $(version)" -F $(tmp_file)
-	gh release upload v$(version) dist/$(name)
+	gh release upload v$(version) dist/$(name).zip
 
 print-instructions:;
 	$(info ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓)
@@ -131,7 +132,7 @@ pypi: create-dist
 clean: clean-dist clean-build clean-release clean-other
 
 clean-dist:;
-	-rm -fr dist/$(name) dist/$(name)-$(version).tar.gz \
+	-rm -fr dist/$(name) dist/$(name).zip dist/$(name)-$(version).tar.gz \
 	    dist/$(name)-$(version)-py3-none-any.whl
 
 clean-build:;
