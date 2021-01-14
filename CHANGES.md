@@ -1,6 +1,13 @@
 Change log for Zowie
 ====================
 
+Version 1.1.2
+--------------
+
+* Add missing dependency to `requirements.txt`
+* Mention Zowie can't work with Zotero installations that use the linked attachment file method.
+
+
 Version 1.1.1
 --------------
 
