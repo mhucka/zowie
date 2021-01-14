@@ -260,6 +260,7 @@ The [vector artwork](https://thenounproject.com/term/tag-exclamation-point/32695
 Zowie makes use of numerous open-source packages, without which Zowie could not have been developed.  I want to acknowledge this debt.  In alphabetical order, the packages are:
 
 * [aenum](https://pypi.org/project/aenum/) &ndash; advanced enumerations for Python
+* [boltons](https://github.com/mahmoud/boltons/) &ndash; package of miscellaneous Python utilities
 * [biplist](https://bitbucket.org/wooster/biplist/src/master/) &ndash; A binary plist parser/writer for Python
 * [bun](https://github.com/caltechlibrary/bun) &ndash; a set of basic user interface classes and functions
 * [commonpy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
