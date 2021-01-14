@@ -31,7 +31,9 @@ When using [Zotero](https://zotero.org), you may on occasion want to work with P
 
 Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pronounced like [the interjection](https://www.merriam-webster.com/dictionary/zowie)).  Zowie scans through the files in a local Zotero database, looks up the Zotero bibliographic record corresponding to each attachment file found, and writes a [Zotero select link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into the file and/or certain macOS Finder/Spotlight metadata fields (depending on the user's choice).  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that file.
 
-Zowie uses the Zotero network API to discover the user's shared libraries and groups.  This allows it to look up Zotero item URIs for files regardless of whether they belong to the user's personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files.
+Zowie uses the Zotero network API to discover the user's shared libraries and groups.  This allows it to look up Zotero item URIs for files regardless of whether they belong to the user's personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files. 
+
+Regretfully, Zowie can only work with Zotero libraries that use normal/local data storage; it cannot work when Zotero is configured to use linked attachments.
 
 
 Installation
@@ -223,7 +225,11 @@ This program exits with a return code of 0 if no problems are encountered.  It r
 Known issues and limitations
 ----------------------------
 
-For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
+The following is a list of currently-known issues and limitations:
+
+* Zowie can only work when Zotero is set to use direct data storage; i.e., where attached files are stored in Zotero.  It cannot work if you use [linked attachments](https://www.zotero.org/support/preferences/advanced#files_and_folders), that is, if you set _Linked Attachment Base Directory_ in your Zotero Preferences' _Advanced_ → _Files and Folders_ panel.
+
+* For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
 
 
 Getting help
