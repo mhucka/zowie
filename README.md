@@ -189,7 +189,7 @@ The following table summarizes all the command line options available.
 | Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp;&nbsp;&nbsp; | Meaning | Default |  |
 |---------- |-------------------|--------------------------------------|---------|---|
 | `-a`_A_   | `--api-key`_A_    | API key to access the Zotero API service | | |
-| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | | |
+| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | |
 | `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | Act on all files found | |
 | `-f`      | `--file-ext`_F_   | Only act on files with extensions in "F" | Act on all files found | ⚑ |
 | `-h`      | `--help`          | Display help text and exit | | |
@@ -266,8 +266,8 @@ The [vector artwork](https://thenounproject.com/term/tag-exclamation-point/32695
 Zowie makes use of numerous open-source packages, without which Zowie could not have been developed.  I want to acknowledge this debt.  In alphabetical order, the packages are:
 
 * [aenum](https://pypi.org/project/aenum/) &ndash; advanced enumerations for Python
-* [boltons](https://github.com/mahmoud/boltons/) &ndash; package of miscellaneous Python utilities
 * [biplist](https://bitbucket.org/wooster/biplist/src/master/) &ndash; A binary plist parser/writer for Python
+* [boltons](https://github.com/mahmoud/boltons/) &ndash; package of miscellaneous Python utilities
 * [bun](https://github.com/caltechlibrary/bun) &ndash; a set of basic user interface classes and functions
 * [commonpy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
 * [ipdb](https://github.com/gotcha/ipdb) &ndash; the IPython debugger
@@ -277,8 +277,8 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [py-applescript](https://pypi.org/project/py-applescript/) &ndash; a Python interface to AppleScript
 * [PyInstaller](http://www.pyinstaller.org) &ndash; a packaging program that creates standalone applications from Python programs
 * [pyobjc](https://github.com/ronaldoussoren/pyobjc) &ndash; Python &rlhar; Objective-C and macOS frameworks bridge
-* [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
 * [pyxattr](https://github.com/iustin/pyxattr) &ndash; access extended file attributes from Python
+* [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
 * [sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
 * [wheel](https://pypi.org/project/wheel/) &ndash; setuptools extension for building wheels
