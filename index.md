@@ -2,7 +2,7 @@ Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
-[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1834)](https://data.caltech.edu/records/1834)
+[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1867)](https://data.caltech.edu/records/1867)
 [![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange)](https://pypi.org/project/zowie/)
 [![GitHub stars](https://img.shields.io/github/stars/mhucka/zowie?style=flat-square&color=purple&label=GitHub%20stars)](https://github.com/mhucka/zowie)
 
@@ -30,6 +30,8 @@ Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pro
 
 Zowie uses the Zotero network API to discover the user's shared libraries and groups.  This allows it to look up Zotero item URIs for files regardless of whether they belong to the user's personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files.
 
+Regretfully, Zowie can only work with Zotero libraries that use normal/local data storage; it cannot work when Zotero is configured to use linked attachments.
+
 
 Installation
 ------------
@@ -47,7 +49,7 @@ A self-contained, ready-to-run executable is available for macOS 10.13 (High Sie
 4. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
 5. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
 
-If you want to put it in `/usr/local/bin` but it does not exist on your computer yet, you can create it by opening a terminal window and running the following command in it (_prior_ to moving `zowie` into `/usr/local/bin`):
+If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
 
 ```shell
 sudo mkdir /usr/local/bin
@@ -219,7 +221,11 @@ This program exits with a return code of 0 if no problems are encountered.  It r
 Known issues and limitations
 ----------------------------
 
-For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
+The following is a list of currently-known issues and limitations:
+
+* Zowie can only work when Zotero is set to use direct data storage; i.e., where attached files are stored in Zotero.  It cannot work if you use [linked attachments](https://www.zotero.org/support/preferences/advanced#files_and_folders), that is, if you set _Linked Attachment Base Directory_ in your Zotero Preferences' _Advanced_ → _Files and Folders_ panel.
+
+* For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
 
 
 Getting help
@@ -257,6 +263,7 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 
 * [aenum](https://pypi.org/project/aenum/) &ndash; advanced enumerations for Python
 * [biplist](https://bitbucket.org/wooster/biplist/src/master/) &ndash; A binary plist parser/writer for Python
+* [boltons](https://github.com/mahmoud/boltons/) &ndash; package of miscellaneous Python utilities
 * [bun](https://github.com/caltechlibrary/bun) &ndash; a set of basic user interface classes and functions
 * [commonpy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
 * [ipdb](https://github.com/gotcha/ipdb) &ndash; the IPython debugger
@@ -266,8 +273,8 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [py-applescript](https://pypi.org/project/py-applescript/) &ndash; a Python interface to AppleScript
 * [PyInstaller](http://www.pyinstaller.org) &ndash; a packaging program that creates standalone applications from Python programs
 * [pyobjc](https://github.com/ronaldoussoren/pyobjc) &ndash; Python &rlhar; Objective-C and macOS frameworks bridge
-* [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
 * [pyxattr](https://github.com/iustin/pyxattr) &ndash; access extended file attributes from Python
+* [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
 * [sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
 * [wheel](https://pypi.org/project/wheel/) &ndash; setuptools extension for building wheels
