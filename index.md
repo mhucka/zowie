@@ -17,7 +17,6 @@ Table of contents
 * [Getting help](#getting-help)
 * [Contributing](#contributing)
 * [License](#license)
-* [Authors and history](#authors-and-history)
 * [Acknowledgments](#authors-and-acknowledgments)
 
 
@@ -26,11 +25,9 @@ Introduction
 
 When using [Zotero](https://zotero.org), you may on occasion want to work with PDF files and other attachment files outside of Zotero.  For example, if you're a [DEVONthink](https://www.devontechnologies.com/apps/devonthink) user, you will at some point discover the power of indexing your local Zotero database from DEVONthink.  However, when viewing or manipulating the attachments from outside of Zotero, you may run into the following problem: when looking at a given file, _how do you find out which Zotero entry it belongs to_?
 
-Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pronounced like [the interjection](https://www.merriam-webster.com/dictionary/zowie)).  Zowie scans through the files in a local Zotero database, looks up the Zotero bibliographic record corresponding to each attachment file found, and writes a [Zotero select link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into the file and/or certain macOS Finder/Spotlight metadata fields (depending on the user's choice).  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that file.
+Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pronounced like [the interjection](https://www.merriam-webster.com/dictionary/zowie)).  Zowie scans through the files on your disk in a local Zotero database, looks up the Zotero bibliographic record corresponding to each file found, and writes a [Zotero select link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into the file and/or certain macOS Finder/Spotlight metadata fields (depending on the user's choice).  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that file.
 
-Zowie uses the Zotero network API to discover the user's shared libraries and groups.  This allows it to look up Zotero item URIs for files regardless of whether they belong to the user's personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files.
-
-Regretfully, Zowie can only work with Zotero libraries that use normal/local data storage; it cannot work when Zotero is configured to use linked attachments.
+Regretfully, Zowie can **only** work with Zotero libraries that use normal/local data storage; **it cannot work when Zotero is configured to use linked attachments**.
 
 
 Installation
@@ -41,7 +38,7 @@ Zowie is available as a self-contained executable program for macOS, as well as 
 
 ### _Alternative 1: ready-to-run executable (for macOS <ins>before</ins> 10.15)_
 
-A self-contained, ready-to-run executable is available for macOS 10.13 (High Sierra) and 10.14 (Mojave), though it **does not run on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
+A self-contained, ready-to-run executable is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not run on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
 
 1. Go to the page on GitHub for [the latest release](https://github.com/mhucka/zowie/releases/latest).
 2.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the release.
@@ -93,7 +90,7 @@ python3 -m zowie -h
 
 ### _Credentials for Zotero access_
 
-Zowie relies on the [Zotero sync API](https://www.zotero.org/support/dev/web_api/v3/start) to get information about your references. If you do not already have a [Zotero sync account](https://www.zotero.org/support/sync), it will be necessary to create one before going any further.
+Zowie relies on the [Zotero sync API](https://www.zotero.org/support/dev/web_api/v3/start) to get information about your references.  This allows it to look up Zotero item URIs for files regardless of whether they belong to your personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files.  If you do not already have a [Zotero sync account](https://www.zotero.org/support/sync), it will be necessary to create one before going any further.
 
 To use Zowie, you will also need both an API user identifier (also known as the **userID**) and an **API key**.  To find out your Zotero userID and create a new API key, log in to your Zotero account at [Zotero.org](https://www.zotero.org) and visit the [_Feeds/API_ tab of the your _Settings_ page](https://www.zotero.org/settings/keys).  On that page you can find your userID and create a new API key for Zowie.
 
@@ -185,7 +182,7 @@ The following table summarizes all the command line options available.
 | Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp;&nbsp;&nbsp; | Meaning | Default |  |
 |---------- |-------------------|--------------------------------------|---------|---|
 | `-a`_A_   | `--api-key`_A_    | API key to access the Zotero API service | | |
-| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | |
+| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | | |
 | `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | Act on all files found | |
 | `-f`      | `--file-ext`_F_   | Only act on files with extensions in "F" | Act on all files found | ⚑ |
 | `-h`      | `--help`          | Display help text and exit | | |
@@ -243,13 +240,7 @@ I would be happy to receive your help and participation if you are interested.  
 License
 -------
 
-This software is Copyright (C) 2020, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
-
-
-Authors and history
----------------------------
-
-Copyright (c) 2020 by Michael Hucka and the California Institute of Technology.
+This software is Copyright (C) 2020-2021, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
 
 
 Acknowledgments
