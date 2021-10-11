@@ -115,8 +115,8 @@ option -l will cause Zowie to print a list of all the methods available:
 to write it into Finder comments for the file. (These comments are visible in
 the Finder's "Get Info" panel.) The option -m can be used to select one or
 more alternative methods. Separate the names with commas without spaces. For
-example, the following command will make Zowie write the Zotero link into the
-Finder comments and the "Where from" attribute:
+example, the following command will make Zowie write the Zotero link into both
+the Finder comments and the "Where from" attribute:
 
   zowie -m findercomment,wherefrom ~/Zotero/storage
 
@@ -151,7 +151,8 @@ folders.  For example,
 
 will cause it to only work on .pdf, .mp4, and .mov files.  You can provide
 multiple file extensions separated by commas, without spaces and without the
-leading periods.  Note that Zowie always ignores certain files, such as
+leading periods.  Note that Zowie always ignores certain files, such as those
+ending with .css, .js, .json, .bak, .csl, and a few others.
 
 
 Filtering by date
