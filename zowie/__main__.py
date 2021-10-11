@@ -14,24 +14,12 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
-from   boltons.debugutils import pdb_on_signal
-from   bun import UI, inform, warn, alert, alert_fatal
-from   commonpy.data_utils import timestamp
-from   commonpy.interrupt import config_interrupt
-from   commonpy.string_utils import antiformat
 import plac
-import signal
-import shutil
 import sys
 from   sys import exit as exit
-from   textwrap import wrap
 
-import zowie
-from zowie import print_version
-from zowie.exceptions import UserCancelled, FileError, CannotProceed
-from zowie.exit_codes import ExitCode
-from zowie.main_body import MainBody
-from zowie.methods import method_names, KNOWN_METHODS
+from   zowie.exit_codes import ExitCode
+from   zowie.methods import method_names
 
 if __debug__:
     from sidetrack import set_debug, log
@@ -220,21 +208,30 @@ Command-line arguments summary
         faulthandler.enable()
         if not sys.platform.startswith('win'):
             # Even with a different signal, I can't get this to work on Win.
+            import signal
+            from boltons.debugutils import pdb_on_signal
             pdb_on_signal(signal.SIGUSR1)
 
     # Preprocess arguments and handle early exits -----------------------------
 
+    if version:
+        from zowie import print_version
+        print_version()
+        exit(int(ExitCode.success))
+
+    from bun import UI, inform, warn, alert, alert_fatal
+
     ui = UI('Zowie', 'ZOtero link WrItEr', use_color = not no_color, be_quiet = quiet)
     ui.start()
 
-    if version:
-        print_version()
-        exit(int(ExitCode.success))
     if list:
+        import shutil
+        from textwrap import wrap
+        from zowie.methods import method_object
         inform('Known methods:\n')
         width = (shutil.get_terminal_size().columns - 2) or 78
         for name in method_names():
-            text = f'[cyan2]{name}[/]: ' + KNOWN_METHODS[name].description()
+            text = f'[cyan2]{name}[/]: {method_object(name).description()}'
             inform('\n'.join(wrap(text, width = width, subsequent_indent = '  ')))
             inform('')
         exit(int(ExitCode.success))
@@ -247,6 +244,11 @@ Command-line arguments summary
         exit(int(ExitCode.bad_arg))
 
     # Do the real work --------------------------------------------------------
+
+    from commonpy.data_utils import timestamp
+    from commonpy.interrupt import config_interrupt
+    from zowie.exceptions import UserCancelled, FileError, CannotProceed
+    from zowie.main_body import MainBody
 
     if __debug__: log('='*8 + f' started {timestamp()} ' + '='*8)
     body = exception = None
@@ -270,6 +272,7 @@ Command-line arguments summary
 
     exit_code = ExitCode.success
     if exception:
+        from commonpy.string_utils import antiformat
         if __debug__: log(f'main body raised exception: {antiformat(exception)}')
         if exception[0] == CannotProceed:
             exit_code = exception[1].args[0]
