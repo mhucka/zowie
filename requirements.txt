@@ -1,3 +1,10 @@
+# =============================================================================
+# @file    requirements.txt
+# @brief   Python dependencies for Zowie
+# @license Please see the file named LICENSE in the project directory
+# @website https://github.com/mhucka/zowie
+# =============================================================================
+
 aenum           >= 2.2.3
 biplist         >= 1.0.3
 boltons         >= 20.2.0
@@ -8,10 +15,10 @@ keyrings.alt    >= 3.1
 pdfrw           >= 0.4
 plac            >= 1.2.0
 py-applescript  >= 1.0.2
-pyzotero        >= 1.4.18
+pyzotero        == 1.4.25
 pyxattr         >= 0.7.1
 setuptools      >= 41.0.1
-sidetrack       >= 1.3.0
+sidetrack       == 2.0.0
 
 # The following are needed by the py-applescript module, but because the
 # py-applescript module doesn't have a requirements.txt, installation via pip

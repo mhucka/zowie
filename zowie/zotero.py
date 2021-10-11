@@ -27,7 +27,7 @@ from .keyring_utils import keyring_credentials, save_keyring_credentials
 from .keyring_utils import validated_input
 
 if __debug__:
-    from sidetrack import log, logr
+    from sidetrack import log
 
 
 # Data definitions.
@@ -65,7 +65,7 @@ class Zotero():
         # some were supplied and others missing, they're filled in from
         # either the keyring or by prompting the user.
 
-        if __debug__: log('keyring {}', 'enabled' if use_keyring else 'disabled')
+        if __debug__: log('keyring ' + ('enabled' if use_keyring else 'disabled'))
         if key is None and user_id is None and use_keyring:
             # We weren't given a key and id, but we can look in the keyring.
             if __debug__: log(f'getting id & key from keyring')
@@ -195,6 +195,6 @@ class Zotero():
             if __debug__: log(f'no "data" in record for {f}')
             return None
         if 'parentItem' not in record['data']:
-            if __debug__: logr(f'unexpected record for {f}: ' + str(record["data"]))
+            if __debug__: log(f'unexpected record for {f}: ' + str(record["data"]))
             return None
         return record['data']['parentItem']

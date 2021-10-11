@@ -14,8 +14,8 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
-from   bun import UI, inform, warn, alert, alert_fatal
 from   boltons.debugutils import pdb_on_signal
+from   bun import UI, inform, warn, alert, alert_fatal
 from   commonpy.data_utils import timestamp
 from   commonpy.interrupt import config_interrupt
 from   commonpy.string_utils import antiformat
@@ -34,7 +34,7 @@ from zowie.main_body import MainBody
 from zowie.methods import method_names, KNOWN_METHODS
 
 if __debug__:
-    from sidetrack import set_debug, log, logr
+    from sidetrack import set_debug, log
 
 
 # Main program.
@@ -285,7 +285,7 @@ Command-line arguments summary
             if __debug__:
                 from traceback import format_exception
                 details = ''.join(format_exception(*exception))
-                logr(f'Exception: {msg}\n{details}')
+                log(f'Exception: {msg}\n{details}')
     else:
         inform('Done.')
 
