@@ -20,7 +20,6 @@ Table of contents
 * [Getting help](#getting-help)
 * [Contributing](#contributing)
 * [License](#license)
-* [Authors and history](#authors-and-history)
 * [Acknowledgments](#authors-and-acknowledgments)
 
 
@@ -247,13 +246,7 @@ I would be happy to receive your help and participation if you are interested.  
 License
 -------
 
-This software is Copyright (C) 2020, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
-
-
-Authors and history
----------------------------
-
-Copyright (c) 2020 by Michael Hucka and the California Institute of Technology.
+This software is Copyright (C) 2020-2021, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
 
 
 Acknowledgments
