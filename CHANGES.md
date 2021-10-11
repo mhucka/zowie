@@ -1,41 +1,41 @@
-Change log for Zowie
-====================
+# Change log for Zowie
 
-Version 1.1.2
---------------
+## ★ Version 1.2.0 ★
+
+* Update LICENSE file, which had the wrong license text!
+* Fix issue #9: version incompatibility with Sidetrack version 2.0 package.
+* Update versions of all Python packages dependencies, and make `requirements.txt` pin the exact version of the packages used at release time.
+
+
+## ★ Version 1.1.2 ★
 
 * Add missing dependency to `requirements.txt`
 * Mention Zowie can't work with Zotero installations that use the linked attachment file method.
 
 
-Version 1.1.1
---------------
+## ★ Version 1.1.1 ★
 
 * Fix for issue #4, caused by not checking that a path has been provided on the command line.
 
 
-Version 1.1.0
---------------
+## ★ Version 1.1.0 ★
 
 * Zowie now operates on all types of files by default, not just PDF files. 
 * Zowie has a new command-line option: `-f`, to allow you to filter files by their extensions and limit its operation to specific file types instead of all files, if you wish.
 * A ready-to-run binary executable for macOS is now available for downloading from GitHub.
 
 
-Version 1.0.6
---------------
+## ★ Version 1.0.6 ★
 
 This update limits the parts of the [PyObjC](https://pypi.org/project/pyobjc/) package that are required in `requirements.txt`, to improve installation time as well as avoid a conflict between `pyobjc-framework-PubSub` and the Python [PyPubSub](https://pypi.org/project/PyPubSub/) package used by [Bun](https://pypi.org/project/bun/).
 
 
-Version 1.0.5
---------------
+## ★ Version 1.0.5 ★
 
 Fixed issue #1: PDF files that have no parent records are not necessarily an error. Print warnings, not errors, for those cases.
 
 
-Version 1.0.4
---------------
+## ★ Version 1.0.4 ★
 
 * Fixed issue #2: errors about database lookups were unclear about which file was involved.
 * Added info to installation instructions about using `--upgrade` option to `pip`.
@@ -45,26 +45,22 @@ Version 1.0.4
 * Made other minor internal fixes and changes.
 
 
-Version 1.0.3
---------------
+## ★ Version 1.0.3 ★
 
 This release fixes a missing Python package import in some code files, and also protects more print statements against file names that contain `{` and/or `}` characters.  (The latter have special meaning to some Python constructs.)
 
 
-Version 1.0.2
---------------
+## ★ Version 1.0.2 ★
 
 This release fixes an important bug in regular expressions used to replace existing Zotero select links inside Finder comments and PDF Subject and Producer fields. It also includes some internal cleanup for some Pylint issues (a cleanup process that is not finished).
 
 
-Version 1.0.1
---------------
+## ★ Version 1.0.1 ★
 
 This release fixes a bug in the installation configuration that caused the shell interface script (`zowie`) to fail to be installed.
 
 
-Version 1.0.0
---------------
+## ★ Version 1.0.0 ★
 
 This is the first public release of a completed version of Zowie.
 
