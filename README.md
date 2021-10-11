@@ -41,14 +41,13 @@ Zowie is available as a self-contained executable program for macOS, as well as 
 
 ### _Alternative 1: ready-to-run executable (for macOS <ins>before</ins> 10.15)_
 
-A self-contained, ready-to-run binary version is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not run on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
+A self-contained, ready-to-run executable is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not run on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
 
-1. Go to the [releases page](https://github.com/mhucka/zowie/releases).
-2. Find the latest release (normally the first one on the page).
-3.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the release.
-4. Click on `zowie.zip` to download it.
-5. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
-6. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
+1. Go to the page on GitHub for [the latest release](https://github.com/mhucka/zowie/releases/latest).
+2.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the latest release.
+3. Click on `zowie.zip` to download it.
+4. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
+5. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
 
 If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
 
@@ -196,7 +195,7 @@ The following table summarizes all the command line options available.
 | `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
 | `-n`      | `--dry-run`       | Report what would be done but don't do it | Do it | | 
 | `-o`      | `--overwrite`     | Overwrite previous metadata content | Don't write if already present | |
-| `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working |
+| `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working | |
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
@@ -257,8 +256,8 @@ The [vector artwork](https://thenounproject.com/term/tag-exclamation-point/32695
 Zowie makes use of numerous open-source packages, without which Zowie could not have been developed.  I want to acknowledge this debt.  In alphabetical order, the packages are:
 
 * [aenum](https://pypi.org/project/aenum/) &ndash; advanced enumerations for Python
-* [boltons](https://github.com/mahmoud/boltons/) &ndash; package of miscellaneous Python utilities
 * [biplist](https://bitbucket.org/wooster/biplist/src/master/) &ndash; A binary plist parser/writer for Python
+* [boltons](https://github.com/mahmoud/boltons/) &ndash; package of miscellaneous Python utilities
 * [bun](https://github.com/caltechlibrary/bun) &ndash; a set of basic user interface classes and functions
 * [commonpy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
 * [ipdb](https://github.com/gotcha/ipdb) &ndash; the IPython debugger
@@ -268,8 +267,8 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [py-applescript](https://pypi.org/project/py-applescript/) &ndash; a Python interface to AppleScript
 * [PyInstaller](http://www.pyinstaller.org) &ndash; a packaging program that creates standalone applications from Python programs
 * [pyobjc](https://github.com/ronaldoussoren/pyobjc) &ndash; Python &rlhar; Objective-C and macOS frameworks bridge
-* [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
 * [pyxattr](https://github.com/iustin/pyxattr) &ndash; access extended file attributes from Python
+* [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
 * [sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
 * [wheel](https://pypi.org/project/wheel/) &ndash; setuptools extension for building wheels
