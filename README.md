@@ -165,6 +165,11 @@ zowie -d "July 4, 2013" ....
 ```
 
 
+### _Special-case behavior_
+
+Although Zowie is not solely aimed at DEVONthink users, its development was motivated by the author's desire to use Zotero with that software.  A complication arose due to an undocumented feature in DEVONthink: [it ignores a Finder comment if it is identical to the value of the "URL" attribute](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864/30) (which is the name it gives to the `com.apple.metadata:kMDItemWhereFroms` attribute [discussed above](#available-methods-of-writing-zotero-links)).  In practical terms, if you write the Zotero select link in both places, or you write it in the Finder comment and have (e.g.) a smart rule in DEVONthink copy it to the URL field, then the Finder comment is ignored by DEVONthink (and [appears blank](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864)).  This in turn can lead to unexpected behavior, and has caught people (including the author of Zowie) unaware.  To compensate, Zowie 1.2 introduced a new default behavior: it adds a trailing space character to the end of the value it writes into the Finder comment when using the `findercomment` method. Since approaches to copy the Zotero link from the Finder comment to the URL field in DEVONthink will typically strip whitespace around the URL value, the net effect is to make the value in the Finder comment just different enough from the URL field value to prevent DEVONthink from ignoring the Finder comment.  If you don't want Zowie to do this, you can use the option `-S` to make Zowie write only the pure URL, without a trailing space character.
+
+
 ### _Additional command-line arguments_
 
 To make Zowie only print what it would do without actually doing it, use the `-n` "dry run" option.
@@ -192,15 +197,17 @@ The following table summarizes all the command line options available.
 | `-i`      | `--identifier`_I_ | Zotero user ID for API calls | | |
 | `-K`      | `--no-keyring`    | Don't use a keyring/keychain | Store login info in keyring | |
 | `-l`      | `--list`          | Display known services and exit | | | 
-| `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
-| `-n`      | `--dry-run`       | Report what would be done but don't do it | Do it | | 
+| `-m`      | `--method`_M_     | Select how Zotero select links are written | `findercomment` | |
+| `-n`      | `--dry-run`       | Say what would be done, but don't do it | Do it | | 
 | `-o`      | `--overwrite`     | Overwrite previous metadata content | Don't write if already present | |
 | `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working | |
+| `-S`      | `--no-space`      | Don't append space to Finder comments | Add trailing space character | ★ |
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
 ⚑ &nbsp; Certain files are always ignored: hidden files, macOS aliases, and files with extensions `.sqlite`, `.sqlite-journal`, `.bak`, `.csl`, `.css`, `.js`, `.json`, `.pl`, and `.config_resp`.<br>
-⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.
+⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.<br>
+★ &nbsp; See the explanation in the section on [special-case behavior](#special-case-behavior).
 
 
 ### _Return values_

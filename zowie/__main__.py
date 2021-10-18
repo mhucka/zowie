@@ -40,6 +40,7 @@ if __debug__:
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
     overwrite  = ('forcefully overwrite previous content',                   'flag',   'o'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
+    no_space   = ('do not add a space character to Finder comments',         'flag',   'S'),
     version    = ('print version info and exit',                             'flag',   'V'),
     debug      = ('write detailed trace to "OUT" ("-" means console)',       'option', '@'),
     files      = 'file(s) and/or folder(s) containing Zotero attachment files',
@@ -47,8 +48,8 @@ if __debug__:
 
 def main(api_key = 'A', no_color = False, after_date = 'D', file_ext = 'F',
          identifier = 'I', no_keyring = False, list = False, method = 'M',
-         dry_run = False, overwrite = False, quiet = False, version = False,
-         debug = 'OUT', *files):
+         dry_run = False, overwrite = False, quiet = False, no_space = False,
+         version = False, debug = 'OUT', *files):
     '''Zowie ("ZOtero link WrItEr") is a tool for Zotero users.
 
 Zowie writes Zotero select links into the files and/or the macOS Finder
@@ -157,6 +158,29 @@ quotes. Examples:
  zowie -d "12 Dec 2014" ....
  zowie -d "July 4, 2013" ....
 
+Special-case behavior
+~~~~~~~~~~~~~~~~~~~~~
+
+Although Zowie is not solely aimed at DEVONthink users, its development was
+motivated by the author's desire to use Zotero with that software.  A
+complication arose due to an undocumented feature in DEVONthink: it ignores a
+Finder comment if it is identical to the value of the "URL" attribute (which
+is the name it gives to the "com.apple.metadata:kMDItemWhereFroms" extended
+attribute on a file).  In practical terms, if you write the Zotero select
+link in both places, or you write it in the Finder comment and have (e.g.) a
+smart rule in DEVONthink copy it to the URL field, then the Finder comment is
+ignored by DEVONthink (and appears blank).  This in turn can lead to
+unexpected behavior, and has caught people (including the author of Zowie)
+unaware.  To compensate, Zowie 1.2 introduced a new default behavior: it adds
+a trailing space character to the end of the value it writes into the Finder
+comment when using the "findercomment" method.  Since approaches to copy the
+Zotero link from the Finder comment to the URL field in DEVONthink will
+typically strip whitespace around the URL value, the net effect is to make
+the value in the Finder comment just different enough from the URL field
+value to prevent DEVONthink from ignoring the Finder comment.  If you don't
+want Zowie to do this, you can use the option -S to make Zowie write only the
+pure URL, without a trailing space character.
+
 Additional command-line arguments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -261,7 +285,8 @@ Command-line arguments summary
                         after_date  = None if after_date == 'D' else after_date,
                         methods     = methods_list,
                         dry_run     = dry_run,
-                        overwrite   = overwrite)
+                        overwrite   = overwrite,
+                        add_space   = not no_space)
         config_interrupt(body.stop, UserCancelled(ExitCode.user_interrupt))
         body.run()
         exception = body.exception

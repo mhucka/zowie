@@ -28,9 +28,10 @@ if __debug__:
 class WriterMethod(ABC):
     '''Base class for Zotero select link writer methods.'''
 
-    def __init__(self, dry_run = False, overwrite = False):
+    def __init__(self, dry_run = False, overwrite = False, add_space = False):
         self.dry_run = dry_run
         self.overwrite = overwrite
+        self.add_space = add_space
 
 
     def __str__(self):

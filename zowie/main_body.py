@@ -63,7 +63,8 @@ class MainBody():
         # Create and initialize objects for the URI writers we will use.
         self._writers = []
         for method_name in self.methods:
-            method = method_object(method_name)(self.dry_run, self.overwrite)
+            method = method_object(method_name)(self.dry_run, self.overwrite,
+                                                self.add_space)
             self._writers.append(method)
 
 
