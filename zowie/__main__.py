@@ -289,7 +289,7 @@ Command-line arguments summary
                         methods     = methods_list,
                         dry_run     = dry_run,
                         overwrite   = overwrite,
-                        add_space   = not space)
+                        add_space   = space)
         config_interrupt(body.stop, UserCancelled(ExitCode.user_interrupt))
         body.run()
         exception = body.exception
