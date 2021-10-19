@@ -2,11 +2,11 @@
 
 ## ★ Version 1.2.0 ★
 
-* Add new `-S` option. Please see the section on [special-case behavior]() for an explanation.
+* Add new `-s` option. Please see the section on [special-case behavior]() for an explanation.
 * Fix issue #9: version incompatibility with Sidetrack version 2.0 package.
 * Use lazy imports of Python packages for faster application startup.
 * Update versions of all Python packages dependencies, and make `requirements.txt` pin the exact version of the packages used at release time.
-* Update LICENSE file, which had the wrong license text!
+* Update `LICENSE` file, which had the wrong license text!
 
 
 ## ★ Version 1.1.2 ★
