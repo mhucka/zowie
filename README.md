@@ -110,10 +110,16 @@ zowie ~/Zotero
 
 If this is your first run of Zowie, it will ask you for your userID and API key, then search for files recursively under `~/Zotero/`.  For each file found, Zowie will contact the Zotero servers over the network and determine the Zotero select link for the bibliographic entry containing that file. Finally, it will use the default method of recording the link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
 
+If you are a user of [DEVONthink](https://www.devontechnologies.com/apps/devonthink), you will probably want to use the `-s` option (see the [explanation below](#special-case-behavior) for the details):
+
+```shell
+zowie -s ~/Zotero
+```
+
 Instead of a folder, you can invoke Zowie on one or more individual files (but be careful to quote pathnames with spaces in them, such as in this example):
 
 ```shell
-zowie "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
+zowie -s "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 ```
 
 
@@ -144,10 +150,10 @@ Note that, depending on the attribute, it is possible that a file has an attribu
 
 By default, Zowie acts on all files it finds on the command line, except for certain files that it always ignores: hidden files and files with extensions `.sqlite`, `.bak`, `.csl`, `.css`, `.js`, `.json`, `.pl`, and a few others.  If the `-m` option is used to select methods that only apply to specific file types, Zowie will examine each file it finds in turn and only apply the methods that match that particular file's type, but it will still consider every file it finds in the directories it scans and apply the methods that are not limited to specific types.
 
-You can use the option `-f` to make Zowie filter the files it finds based on file name extensions.  This is useful if you want it to concentrate only on particular file types and ignore other files it might find while scanning folders. For example,
+You can use the option `-f` to make Zowie filter the files it finds based on file name extensions.  This is useful if you want it to concentrate only on particular file types and ignore other files it might find while scanning folders. Here is an example (this also using the `-s` option for [reasons given below](#special-case-behavior)):
 
 ```shell
-zowie -f pdf,mp4,mov ~/Zotero
+zowie -s -f pdf,mp4,mov ~/Zotero
 ```
 
 will cause it to only work on PDF, MP4, and QuickTime format files.  You can provide multiple file extensions separated by commas, without spaces and without the leading periods.
@@ -167,7 +173,7 @@ zowie -d "July 4, 2013" ....
 
 ### _Special-case behavior_
 
-Although Zowie is not solely aimed at DEVONthink users, its development was motivated by the author's desire to use Zotero with that software.  A complication arose due to an undocumented feature in DEVONthink: [it ignores a Finder comment if it is identical to the value of the "URL" attribute](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864/30) (which is the name it gives to the `com.apple.metadata:kMDItemWhereFroms` attribute [discussed above](#available-methods-of-writing-zotero-links)).  In practical terms, if you write the Zotero select link in both places, or you write it in the Finder comment and have (e.g.) a smart rule in DEVONthink copy it to the URL field, then the Finder comment is ignored by DEVONthink (and [appears blank](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864)).  This in turn can lead to unexpected behavior, and has caught people (including the author of Zowie) unaware.  To compensate, Zowie 1.2 introduced a new default behavior: it adds a trailing space character to the end of the value it writes into the Finder comment when using the `findercomment` method. Since approaches to copy the Zotero link from the Finder comment to the URL field in DEVONthink will typically strip whitespace around the URL value, the net effect is to make the value in the Finder comment just different enough from the URL field value to prevent DEVONthink from ignoring the Finder comment.  If you don't want Zowie to do this, you can use the option `-S` to make Zowie write only the pure URL, without a trailing space character.
+Although Zowie is not solely aimed at DEVONthink users, its development was motivated by the author's desire to use Zotero with that software.  A complication arose due to an undocumented feature in DEVONthink: [it ignores a Finder comment if it is identical to the value of the "URL" attribute](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864/30) (which is the name it gives to the `com.apple.metadata:kMDItemWhereFroms` attribute [discussed above](#available-methods-of-writing-zotero-links)).  In practical terms, if you do something like write the Zotero select link in the Finder comment of a file and then have a DEVONthink smart rule copy the value to the URL field, the Finder comment is ignored by DEVONthink and [appears blank](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864) (even though it exists on the actual file).  This can be unexpected and confusing, and has caught people (including the author of Zowie) unaware.  To compensate, Zowie 1.2 introduced a new option: it can add a trailing space character to the end of the value it writes into the Finder comment when using the `findercomment` method.  Since approaches to copy the Zotero link from the Finder comment to the URL field in DEVONthink will typically strip whitespace around the URL value, the net effect is to make the value in the Finder comment just different enough from the URL field value to prevent DEVONthink from ignoring the Finder comment.  Use the option `-s` to achieve this.
 
 
 ### _Additional command-line arguments_
@@ -201,7 +207,7 @@ The following table summarizes all the command line options available.
 | `-n`      | `--dry-run`       | Say what would be done, but don't do it | Do it | | 
 | `-o`      | `--overwrite`     | Overwrite previous metadata content | Don't write if already present | |
 | `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working | |
-| `-S`      | `--no-space`      | Don't append space to Finder comments | Add trailing space character | ★ |
+| `-s`      | `--space`         | Append trailing space to Finder comments | Don't add a space | ★ |
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
@@ -230,7 +236,9 @@ Known issues and limitations
 
 The following is a list of currently-known issues and limitations:
 
-* Zowie can only work when Zotero is set to use direct data storage; i.e., where attached files are stored in Zotero.  It cannot work if you use [linked attachments](https://www.zotero.org/support/preferences/advanced#files_and_folders), that is, if you set _Linked Attachment Base Directory_ in your Zotero Preferences' _Advanced_ → _Files and Folders_ panel.
+* Zowie can only work when Zotero is set to use direct data storage; i.e., where attached files are stored in Zotero.  It **cannot work if you use [linked attachments](https://www.zotero.org/support/preferences/advanced#files_and_folders)**, that is, if you set _Linked Attachment Base Directory_ in your Zotero Preferences' _Advanced_ → _Files and Folders_ panel.
+
+* If you use [DEVONthink](https://www.devontechnologies.com/apps/devonthink) in a scheme in which you index your Zotero folder and use Zowie to write the Zotero select link into the Finder comments of files, beware of the following situation. If you use a DEVONthink smart rule to copy the comment string into the "URL" field, DEVONthink will (after reindexing the file) suddently display an _empty_ Finder comment, even though the comment is still there. This is due to a [deliberate behavior in DEVONthink](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864/30) and not a problem with Zowie, as discussed in the [section on special-case behavior](#special-case-behavior). Using the `-s` option will avoid this, but at the cost of adding an extra character to the Finder comment, so make sure to account for the added space character in any scripts or other actions you take on the Finder comment.
 
 * For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
 
