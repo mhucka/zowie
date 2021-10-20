@@ -14,6 +14,9 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
+# Note: this program uses lazy importing of Python packages. Other imports
+# are present throughout the rest of the code.
+
 import plac
 import sys
 from   sys import exit as exit
