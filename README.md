@@ -3,12 +3,12 @@ Zowie<img width="10%" align="right" src="https://github.com/mhucka/zowie/raw/mai
 
 Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS that writes Zotero _select_ links into the file attachments contained in a Zotero database.
 
+[![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88&label=Latest%20release)](https://github.com/mhucka/zowie/releases)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
-[![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
-[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1857)](https://data.caltech.edu/records/1857)
 [![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
-[![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange)](https://pypi.org/project/zowie/)
-
+[![GitHub stars](https://img.shields.io/github/stars/caltechlibrary/handprint.svg?style=flat-square&color=lightgray&label=Stars)](https://github.com/caltechlibrary/handprint/stargazers)
+[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1857)](https://data.caltech.edu/records/1857)
+[![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange&label=PyPI)](https://pypi.org/project/zowie/)
 
 Table of contents
 -----------------
@@ -110,13 +110,13 @@ zowie ~/Zotero
 
 If this is your first run of Zowie, it will ask you for your userID and API key, then search for files recursively under `~/Zotero/`.  For each file found, Zowie will contact the Zotero servers over the network and determine the Zotero select link for the bibliographic entry containing that file. Finally, it will use the default method of recording the link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
 
-If you are a user of [DEVONthink](https://www.devontechnologies.com/apps/devonthink), you will probably want to use the `-s` option (see the [explanation below](#special-case-behavior) for the details):
+If you are a user of [DEVONthink](https://www.devontechnologies.com/apps/devonthink), you will probably want to add the `-s` option (see the [explanation below](#special-case-behavior) for the details):
 
 ```shell
 zowie -s ~/Zotero
 ```
 
-Instead of a folder, you can invoke Zowie on one or more individual files (but be careful to quote pathnames with spaces in them, such as in this example):
+Instead of a folder, you can also invoke Zowie on one or more individual files (but be careful to put quotes around pathnames with spaces in them, such as in this example):
 
 ```shell
 zowie -s "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
@@ -180,13 +180,13 @@ Although Zowie is not solely aimed at DEVONthink users, its development was moti
 
 To make Zowie only print what it would do without actually doing it, use the `-n` "dry run" option.
 
-If given the `-q` option, Zowie will not print its usual informational messages while it is working. It will only print messages for warnings or errors.  By default messages printed by Zowie are also color-coded. If given the option `-C`, Zowie will not color the text of messages it prints. (This latter option is useful when running Zowie within subshells inside other environments such as Emacs.)
+If given the `-q` option, Zowie will not print its usual informational messages while it is working. It will only print messages for warnings or errors.  By default, messages printed by Zowie are also color-coded. If given the option `-C`, Zowie will not color the text of messages it prints. (This latter option is useful when running Zowie within subshells inside other environments such as Emacs.)
 
 If given the `-V` option, this program will print the version and other information, and exit without doing anything else.
 
 If given the `-@` argument, this program will output a detailed trace of what it is doing.  The debug trace will be sent to the given destination, which can be `-` to indicate console output, or a file path to send the output to a file.
 
-When `-@ has` been given, Zowie also installs a signal handler on signal `SIGUSR1` that will drop Zowie into the pdb debugger if the signal is sent to the running process.
+When `-@` has been given, Zowie also installs a signal handler on signal `SIGUSR1` that will drop Zowie into the pdb debugger if the signal is sent to the running process.
 
 
 ### _Summary of command-line options_
