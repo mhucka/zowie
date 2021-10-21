@@ -21,7 +21,7 @@ the file "LICENSE" for more information.
 #  |    by the Makefile. Manual changes to these values will be lost.      |
 #  ╰────────────────────── Notice ── Notice ── Notice ─────────────────────╯
 
-__version__     = '1.1.1'
+__version__     = '1.2.0'
 __description__ = 'Write Zotero select links into article attachment files'
 __url__         = 'https://github.com/mhucka/zowie'
 __author__      = 'Michael Hucka'
