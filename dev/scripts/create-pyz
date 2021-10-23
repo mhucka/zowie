@@ -1,0 +1,298 @@
+#!/usr/bin/env python3
+# =============================================================================
+# @file    create-pyz
+# @brief   Script to create a Zowie executable zipapp using shiv
+# @created 2021-10-13
+# @license Please see the file named LICENSE in the project directory
+# @website https://github.com/mhucka/zowie
+#
+# Preliminary setup (on macOS) assumed to have been done before this is run:
+#   brew install python@3.8
+#   brew install python@3.9
+#   brew install python@3.9
+#   brew install python@3.10
+#   brew install pyenv
+#   pyenv install 3.10.0
+#   pyenv install 3.9.0  3.9.1  3.9.5
+#   pyenv install 3.8.0  3.8.1  3.8.2  3.8.10
+# =============================================================================
+
+from   datetime import date
+from   fastnumbers import isint
+import pkg_resources
+from   os import getcwd, chdir, system, unlink
+from   os.path import exists, dirname, join, basename, abspath, realpath
+from   rich.console import Console
+import subprocess
+from   subprocess import check_output, check_call
+import sys
+from   sys import exit
+import zipfile
+from   zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
+
+
+# Constants used later.
+# .............................................................................
+
+# Any executable created by shiv needs at least Python 3.6 because it uses
+# f-strings internally.  If you try to run the shiv-produced result with an
+# earlier version of Python, you will get a syntax error and you have to be a
+# Python expert to figure out what it means (namely, that your version of
+# Python is too low, and not that something else is wrong).  There is no
+# provision in shiv to do something like test the minimum version of Python
+# in its bootstrap script, so if you want to give the user better information
+# about why your application fails on Python versions before 3.6, you have to
+# find your own solution.
+#
+# Another issue is that MacOS Catalina (and probably later) systems ship with
+# a /usr/bin/python3, but NOT (e.g.) a /usr/bin/python3.6 or anything that
+# identifies the Python minor version in the name.  Also, that particular
+# macOS program, i.e., /usr/bin/python3, is a stub that offers to download
+# and install Python the first time you run it, but what it installs STILL
+# does not include an executable named (e.g.) "python3.8", only "python3".
+# Consequently, the program we produce cannot ask for an explicit x.y version
+# of Python in the hash-bang line because that would always fail on Catalina
+# (unless the user installs their own distribution of Python, which we don't
+# want to rely on).
+#
+# So, what this means is we _must_ run python3 (and not python3.6 or similar)
+# in the hash-bang line, and we must come up with a way of testing that it's
+# at least Python 3.6 in some other way.
+#
+# The approach used here is to leverage shiv's option to include a custom
+# hash-bang line, and use that to insert a short polyglot script that tests
+# the version of Python and either exits with an error or execs Python on the
+# whole file.  This code becomes the first few lines inside the Zowie
+# zipapp.  The syntax for making this work is partly based on the 2016-03-02
+# Stack Overflow posting at https://stackoverflow.com/a/35744488/743730.
+#
+# (Implementation note: the length of this hash-bang script is at the maximum
+# character length accepted by shiv -- anything longer is rejected.  I would
+# have wanted to write a better error message but it's not possible.)
+
+_HASHBANG = r"""/bin/bash
+''''test \$(python3 -V 2>&1|cut -c 10) -ge 6 && exec python3 -x \"\$0\" \"\$@\" # '''
+''''exec echo 'Python too old.' # '''"""
+
+# After the first few lines of the zipapp that we produce, we have a preamble
+# script created based on the template below.  This does a couple of things.
+# First, it tests the version of Python against the one that this zipapp was
+# built for, and provides a helpful error message if there's a mismatch.
+# Second, it cleans up old versions of our program in the user's shiv cache.
+
+_PREAMBLE_FMT = '''#!/usr/bin/env python3
+# Preamble script for Zowie PYZ version {1} and Python {2}.{3} on {4}.
+
+# Version test ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# The shiv wrapper tests for a minimum version to run, but our application may
+# be built against a different/higher version of Python.  Test it and don't
+# bother doing going further if the Python version is not the one needed.
+
+import sys
+
+if sys.version_info.major != {2} or sys.version_info.minor != {3}:
+    print('The self-contained executable of Zowie {1} that you are')
+    print('attempting to run was built to work specifically (and only)')
+    print('with version {2}.{3} of Python. The version of Python obtained')
+    print('by running "python3" on your computer is '
+          + str(sys.version_info.major) + '.' + str(sys.version_info.minor)
+          + '. This makes it')
+    print('incompatible and prevents this copy of Zowie from running.')
+    print('The problem can be solved in one of two ways:')
+    print('')
+    print('Alternative 1: ensure "python3" invokes Python version {2}.{3}')
+    print('  and not an earlier nor a later version of Python. This may')
+    print('  require changing your shell\\'s search path (i.e., where it')
+    print('  search for programs), or installing a different copy of')
+    print('  Python, or another solution.')
+    print('')
+    print('Alternative 2: visit the following URL to see if a version')
+    print('  of Zowie is available that matches the version of "python3"')
+    print('  on your system:')
+    print('')
+    print('          https://github.com/mhucka/zowie/releases/')
+    print('')
+    print('You can visit https://mhucka.github.io/zowie for more')
+    print('information about this and Zowie in general.')
+    exit(6)
+
+# Cache cleanup ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Remove past versions of the shiv cache for this program, if any exist.
+
+from pathlib import Path
+
+# The following variables are injected by shiv.bootstrap.
+site_packages: Path
+
+# Get the current PYZ's site_packages directory.
+current = site_packages.parent
+
+# Get the parent directory of the site_packages directory is our shiv cache.
+cache_path = current.parent
+
+name, build_id = current.name.split('_')
+if __name__ == "__main__":
+    printed_message = False
+    for path in cache_path.iterdir():
+        if path.name.startswith(name + '_') and not path.name.endswith(build_id):
+            if not printed_message:
+                print('Zowie doing one-time cleanup operations ...', end = '')
+                printed_message = True
+            import shutil
+            shutil.rmtree(path)
+    if printed_message:
+        print('Done.')
+'''
+
+# The next two variables are templates for creating a README file included with
+# the distribution archive, and a file comment in the distribution archive.
+
+_README_FMT = '''About the Zowie version {1} distribution for {3}
+=========================================================
+
+The file named "zowie" inside the ZIP file that you
+downloaded is an executable Python program in a special
+format (not a script) that only needs an installation of
+Python version {2} on your computer to run.
+
+Simply move or copy the file "zowie" to a location where
+you put other command-line programs on your computer.  A
+popular location is /usr/local/bin/.  The following is an
+example command that you can type in a terminal to move
+"zowie" there:
+
+    sudo mv zowie /usr/local/bin
+
+To see usage information for "zowie", run it with the
+-h option, like this:
+
+    zowie -h
+
+For more information about Zowie (the ZOtero link WrItEr),
+please visit the following website:
+
+    https://mhucka.github.io/zowie
+
+Mike Hucka
+https://www.cds.caltech.edu/~mhucka/
+Date created: {0}
+'''
+
+_ZIP_COMMENTS_FMT = '''
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ This Zip archive file includes a self-contained, runnable ┃
+┃ version of the program Zowie ("ZOtero link WrItEr") for   ┃
+┃ macOS. To learn more about Zowie, please visit this site: ┃
+┃                                                           ┃
+┃              https://mhucka.github.io/zowie/              ┃
+┃                                                           ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+'''
+
+
+# Utility functions used below.
+# .............................................................................
+
+def run(cmd, quiet = False):
+    if quiet:
+        return check_output(cmd, shell = True).decode()
+    else:
+        return check_call(cmd, shell = True,
+                          stdout = sys.stdout, stderr = subprocess.STDOUT)
+
+
+def quit(msg):
+    Console().print(f'‼️  {msg}', style = "bold red")
+    exit(1)
+
+
+def inform(text):
+    Console().print(text, style = "cyan")
+
+
+# Sanity-check the run-time environment before attempting anything else.
+# .............................................................................
+
+here  = getcwd()
+if not exists(join(here, 'requirements.txt')):
+    quit(f'Expected to be in same directory as requirements.txt')
+
+setup_file = join(here, 'setup.cfg')
+if not exists(setup_file):
+    quit(f'setup.cfg does not exist in {here}')
+
+if len(sys.argv) < 2:
+    quit(f'First argument must be destination where outputs will be written')
+
+dest = sys.argv[1]
+if not exists(dest):
+    quit(f'Directory does not exist: {dest}')
+
+if len(sys.argv) < 3:
+    quit(f'Second argument must be the target Python version')
+
+py_version = sys.argv[2]
+if len(py_version.split('.')) < 3 or not all(isint(x) for x in py_version.split('.')):
+    quit(f'Python version must be in the form x.y.z')
+
+known_versions = [s.strip() for s in run('pyenv versions', True).split('\n')]
+if py_version not in known_versions:
+    quit(f'pyenv lacks version {py_version} -- run "pyenv install {py_version}"')
+
+
+# Gather information.
+# .............................................................................
+
+py_major, py_minor, _ = [int(x) for x in py_version.split('.')]
+py_short_version = f'{py_major}.{py_minor}'
+
+with open('setup.cfg', 'r') as config_file:
+    for line in config_file.readlines():
+        if line.startswith('version'):
+            z_version = line.split('=')[1].strip()
+
+os      = run("uname -s | tr '[A-Z]' '[a-z]' | sed 's/darwin/macos/'", True).strip()
+dirname = f'zowie-{z_version}-{os}-python{py_short_version}'
+outdir  = join(dest, dirname)
+outname = f'zowie'
+today   = str(date.today())
+
+
+# Do the work.
+# .............................................................................
+
+inform(f'Creating output directory in {outdir}')
+run(f'rm -rf {outdir}')
+run(f'mkdir -p {outdir}')
+chdir(outdir)
+
+inform(f'Setting up pyenv local environment')
+run(f'pyenv local {py_version}')
+run(f'~/.pyenv/shims/pip install shiv --upgrade')
+
+inform(f'Building output with shiv')
+
+with open('preamble.py', 'w') as file:
+    file.write(_PREAMBLE_FMT.format(today, z_version, py_major, py_minor, os))
+
+run(f'~/.pyenv/shims/shiv -p "{_HASHBANG}" -c zowie -o "{outname}" -E'
+    + f' --preamble preamble.py --prefer-binary'
+    + f' git+file://{realpath(here)}')
+
+inform(f'Creating zip file')
+zip_file = dirname + '.zip'
+comment  = _ZIP_COMMENTS_FMT.format(today, z_version, py_short_version, os)
+readme   = _README_FMT.format(today, z_version, py_short_version, os)
+with zipfile.ZipFile(zip_file, 'w', ZIP_STORED) as zf:
+    zf.write(outname, join(dirname, outname))
+    zf.writestr(join(dirname, 'README-ZOWIE-INSTRUCTIONS.txt'), readme)
+    zf.comment = comment.encode()
+
+
+# Clean up and exit.
+# .............................................................................
+
+inform(f'Cleaning up')
+unlink('preamble.py')
+
+inform(f'Done; output is in {outdir}')
