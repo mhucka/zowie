@@ -2,11 +2,11 @@
 
 Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS that writes Zotero _select_ links into the file attachments contained in a Zotero database.
 
-[![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88&label=Latest%20release)](https://github.com/mhucka/zowie/releases)
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
+[![License](https://img.shields.io/badge/License-BSD-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
-[![GitHub stars](https://img.shields.io/github/stars/caltechlibrary/handprint.svg?style=flat-square&color=lightgray&label=Stars)](https://github.com/caltechlibrary/handprint/stargazers)
-[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1857)](https://data.caltech.edu/records/1857)
+[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1867)](https://data.caltech.edu/records/1867)
+[![GitHub stars](https://img.shields.io/github/stars/mhucka/zowie.svg?style=flat-square&color=lightgray&label=Stars)](https://github.com/mhucka/zowie/stargazers)
+[![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88&label=Latest%20release)](https://github.com/mhucka/zowie/releases)
 [![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange&label=PyPI)](https://pypi.org/project/zowie/)
 
 
@@ -242,7 +242,7 @@ The following table summarizes all the command line options available.
 | Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp;&nbsp;&nbsp; | Meaning | Default |  |
 |---------- |-------------------|--------------------------------------|---------|---|
 | `-a`_A_   | `--api-key`_A_    | API key to access the Zotero API service | | |
-| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | | |
+| `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | |
 | `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | Act on all files found | |
 | `-f`      | `--file-ext`_F_   | Only act on files with extensions in "F" | Act on all files found | ⚑ |
 | `-h`      | `--help`          | Display help text and exit | | |
@@ -328,7 +328,6 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [pyobjc](https://github.com/ronaldoussoren/pyobjc) &ndash; Python &rlhar; Objective-C and macOS frameworks bridge
 * [pyxattr](https://github.com/iustin/pyxattr) &ndash; access extended file attributes from Python
 * [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
-* [Rich](https://rich.readthedocs.io/en/latest/) &ndash; library for writing styled text to the terminal
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
 * [Shiv](https://github.com/linkedin/shiv) &ndash; command-line utility for creating self-contained Python zipapps
 * [Sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package

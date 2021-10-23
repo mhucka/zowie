@@ -111,12 +111,14 @@ report: vars
 
 # make binaries ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-binaries: | vars dependencies pysinstaller shiv
+binaries: | pyinstaller shiv
 
 dependencies:;
 	pip3 install -r requirements.txt
 
-run-pyinstaller: vars
+pyinstaller: | vars dependencies run-pyinstaller
+
+run-pyinstaller: vars dependencies
 	@mkdir -p dist
 	$(eval comments_file := $(shell mktemp /tmp/comments-$(name).XXXXXX))
 	pyinstaller --clean pyinstaller-$(platform).spec
@@ -134,9 +136,9 @@ run-pyinstaller: vars
 	zip -z dist/$(name).zip < $(comments_file)
 	-rm -f $(comments_file)
 
-shiv zipapps: | vars run-shiv
+shiv zipapps: | run-shiv
 
-run-shiv: vars
+run-shiv:
 	@mkdir -p dist
 	dev/scripts/create-pyz dist 3.8.2
 	dev/scripts/create-pyz dist 3.9.5
