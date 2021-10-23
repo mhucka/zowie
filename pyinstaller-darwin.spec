@@ -23,7 +23,7 @@ import sys
 #   not found and is required by the application
 #
 # I don't actually know why that error occurs.  CommonPy imports humanize,
-# but it has it in its requirements.txt, and PyInstaller looks like it's
+# and it has it in its requirements.txt, and PyInstaller looks like it's
 # picking it up.  So I'm stumped about why humanize seems to get missed in
 # the binary produced by PyInstaller.  Don't have time to debug more.
 data_files = copy_metadata('humanize')

@@ -168,24 +168,24 @@ quotes. Examples:
 Special-case behavior
 ~~~~~~~~~~~~~~~~~~~~~
 
-Although Zowie is not solely aimed at DEVONthink users, its development was
+Although Zowie is not aimed solely at DEVONthink users, its development was
 motivated by the author's desire to use Zotero with that software. A
 complication arose due to an undocumented feature in DEVONthink: it ignores a
 Finder comment if it is identical to the value of the "URL" attribute (which
 is the name it gives to the "com.apple.metadata:kMDItemWhereFroms" extended
 attribute on a file). In practical terms, if you do something like write the
-Zotero select link in the Finder comment of a file and then have a DEVONthink
-smart rule copy the value to the URL field, the Finder comment is ignored by
-DEVONthink and appear blank (even though it exists on the actual file). This
-can be unexpected and confusing, and has caught people (including the author
-of Zowie) unaware. To compensate, Zowie 1.2 introduced a new option: it can
-add a trailing space character to the end of the value it writes into the
-Finder comment when using the "findercomment" method. Since approaches to copy
-the Zotero link from the Finder comment to the URL field in DEVONthink will
-typically strip whitespace around the URL value, the net effect is to make the
-value in the Finder comment just different enough from the URL field value to
-prevent DEVONthink from ignoring the Finder comment. Use option -s to cause
-Zowie to add the trailing space character.
+Zotero select link into the Finder comment of a file and then have a
+DEVONthink smart rule copy the value to the URL field, the Finder comment
+will appear blank in DEVONthink (even though it exists on the actual
+file). This can be unexpected and confusing, and has caught people (including
+the author of Zowie) unaware. To compensate, Zowie 1.2 introduced a new
+option: it can add a trailing space character to the end of the value it
+writes into the Finder comment when using the "findercomment" method. Since
+approaches to copy the Zotero link from the Finder comment to the URL field
+in DEVONthink will typically strip whitespace around the URL value, the net
+effect is to make the value in the Finder comment just different enough from
+the URL field value to prevent DEVONthink from ignoring the Finder
+comment. Use option -s to make Zowie to add the trailing space character.
 
 Additional command-line arguments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
