@@ -111,12 +111,14 @@ report: vars
 
 # make binaries ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-binaries: | vars dependencies pysinstaller shiv
+binaries: | pyinstaller shiv
 
 dependencies:;
 	pip3 install -r requirements.txt
 
-run-pyinstaller: vars
+pyinstaller: | vars dependencies run-pyinstaller
+
+run-pyinstaller: vars dependencies
 	@mkdir -p dist
 	$(eval comments_file := $(shell mktemp /tmp/comments-$(name).XXXXXX))
 	pyinstaller --clean pyinstaller-$(platform).spec
