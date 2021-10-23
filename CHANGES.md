@@ -5,6 +5,8 @@
 * Add new `-s` option. Please see the section on [special-case behavior]() for an explanation.
 * Fix issue #9: version incompatibility with Sidetrack version 2.0 package.
 * Use lazy imports of Python packages for faster application startup.
+* Add script to create zippap version of Zowie.
+* Overhaul Makefile.
 * Update versions of all Python packages dependencies, and make `requirements.txt` pin the exact version of the packages used at release time.
 * Update `LICENSE` file, which had the wrong license text!
 
