@@ -40,18 +40,19 @@ Zowie is available as a self-contained, single-file, ready-to-run program for ma
 
 Depending on the version of macOS you are using, please see the relevant section below.
 
-<details><summary><img alt="macOS 10.15 and later" align="bottom" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS version 10.15 (Catalina) or later</strong></summary>
+<details><summary><img alt="macOS 10.15 and later" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS version 10.15 (Catalina) or later</strong></summary>
 
 First, you need a Python interpreter version 3.8 or higher on your computer. Happily, that's the version provided by macOS 10.15 and later, but if you have never run `python3` on your computer, then the first time you do, macOS will ask if you want to install certain additional software components. (Let it do so.) Check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
 ```sh
 python3 --version
 ```
 
-Next, install a copy of Zowie that matches your version of Python. Visit the [Zowie releases page](https://github.com/mhucka/zowie/releases) and look for the ZIP files with names such as (e.g.) `zowie-1.2.0-macos-python3.8.zip`. Then:
-1. Download the one matching your version of Python
-2. Unzip the file (if your browser did not automatically unzip it for you)
-3. Open the folder thus created (it will have a name like `zowie-1.2.0-macos-python3.8`)
-4. Look inside for `zowie` and move it to a location where you put other command-line programs (such as `/usr/local/bin`). 
+Next, go to the [GitHub page for the latest Zowie release](https://github.com/mhucka/zowie/releases) and:
+1. Find a ZIP file with a name that contains your version of Python
+2. Click on that ZIP file to download it
+3. Unzip the file (if your browser did not automatically unzip it for you)
+4. Open the folder thus created (it will have a name like `zowie-1.2.0-macos-python3.8`)
+5. Look inside for `zowie` and move it to a location where you put other command-line programs (such as `/usr/local/bin`). 
 
 If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
 
@@ -66,7 +67,8 @@ sudo mv zowie /usr/local/bin
 ```
 
 </details>
-<details><summary><img alt="macOS before 10.15" align="bottom" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS before version 10.15 (Catalina)</strong></summary>
+<p> </p>
+<details><summary><img alt="macOS before 10.15" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS before version 10.15 (Catalina)</strong></summary>
 
 A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
 
