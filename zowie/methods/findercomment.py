@@ -126,6 +126,9 @@ class FinderComment(WriterMethod):
             comments = uri
 
         if not self.dry_run:
+            if self.add_space and not comments.endswith(' '):
+                if __debug__: log('adding trailing space to Finder comment')
+                comments += ' '
             if __debug__: log(f'invoking AS function to clear comment on {fp}')
             _FINDER_SCRIPTS.call('clear_comments', file_path)
             if __debug__: log(f'invoking AS function to set comment on {fp}')

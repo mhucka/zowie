@@ -1,17 +1,18 @@
-Zowie<img width="10%" align="right" src="https://github.com/mhucka/zowie/raw/main/.graphics/zowie-icon.png">
-======
+# Zowie<img width="10%" align="right" src="https://github.com/mhucka/zowie/raw/main/.graphics/zowie-icon.png">
 
 Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS that writes Zotero _select_ links into the file attachments contained in a Zotero database.
 
+[![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88&label=Latest%20release)](https://github.com/mhucka/zowie/releases)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88)](https://github.com/mhucka/zowie/releases)
 [![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1867)](https://data.caltech.edu/records/1867)
 [![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
-[![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange)](https://pypi.org/project/zowie/)
+[![GitHub stars](https://img.shields.io/github/stars/caltechlibrary/handprint.svg?style=flat-square&color=lightgray&label=Stars)](https://github.com/caltechlibrary/handprint/stargazers)
+[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1857)](https://data.caltech.edu/records/1857)
+[![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange&label=PyPI)](https://pypi.org/project/zowie/)
 
 
-Table of contents
------------------
+## Table of contents
 
 * [Introduction](#introduction)
 * [Installation](#installation)
@@ -20,38 +21,40 @@ Table of contents
 * [Getting help](#getting-help)
 * [Contributing](#contributing)
 * [License](#license)
-* [Authors and history](#authors-and-history)
 * [Acknowledgments](#authors-and-acknowledgments)
 
 
-Introduction
-------------
+## Introduction
 
 When using [Zotero](https://zotero.org), you may on occasion want to work with PDF files and other attachment files outside of Zotero.  For example, if you're a [DEVONthink](https://www.devontechnologies.com/apps/devonthink) user, you will at some point discover the power of indexing your local Zotero database from DEVONthink.  However, when viewing or manipulating the attachments from outside of Zotero, you may run into the following problem: when looking at a given file, _how do you find out which Zotero entry it belongs to_?
 
-Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pronounced like [the interjection](https://www.merriam-webster.com/dictionary/zowie)).  Zowie scans through the files in a local Zotero database, looks up the Zotero bibliographic record corresponding to each attachment file found, and writes a [Zotero select link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into the file and/or certain macOS Finder/Spotlight metadata fields (depending on the user's choice).  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that file.
+Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pronounced like [the interjection](https://www.merriam-webster.com/dictionary/zowie)).  Zowie scans through the files on your disk in a local Zotero database, looks up the Zotero bibliographic record corresponding to each file found, and writes a [Zotero select link](https://forums.zotero.org/discussion/78053/given-the-pdf-file-of-an-article-how-can-you-find-out-its-uri#latest) into the file and/or certain macOS Finder/Spotlight metadata fields (depending on the user's choice).  A Zotero select link has the form `zotero://select/...` and when opened on macOS, causes the Zotero desktop application to open that item in your database.  Zowie thus makes it possible to go from a file opened in an application other than Zotero (e.g., DEVONthink, Adobe Acrobat), to the Zotero record corresponding to that file.
 
-Zowie uses the Zotero network API to discover the user's shared libraries and groups.  This allows it to look up Zotero item URIs for files regardless of whether they belong to the user's personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files. 
-
-Regretfully, Zowie can only work with Zotero libraries that use normal/local data storage; it cannot work when Zotero is configured to use linked attachments.
+Regretfully, Zowie can **only** work with Zotero libraries that use normal/local data storage; **it cannot work when Zotero is configured to use linked attachments**.
 
 
-Installation
-------------
+## Installation
 
-Zowie is available as a self-contained executable program for macOS, as well as a program for running within a Python interpreter. The following are alternative ways of installing it.
+Zowie is available as a self-contained, single-file, ready-to-run program for macOS, as well as a program for running within a Python interpreter. The following are alternative ways of installing it.
 
 
-### _Alternative 1: ready-to-run executable (for macOS <ins>before</ins> 10.15)_
+### _Alternative 1: using ready-to-run executables_
 
-A self-contained, ready-to-run binary version is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not run on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
+Depending on the version of macOS you are using, please see the relevant section below.
 
-1. Go to the [releases page](https://github.com/mhucka/zowie/releases).
-2. Find the latest release (normally the first one on the page).
-3.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the release.
-4. Click on `zowie.zip` to download it.
-5. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
-6. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
+<details><summary><img alt="macOS 10.15 and later" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS version 10.15 (Catalina) or later</strong></summary>
+
+First, you need a Python interpreter version 3.8 or higher on your computer. Happily, that's the version provided by macOS 10.15 and later, but if you have never run `python3` on your computer, then the first time you do, macOS will ask if you want to install certain additional software components. (Let it do so.) Check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
+```sh
+python3 --version
+```
+
+Next, go to the [GitHub page for the latest Zowie release](https://github.com/mhucka/zowie/releases) and:
+1. Find a ZIP file with a name that contains your version of Python
+2. Click on that ZIP file to download it
+3. Unzip the file (if your browser did not automatically unzip it for you)
+4. Open the folder thus created (it will have a name like `zowie-1.2.0-macos-python3.8`)
+5. Look inside for `zowie` and move it to a location where you put other command-line programs (such as `/usr/local/bin`). 
 
 If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
 
@@ -59,8 +62,50 @@ If you want to put it in `/usr/local/bin` but that folder does not exist on your
 sudo mkdir /usr/local/bin
 ```
 
+The following is an example command that you can type in a terminal to move Zowie there:
 
-### _Alternative 2: Zowie as a Python package_
+```shell
+sudo mv zowie /usr/local/bin
+```
+
+</details>
+<p> </p>
+<details><summary><img alt="macOS before 10.15" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS before version 10.15 (Catalina)</strong></summary>
+
+A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
+
+1. Go to the page on GitHub for [the latest release](https://github.com/mhucka/zowie/releases/latest).
+2.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/binary-release.png"/>Find the **Assets** section of the latest release.
+3. Click on `zowie.zip` to download it.
+4. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
+5. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
+
+If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
+
+```shell
+sudo mkdir /usr/local/bin
+```
+
+The following is an example command that you can type in a terminal to move Zowie there:
+
+```shell
+sudo mv zowie /usr/local/bin
+```
+
+</details>
+
+
+### _Alternative 2: using `pipx`_
+
+You can use [pipx](https://pypa.github.io/pipx/) to install Zowie. Pipx will install it into a separate Python environment that isolates the dependencies needed by Zowie from other Python programs on your system, and yet the resulting `zowie` command wil be executable from any shell &ndash; like any normal application on your computer. If you do not already have `pipx` on your system, it can be installed in a variety of easy ways and it is best to consult [Pipx's installation guide](https://pypa.github.io/pipx/installation/) for instructions. Once you have pipx on your system, you can install Zowie with the following command:
+```sh
+pipx install zowie
+```
+
+Pipx can also let you run Zowie directly using `pipx run zowie`, although in that case, you must always prefix every Zowie command with `pipx run`.  Consult the [documentation for `pipx run`](https://github.com/pypa/pipx#walkthrough-running-an-application-in-a-temporary-virtual-environment) for more information.
+
+
+### _Alternative 3: using `pip`_
 
 The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python **2** &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
@@ -77,8 +122,7 @@ python3 -m pip install git+https://github.com/mhucka/zowie.git
 _If you already installed Zowie once before_, and want to update to the latest version, add `--upgrade` to the end of either command line above.
 
 
-Usage
------
+## Usage
 
 For help with usage at any time, run `zowie` with the option `-h`.
 
@@ -97,7 +141,7 @@ python3 -m zowie -h
 
 ### _Credentials for Zotero access_
 
-Zowie relies on the [Zotero sync API](https://www.zotero.org/support/dev/web_api/v3/start) to get information about your references. If you do not already have a [Zotero sync account](https://www.zotero.org/support/sync), it will be necessary to create one before going any further.
+Zowie relies on the [Zotero sync API](https://www.zotero.org/support/dev/web_api/v3/start) to get information about your references.  This allows it to look up Zotero item URIs for files regardless of whether they belong to your personal library or shared libraries, and from there, construct the appropriate Zotero select link for the files.  If you do not already have a [Zotero sync account](https://www.zotero.org/support/sync), it will be necessary to create one before going any further.
 
 To use Zowie, you will also need both an API user identifier (also known as the **userID**) and an **API key**.  To find out your Zotero userID and create a new API key, log in to your Zotero account at [Zotero.org](https://www.zotero.org) and visit the [_Feeds/API_ tab of the your _Settings_ page](https://www.zotero.org/settings/keys).  On that page you can find your userID and create a new API key for Zowie.
 
@@ -114,10 +158,16 @@ zowie ~/Zotero
 
 If this is your first run of Zowie, it will ask you for your userID and API key, then search for files recursively under `~/Zotero/`.  For each file found, Zowie will contact the Zotero servers over the network and determine the Zotero select link for the bibliographic entry containing that file. Finally, it will use the default method of recording the link, which is to write it into the macOS Finder comments for the file.  It will also store your Zotero userID and API key into the system keychain so that it does not have to ask for them in the future.
 
-Instead of a folder, you can invoke Zowie on one or more individual files (but be careful to quote pathnames with spaces in them, such as in this example):
+If you are a user of [DEVONthink](https://www.devontechnologies.com/apps/devonthink), you will probably want to add the `-s` option (see the [explanation below](#special-case-behavior) for the details):
 
 ```shell
-zowie "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
+zowie -s ~/Zotero
+```
+
+Instead of a folder, you can also invoke Zowie on one or more individual files (but be careful to put quotes around pathnames with spaces in them, such as in this example):
+
+```shell
+zowie -s "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 ```
 
 
@@ -148,10 +198,10 @@ Note that, depending on the attribute, it is possible that a file has an attribu
 
 By default, Zowie acts on all files it finds on the command line, except for certain files that it always ignores: hidden files and files with extensions `.sqlite`, `.bak`, `.csl`, `.css`, `.js`, `.json`, `.pl`, and a few others.  If the `-m` option is used to select methods that only apply to specific file types, Zowie will examine each file it finds in turn and only apply the methods that match that particular file's type, but it will still consider every file it finds in the directories it scans and apply the methods that are not limited to specific types.
 
-You can use the option `-f` to make Zowie filter the files it finds based on file name extensions.  This is useful if you want it to concentrate only on particular file types and ignore other files it might find while scanning folders. For example,
+You can use the option `-f` to make Zowie filter the files it finds based on file name extensions.  This is useful if you want it to concentrate only on particular file types and ignore other files it might find while scanning folders. Here is an example (this also using the `-s` option for [reasons given below](#special-case-behavior)):
 
 ```shell
-zowie -f pdf,mp4,mov ~/Zotero
+zowie -s -f pdf,mp4,mov ~/Zotero
 ```
 
 will cause it to only work on PDF, MP4, and QuickTime format files.  You can provide multiple file extensions separated by commas, without spaces and without the leading periods.
@@ -169,17 +219,22 @@ zowie -d "July 4, 2013" ....
 ```
 
 
+### _Special-case behavior_
+
+Although Zowie is not aimed solely at DEVONthink users, its development was motivated by the author's desire to use Zotero with that software.  A complication arose due to an undocumented feature in DEVONthink: [it ignores a Finder comment if it is identical to the value of the "URL" attribute](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864/30) (which is the name it gives to the `com.apple.metadata:kMDItemWhereFroms` attribute [discussed above](#available-methods-of-writing-zotero-links)).  In practical terms, if you do something like write the Zotero select link into the Finder comment of a file and then have a DEVONthink smart rule copy the value to the URL field, the Finder comment will subsequently [appear blank in DEVONthink](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864) (even though it exists on the actual file).  This can be unexpected and confusing, and has caught people (including the author of Zowie) unaware.  To compensate, Zowie 1.2 introduced a new option: it can add a trailing space character to the end of the value it writes into the Finder comment when using the `findercomment` method.  Since approaches to copy the Zotero link from the Finder comment to the URL field in DEVONthink will typically strip whitespace around the URL value, the net effect is to make the value in the Finder comment just different enough from the URL field value to prevent DEVONthink from ignoring the Finder comment.  Use the option `-s` to  make Zowie to add the trailing space character.
+
+
 ### _Additional command-line arguments_
 
 To make Zowie only print what it would do without actually doing it, use the `-n` "dry run" option.
 
-If given the `-q` option, Zowie will not print its usual informational messages while it is working. It will only print messages for warnings or errors.  By default messages printed by Zowie are also color-coded. If given the option `-C`, Zowie will not color the text of messages it prints. (This latter option is useful when running Zowie within subshells inside other environments such as Emacs.)
+If given the `-q` option, Zowie will not print its usual informational messages while it is working. It will only print messages for warnings or errors.  By default, messages printed by Zowie are also color-coded. If given the option `-C`, Zowie will not color the text of messages it prints. (This latter option is useful when running Zowie within subshells inside other environments such as Emacs.)
 
 If given the `-V` option, this program will print the version and other information, and exit without doing anything else.
 
 If given the `-@` argument, this program will output a detailed trace of what it is doing.  The debug trace will be sent to the given destination, which can be `-` to indicate console output, or a file path to send the output to a file.
 
-When `-@ has` been given, Zowie also installs a signal handler on signal `SIGUSR1` that will drop Zowie into the pdb debugger if the signal is sent to the running process.
+When `-@` has been given, Zowie also installs a signal handler on signal `SIGUSR1` that will drop Zowie into the pdb debugger if the signal is sent to the running process.
 
 
 ### _Summary of command-line options_
@@ -196,15 +251,17 @@ The following table summarizes all the command line options available.
 | `-i`      | `--identifier`_I_ | Zotero user ID for API calls | | |
 | `-K`      | `--no-keyring`    | Don't use a keyring/keychain | Store login info in keyring | |
 | `-l`      | `--list`          | Display known services and exit | | | 
-| `-m`      | `--method`_M_     | Control how Zotero select links are stored | `findercomment` | |
-| `-n`      | `--dry-run`       | Report what would be done but don't do it | Do it | | 
+| `-m`      | `--method`_M_     | Select how Zotero select links are written | `findercomment` | |
+| `-n`      | `--dry-run`       | Say what would be done, but don't do it | Do it | | 
 | `-o`      | `--overwrite`     | Overwrite previous metadata content | Don't write if already present | |
-| `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working |
+| `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working | |
+| `-s`      | `--space`         | Append trailing space to Finder comments | Don't add a space | ★ |
 | `-V`      | `--version`       | Display program version info and exit | | |
 | `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
 ⚑ &nbsp; Certain files are always ignored: hidden files, macOS aliases, and files with extensions `.sqlite`, `.sqlite-journal`, `.bak`, `.csl`, `.css`, `.js`, `.json`, `.pl`, and `.config_resp`.<br>
-⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.
+⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.<br>
+★ &nbsp; See the explanation in the section on [special-case behavior](#special-case-behavior).
 
 
 ### _Return values_
@@ -222,42 +279,35 @@ This program exits with a return code of 0 if no problems are encountered.  It r
 | 6    | an exception or fatal error occurred                     |
 
 
-Known issues and limitations
-----------------------------
+## Known issues and limitations
 
 The following is a list of currently-known issues and limitations:
 
-* Zowie can only work when Zotero is set to use direct data storage; i.e., where attached files are stored in Zotero.  It cannot work if you use [linked attachments](https://www.zotero.org/support/preferences/advanced#files_and_folders), that is, if you set _Linked Attachment Base Directory_ in your Zotero Preferences' _Advanced_ → _Files and Folders_ panel.
+* Zowie can only work when Zotero is set to use direct data storage; i.e., where attached files are stored in Zotero.  It **cannot work if you use [linked attachments](https://www.zotero.org/support/preferences/advanced#files_and_folders)**, that is, if you set _Linked Attachment Base Directory_ in your Zotero Preferences' _Advanced_ → _Files and Folders_ panel.
+
+* If you use [DEVONthink](https://www.devontechnologies.com/apps/devonthink) in a scheme in which you index your Zotero folder and use Zowie to write the Zotero select link into the Finder comments of files, beware of the following situation. If you use a DEVONthink smart rule to copy the comment string into the "URL" field, DEVONthink will (after reindexing the file) suddenly display an _empty_ Finder comment, even though the comment is still there. This is due to a [deliberate behavior in DEVONthink](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864/30) and not a problem with Zowie, as discussed in the [section on special-case behavior](#special-case-behavior). Using the `-s` option will avoid this, but at the cost of adding an extra character to the Finder comment, so make sure to account for the added space character in any scripts or other actions you take on the Finder comment.
+
+* [DEVONthink](https://www.devontechnologies.com/apps/devonthink) bases the "URL" value of a file on the file's [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute.  The original hope behind Zowie was to make it write Zotero select links directly into that attribute value. Unfortunately, it turns out that if a file has already been indexed by DEVONthink, then [it will _not_ detect any changes to the `com.apple.metadata:kMDItemWhereFroms` attribute](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864/38) made by an external program. Thus, if you index your Zotero folder within DEVONthink, you cannot use Zowie's `wherefroms` method to update the "URL" field directly. You are advised instead to use Zowie's `findercomment` method (the default) in combination with smart rules in DEVONthink, as discussed in [the wiki](https://github.com/mhucka/zowie/wiki/Example:-using-Zowie-with-DEVONthink). I share your frustration.
 
 * For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
 
 
-Getting help
-------------
+## Getting help
 
 If you find an issue, please submit it in [the GitHub issue tracker](https://github.com/mhucka/zowie/issues) for this repository.
 
 
-Contributing
-------------
+## Contributing
 
 I would be happy to receive your help and participation if you are interested.  Everyone is asked to read and respect the [code of conduct](CONDUCT.md) when participating in this project.  Development generally takes place on the `development` branch.
 
 
-License
--------
+## License
 
-This software is Copyright (C) 2020, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
-
-
-Authors and history
----------------------------
-
-Copyright (c) 2020 by Michael Hucka and the California Institute of Technology.
+This software is Copyright (C) 2020-2021, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
 
 
-Acknowledgments
----------------
+## Acknowledgments
 
 This work is a personal project developed by the author, using computing facilities and other resources of the [California Institute of Technology Library](https://www.library.caltech.edu).
 
@@ -269,7 +319,8 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [biplist](https://bitbucket.org/wooster/biplist/src/master/) &ndash; A binary plist parser/writer for Python
 * [boltons](https://github.com/mahmoud/boltons/) &ndash; package of miscellaneous Python utilities
 * [bun](https://github.com/caltechlibrary/bun) &ndash; a set of basic user interface classes and functions
-* [commonpy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
+* [CommonPy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
+* [fastnumbers](https://github.com/SethMMorton/fastnumbers) &ndash; number testing and conversion functions
 * [ipdb](https://github.com/gotcha/ipdb) &ndash; the IPython debugger
 * [keyring](https://github.com/jaraco/keyring) &ndash; access the system keyring service from Python
 * [pdfrw](https://github.com/pmaupin/pdfrw) &ndash; a pure Python library for reading and writing PDFs
@@ -280,7 +331,8 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [pyxattr](https://github.com/iustin/pyxattr) &ndash; access extended file attributes from Python
 * [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
-* [sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
+* [Shiv](https://github.com/linkedin/shiv) &ndash; command-line utility for creating self-contained Python zipapps
+* [Sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
 * [wheel](https://pypi.org/project/wheel/) &ndash; setuptools extension for building wheels
 
 The [developers of DEVONthink](https://www.devontechnologies.com/about), especially Jim Neumann and Christian Grunenberg, quickly and consistently replied to my many questions on the [DEVONtechnologies forums](https://discourse.devontechnologies.com).

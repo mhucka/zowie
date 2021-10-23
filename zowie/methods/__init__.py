@@ -14,20 +14,25 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
-from .findercomment import FinderComment
-from .pdfsubject import PDFSubject
-from .pdfproducer import PDFProducer
-from .wherefrom import WhereFrom
-
-KNOWN_METHODS = {
-    'findercomment': FinderComment,
-    'wherefrom': WhereFrom,
-    'pdfsubject': PDFSubject,
-    'pdfproducer': PDFProducer,
-}
-
-# Save this list to avoid recreating it all the time.
-_METHOD_NAMES = sorted(KNOWN_METHODS.keys())
-
 def method_names():
-    return _METHOD_NAMES
+    return ['findercomment', 'wherefrom', 'pdfsubject', 'pdfproducer']
+
+
+def method_object(name):
+    # This grungy approach, instead of using a dictionary, is on purpose: it
+    # implements delayed loading of methods in order to speed up application
+    # start time.
+    if name == 'findercomment':
+        from .findercomment import FinderComment
+        return FinderComment
+    elif name == 'wherefrom':
+        from .wherefrom import WhereFrom
+        return WhereFrom
+    elif name == 'pdfsubject':
+        from .pdfsubject import PDFSubject
+        return PDFSubject
+    elif name == 'pdfproducer':
+        from .pdfproducer import PDFProducer
+        return PDFProducer
+    else:
+        raise ValueError(f'Unknown method name "{name}"')

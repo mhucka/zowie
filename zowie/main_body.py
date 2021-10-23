@@ -28,7 +28,7 @@ import sys
 
 from .exceptions import CannotProceed
 from .exit_codes import ExitCode
-from .methods import KNOWN_METHODS, method_names
+from .methods import method_names, method_object
 from .zotero import Zotero
 
 if __debug__:
@@ -63,7 +63,8 @@ class MainBody():
         # Create and initialize objects for the URI writers we will use.
         self._writers = []
         for method_name in self.methods:
-            method = KNOWN_METHODS[method_name](self.dry_run, self.overwrite)
+            method = method_object(method_name)(self.dry_run, self.overwrite,
+                                                self.add_space)
             self._writers.append(method)
 
 

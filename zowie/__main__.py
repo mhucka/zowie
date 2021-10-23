@@ -14,27 +14,18 @@ This code is open-source software released under a 3-clause BSD license.
 Please see the file "LICENSE" for more information.
 '''
 
-from   bun import UI, inform, warn, alert, alert_fatal
-from   boltons.debugutils import pdb_on_signal
-from   commonpy.data_utils import timestamp
-from   commonpy.interrupt import config_interrupt
-from   commonpy.string_utils import antiformat
+# Note: this program uses lazy importing of Python packages. Other imports
+# are present throughout the rest of the code.
+
 import plac
-import signal
-import shutil
 import sys
 from   sys import exit as exit
-from   textwrap import wrap
 
-import zowie
-from zowie import print_version
-from zowie.exceptions import UserCancelled, FileError, CannotProceed
-from zowie.exit_codes import ExitCode
-from zowie.main_body import MainBody
-from zowie.methods import method_names, KNOWN_METHODS
+from   zowie.exit_codes import ExitCode
+from   zowie.methods import method_names
 
 if __debug__:
-    from sidetrack import set_debug, log, logr
+    from sidetrack import set_debug, log
 
 
 # Main program.
@@ -52,6 +43,7 @@ if __debug__:
     dry_run    = ('report what would be done without actually doing it',     'flag',   'n'),
     overwrite  = ('forcefully overwrite previous content',                   'flag',   'o'),
     quiet      = ('be less chatty -- only print important messages',         'flag',   'q'),
+    space      = ('add a trailing space character to Finder comments',       'flag',   's'),
     version    = ('print version info and exit',                             'flag',   'V'),
     debug      = ('write detailed trace to "OUT" ("-" means console)',       'option', '@'),
     files      = 'file(s) and/or folder(s) containing Zotero attachment files',
@@ -59,8 +51,8 @@ if __debug__:
 
 def main(api_key = 'A', no_color = False, after_date = 'D', file_ext = 'F',
          identifier = 'I', no_keyring = False, list = False, method = 'M',
-         dry_run = False, overwrite = False, quiet = False, version = False,
-         debug = 'OUT', *files):
+         dry_run = False, overwrite = False, quiet = False, space = False,
+         version = False, debug = 'OUT', *files):
     '''Zowie ("ZOtero link WrItEr") is a tool for Zotero users.
 
 Zowie writes Zotero select links into the files and/or the macOS Finder
@@ -101,10 +93,15 @@ determine the Zotero URI for the bibliographic entry containing that file.
 Finally, it will use its default method of writing the Zotero select
 link, which is to write it into the macOS Finder comments for the file.
 
+If you are a user of DEVONthink, you will probably want to use the -s option
+(see the explanation below in the section on special-case behavior):
+
+  zowie -s ~/Zotero
+
 Instead of a folder, you can invoke Zowie on one or more individual files (but
 be careful to quote pathnames with spaces in them, such as in this example):
 
-  zowie "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
+  zowie -s "~/Zotero/storage/26GS7CZL/Smith 2020 Paper.pdf"
 
 Zowie supports multiple methods of writing the Zotero select link.  The
 option -l will cause Zowie to print a list of all the methods available:
@@ -115,8 +112,8 @@ option -l will cause Zowie to print a list of all the methods available:
 to write it into Finder comments for the file. (These comments are visible in
 the Finder's "Get Info" panel.) The option -m can be used to select one or
 more alternative methods. Separate the names with commas without spaces. For
-example, the following command will make Zowie write the Zotero link into the
-Finder comments and the "Where from" attribute:
+example, the following command will make Zowie write the Zotero link into both
+the Finder comments and the "Where from" attribute:
 
   zowie -m findercomment,wherefrom ~/Zotero/storage
 
@@ -151,8 +148,8 @@ folders.  For example,
 
 will cause it to only work on .pdf, .mp4, and .mov files.  You can provide
 multiple file extensions separated by commas, without spaces and without the
-leading periods.  Note that Zowie always ignores certain files, such as
-
+leading periods.  Note that Zowie always ignores certain files, such as those
+ending with .css, .js, .json, .bak, .csl, and a few others.
 
 Filtering by date
 ~~~~~~~~~~~~~~~~~
@@ -167,6 +164,28 @@ quotes. Examples:
  zowie -d "2014-08-29" ....
  zowie -d "12 Dec 2014" ....
  zowie -d "July 4, 2013" ....
+
+Special-case behavior
+~~~~~~~~~~~~~~~~~~~~~
+
+Although Zowie is not aimed solely at DEVONthink users, its development was
+motivated by the author's desire to use Zotero with that software. A
+complication arose due to an undocumented feature in DEVONthink: it ignores a
+Finder comment if it is identical to the value of the "URL" attribute (which
+is the name it gives to the "com.apple.metadata:kMDItemWhereFroms" extended
+attribute on a file). In practical terms, if you do something like write the
+Zotero select link into the Finder comment of a file and then have a
+DEVONthink smart rule copy the value to the URL field, the Finder comment
+will appear blank in DEVONthink (even though it exists on the actual
+file). This can be unexpected and confusing, and has caught people (including
+the author of Zowie) unaware. To compensate, Zowie 1.2 introduced a new
+option: it can add a trailing space character to the end of the value it
+writes into the Finder comment when using the "findercomment" method. Since
+approaches to copy the Zotero link from the Finder comment to the URL field
+in DEVONthink will typically strip whitespace around the URL value, the net
+effect is to make the value in the Finder comment just different enough from
+the URL field value to prevent DEVONthink from ignoring the Finder
+comment. Use option -s to make Zowie to add the trailing space character.
 
 Additional command-line arguments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -219,21 +238,30 @@ Command-line arguments summary
         faulthandler.enable()
         if not sys.platform.startswith('win'):
             # Even with a different signal, I can't get this to work on Win.
+            import signal
+            from boltons.debugutils import pdb_on_signal
             pdb_on_signal(signal.SIGUSR1)
 
     # Preprocess arguments and handle early exits -----------------------------
 
+    if version:
+        from zowie import print_version
+        print_version()
+        exit(int(ExitCode.success))
+
+    from bun import UI, inform, warn, alert, alert_fatal
+
     ui = UI('Zowie', 'ZOtero link WrItEr', use_color = not no_color, be_quiet = quiet)
     ui.start()
 
-    if version:
-        print_version()
-        exit(int(ExitCode.success))
     if list:
+        import shutil
+        from textwrap import wrap
+        from zowie.methods import method_object
         inform('Known methods:\n')
         width = (shutil.get_terminal_size().columns - 2) or 78
         for name in method_names():
-            text = f'[cyan2]{name}[/]: ' + KNOWN_METHODS[name].description()
+            text = f'[cyan2]{name}[/]: {method_object(name).description()}'
             inform('\n'.join(wrap(text, width = width, subsequent_indent = '  ')))
             inform('')
         exit(int(ExitCode.success))
@@ -247,6 +275,11 @@ Command-line arguments summary
 
     # Do the real work --------------------------------------------------------
 
+    from commonpy.data_utils import timestamp
+    from commonpy.interrupt import config_interrupt
+    from zowie.exceptions import UserCancelled, FileError, CannotProceed
+    from zowie.main_body import MainBody
+
     if __debug__: log('='*8 + f' started {timestamp()} ' + '='*8)
     body = exception = None
     try:
@@ -258,7 +291,8 @@ Command-line arguments summary
                         after_date  = None if after_date == 'D' else after_date,
                         methods     = methods_list,
                         dry_run     = dry_run,
-                        overwrite   = overwrite)
+                        overwrite   = overwrite,
+                        add_space   = space)
         config_interrupt(body.stop, UserCancelled(ExitCode.user_interrupt))
         body.run()
         exception = body.exception
@@ -269,6 +303,7 @@ Command-line arguments summary
 
     exit_code = ExitCode.success
     if exception:
+        from commonpy.string_utils import antiformat
         if __debug__: log(f'main body raised exception: {antiformat(exception)}')
         if exception[0] == CannotProceed:
             exit_code = exception[1].args[0]
@@ -285,7 +320,7 @@ Command-line arguments summary
             if __debug__:
                 from traceback import format_exception
                 details = ''.join(format_exception(*exception))
-                logr(f'Exception: {msg}\n{details}')
+                log(f'Exception: {msg}\n{details}')
     else:
         inform('Done.')
 
