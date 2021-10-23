@@ -40,7 +40,7 @@ Zowie is available as a self-contained, single-file, ready-to-run program for ma
 
 Depending on the version of macOS you are using, please see the relevant section below.
 
-<details><summary><img alt="macOS 10.15 and later" align="bottom" height="26px" src="https://github.com/mhucka/zowie/raw/main/.graphics/mac-os-32.png">&nbsp;<strong>macOS version 10.15 (Catalina) or later</strong></summary>
+<details><summary><img alt="macOS 10.15 and later" align="bottom" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS version 10.15 (Catalina) or later</strong></summary>
 
 First, you need a Python interpreter version 3.8 or higher on your computer. Happily, that's the version provided by macOS 10.15 and later, but if you have never run `python3` on your computer, then the first time you do, macOS will ask if you want to install certain additional software components. (Let it do so.) Check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
 ```sh
@@ -66,12 +66,12 @@ sudo mv zowie /usr/local/bin
 ```
 
 </details>
-<details><summary><img alt="macOS before 10.15" align="bottom" height="26px" src="https://github.com/mhucka/zowie/raw/main/.graphics/mac-os-32.png">&nbsp;<strong>macOS before version 10.15 (Catalina)</strong></summary>
+<details><summary><img alt="macOS before 10.15" align="bottom" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS before version 10.15 (Catalina)</strong></summary>
 
 A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
 
 1. Go to the page on GitHub for [the latest release](https://github.com/mhucka/zowie/releases/latest).
-2.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the latest release.
+2.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/binary-release.png"/>Find the **Assets** section of the latest release.
 3. Click on `zowie.zip` to download it.
 4. Unzip the file; this will leave you with a file named `zowie`, which is the program itself.
 5. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`). 
