@@ -136,9 +136,9 @@ run-pyinstaller: vars dependencies
 	zip -z dist/$(name).zip < $(comments_file)
 	-rm -f $(comments_file)
 
-shiv zipapps: | vars run-shiv
+shiv zipapps: | run-shiv
 
-run-shiv: vars
+run-shiv:
 	@mkdir -p dist
 	dev/scripts/create-pyz dist 3.8.2
 	dev/scripts/create-pyz dist 3.9.5
