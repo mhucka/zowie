@@ -71,7 +71,7 @@ from   zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
 # have wanted to write a better error message but it's not possible.)
 
 _HASHBANG = r"""/bin/bash
-''''test \$(python3 -V 2>&1|cut -c 10) -ge 6 && exec python3 -x \"\$0\" \"\$@\" # '''
+''''test \$(python3 -V 2>&1|cut -d. -f2) -ge 6&&exec python3 -x \"\$0\" \"\$@\" # '''
 ''''exec echo 'Python too old.' # '''"""
 
 # After the first few lines of the zipapp that we produce, we have a preamble
