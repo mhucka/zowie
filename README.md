@@ -1,5 +1,4 @@
-Zowie<img width="10%" align="right" src="https://github.com/mhucka/zowie/raw/main/.graphics/zowie-icon.png">
-======
+# Zowie<img width="10%" align="right" src="https://github.com/mhucka/zowie/raw/main/.graphics/zowie-icon.png">
 
 Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS that writes Zotero _select_ links into the file attachments contained in a Zotero database.
 
@@ -10,8 +9,8 @@ Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS
 [![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1857)](https://data.caltech.edu/records/1857)
 [![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange&label=PyPI)](https://pypi.org/project/zowie/)
 
-Table of contents
------------------
+
+## Table of contents
 
 * [Introduction](#introduction)
 * [Installation](#installation)
@@ -23,8 +22,7 @@ Table of contents
 * [Acknowledgments](#authors-and-acknowledgments)
 
 
-Introduction
-------------
+## Introduction
 
 When using [Zotero](https://zotero.org), you may on occasion want to work with PDF files and other attachment files outside of Zotero.  For example, if you're a [DEVONthink](https://www.devontechnologies.com/apps/devonthink) user, you will at some point discover the power of indexing your local Zotero database from DEVONthink.  However, when viewing or manipulating the attachments from outside of Zotero, you may run into the following problem: when looking at a given file, _how do you find out which Zotero entry it belongs to_?
 
@@ -33,15 +31,44 @@ Enter Zowie (a loose acronym for _"**Zo**tero link **w**r**i**t**e**r"_, and pro
 Regretfully, Zowie can **only** work with Zotero libraries that use normal/local data storage; **it cannot work when Zotero is configured to use linked attachments**.
 
 
-Installation
-------------
+## Installation
 
-Zowie is available as a self-contained executable program for macOS, as well as a program for running within a Python interpreter. The following are alternative ways of installing it.
+Zowie is available as a self-contained, single-file, ready-to-run program for macOS, as well as a program for running within a Python interpreter. The following are alternative ways of installing it.
 
 
-### _Alternative 1: ready-to-run executable (for macOS <ins>before</ins> 10.15)_
+### _Alternative 1: using ready-to-run executables_
 
-A self-contained, ready-to-run executable is available for macOS 10.13 (High Sierra) and 10.14 (Mojave); it **does not run on 10.15 (Catalina) or later** due to Apple security issues.  The binary is created using [PyInstaller](http://www.pyinstaller.org); it works like any normal command-line program and does **not** require Python.
+Depending on the version of macOS you are using, please see the relevant section below.
+
+<details><summary><img alt="macOS 10.15 and later" align="bottom" height="26px" src="https://github.com/mhucka/zowie/raw/main/.graphics/mac-os-32.png">&nbsp;<strong>macOS version 10.15 (Catalina) or later</strong></summary>
+
+First, you need a Python interpreter version 3.8 or higher on your computer. Happily, that's the version provided by macOS 10.15 and later, but if you have never run `python3` on your computer, then the first time you do, macOS will ask if you want to install certain additional software components. (Let it do so.) Check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
+```sh
+python3 --version
+```
+
+Next, install a copy of Zowie that matches your version of Python. Visit the [Zowie releases page](https://github.com/mhucka/zowie/releases) and look for the ZIP files with names such as (e.g.) `zowie-1.2.0-macos-python3.8.zip`. Then:
+1. Download the one matching your version of Python
+2. Unzip the file (if your browser did not automatically unzip it for you)
+3. Open the folder thus created (it will have a name like `zowie-1.2.0-macos-python3.8`)
+4. Look inside for `zowie` and move it to a location where you put other command-line programs (such as `/usr/local/bin`). 
+
+If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
+
+```shell
+sudo mkdir /usr/local/bin
+```
+
+The following is an example command that you can type in a terminal to move Zowie there:
+
+```shell
+sudo mv zowie /usr/local/bin
+```
+
+</details>
+<details><summary><img alt="macOS before 10.15" align="bottom" height="26px" src="https://github.com/mhucka/zowie/raw/main/.graphics/mac-os-32.png">&nbsp;<strong>macOS before version 10.15 (Catalina)</strong></summary>
+
+A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
 
 1. Go to the page on GitHub for [the latest release](https://github.com/mhucka/zowie/releases/latest).
 2.  <img align="right" width="400px" src="https://github.com/mhucka/zowie/raw/main/.graphics/binary-release.png"/>Find the **Assets** section of the latest release.
@@ -55,8 +82,26 @@ If you want to put it in `/usr/local/bin` but that folder does not exist on your
 sudo mkdir /usr/local/bin
 ```
 
+The following is an example command that you can type in a terminal to move Zowie there:
 
-### _Alternative 2: Zowie as a Python package_
+```shell
+sudo mv zowie /usr/local/bin
+```
+
+</details>
+
+
+### _Alternative 2: using `pipx`_
+
+You can use [pipx](https://pypa.github.io/pipx/) to install Zowie. Pipx will install it into a separate Python environment that isolates the dependencies needed by Zowie from other Python programs on your system, and yet the resulting `zowie` command wil be executable from any shell &ndash; like any normal application on your computer. If you do not already have `pipx` on your system, it can be installed in a variety of easy ways and it is best to consult [Pipx's installation guide](https://pypa.github.io/pipx/installation/) for instructions. Once you have pipx on your system, you can install Zowie with the following command:
+```sh
+pipx install zowie
+```
+
+Pipx can also let you run Zowie directly using `pipx run zowie`, although in that case, you must always prefix every Zowie command with `pipx run`.  Consult the [documentation for `pipx run`](https://github.com/pypa/pipx#walkthrough-running-an-application-in-a-temporary-virtual-environment) for more information.
+
+
+### _Alternative 3: using `pip`_
 
 The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python **2** &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
@@ -73,8 +118,7 @@ python3 -m pip install git+https://github.com/mhucka/zowie.git
 _If you already installed Zowie once before_, and want to update to the latest version, add `--upgrade` to the end of either command line above.
 
 
-Usage
------
+## Usage
 
 For help with usage at any time, run `zowie` with the option `-h`.
 
@@ -231,8 +275,7 @@ This program exits with a return code of 0 if no problems are encountered.  It r
 | 6    | an exception or fatal error occurred                     |
 
 
-Known issues and limitations
-----------------------------
+## Known issues and limitations
 
 The following is a list of currently-known issues and limitations:
 
@@ -245,26 +288,22 @@ The following is a list of currently-known issues and limitations:
 * For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
 
 
-Getting help
-------------
+## Getting help
 
 If you find an issue, please submit it in [the GitHub issue tracker](https://github.com/mhucka/zowie/issues) for this repository.
 
 
-Contributing
-------------
+## Contributing
 
 I would be happy to receive your help and participation if you are interested.  Everyone is asked to read and respect the [code of conduct](CONDUCT.md) when participating in this project.  Development generally takes place on the `development` branch.
 
 
-License
--------
+## License
 
 This software is Copyright (C) 2020-2021, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
 
 
-Acknowledgments
----------------
+## Acknowledgments
 
 This work is a personal project developed by the author, using computing facilities and other resources of the [California Institute of Technology Library](https://www.library.caltech.edu).
 
@@ -276,7 +315,8 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [biplist](https://bitbucket.org/wooster/biplist/src/master/) &ndash; A binary plist parser/writer for Python
 * [boltons](https://github.com/mahmoud/boltons/) &ndash; package of miscellaneous Python utilities
 * [bun](https://github.com/caltechlibrary/bun) &ndash; a set of basic user interface classes and functions
-* [commonpy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
+* [CommonPy](https://github.com/caltechlibrary/commonpy) &ndash; a collection of commonly-useful Python functions
+* [fastnumbers](https://github.com/SethMMorton/fastnumbers) &ndash; number testing and conversion functions
 * [ipdb](https://github.com/gotcha/ipdb) &ndash; the IPython debugger
 * [keyring](https://github.com/jaraco/keyring) &ndash; access the system keyring service from Python
 * [pdfrw](https://github.com/pmaupin/pdfrw) &ndash; a pure Python library for reading and writing PDFs
@@ -286,8 +326,10 @@ Zowie makes use of numerous open-source packages, without which Zowie could not 
 * [pyobjc](https://github.com/ronaldoussoren/pyobjc) &ndash; Python &rlhar; Objective-C and macOS frameworks bridge
 * [pyxattr](https://github.com/iustin/pyxattr) &ndash; access extended file attributes from Python
 * [pyzotero](https://github.com/urschrei/pyzotero) &ndash; a Python API client for Zotero
+* [Rich](https://rich.readthedocs.io/en/latest/) &ndash; library for writing styled text to the terminal
 * [setuptools](https://github.com/pypa/setuptools) &ndash; library for `setup.py`
-* [sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
+* [Shiv](https://github.com/linkedin/shiv) &ndash; command-line utility for creating self-contained Python zipapps
+* [Sidetrack](https://github.com/caltechlibrary/sidetrack) &ndash; simple debug logging/tracing package
 * [wheel](https://pypi.org/project/wheel/) &ndash; setuptools extension for building wheels
 
 The [developers of DEVONthink](https://www.devontechnologies.com/about), especially Jim Neumann and Christian Grunenberg, quickly and consistently replied to my many questions on the [DEVONtechnologies forums](https://discourse.devontechnologies.com).
