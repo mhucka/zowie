@@ -147,7 +147,7 @@ run-shiv:
 
 # make release ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-release: | test-branch binary release-on-github print-instructions
+release: | test-branch release-on-github print-instructions
 
 test-branch: vars
 ifneq ($(branch),main)
