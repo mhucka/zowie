@@ -38,6 +38,7 @@ There are multiple ways of installing Zowie, ranging from downloading a self-con
 
 Depending on the version of macOS you are using, please see the relevant section below.
 
+
 #### macOS version 10.15 (Catalina) or later
 
 First, you need a Python interpreter version 3.8 or higher on your computer. Happily, that's the version provided by macOS 10.15 and later, but if you have never run `python3` on your computer, then the first time you do, macOS will ask if you want to install certain additional software components. (Let it do so.) Check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
