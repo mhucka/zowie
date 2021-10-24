@@ -2,7 +2,7 @@
 
 ## ★ Version 1.2.0 ★
 
-* Add new `-s` option. Please see the section on [special-case behavior]() for an explanation.
+* Add new `-s` option. Please see the section on [special-case behavior](https://github.com/mhucka/zowie#special-case-behavior) for an explanation.
 * Fix issue #9: version incompatibility with Sidetrack version 2.0 package.
 * Use lazy imports of Python packages for faster application startup.
 * Add script to create zipapp version of Zowie.
