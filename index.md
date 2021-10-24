@@ -48,7 +48,7 @@ python3 --version
 
 Next, 
 
-1. <img align="right" width="350px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets** section
+1. <img align="right" width="300px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets** section
 2. Click on the ZIP file whose name contains your version of Python
 3. Unzip the downloaded file (if your browser didn't unzip it)
 4. Open the folder that gets created (it will have a name like `zowie-1.2.0-macos-python3.8`)
@@ -71,7 +71,7 @@ sudo mv zowie /usr/local/bin
 
 A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
 
-1. <img align="right" width="350px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/pyinstaller-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets** section
+1. <img align="right" width="300px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/pyinstaller-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets** section
 3. Click on `zowie.zip` to download it
 4. Unzip the file; this will leave you with a file named `zowie`, which is the program itself
 5. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`).
