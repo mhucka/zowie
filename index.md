@@ -253,21 +253,21 @@ The following table summarizes all the command line options available.
 
 | Short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Long&nbsp;form&nbsp;opt&nbsp;&nbsp;&nbsp;&nbsp; | Meaning | Default |  |
 |---------- |-------------------|--------------------------------------|---------|---|
-| `-a`_A_   | `--api-key`_A_    | API key to access the Zotero API service | | |
+| `-a`&nbsp;_A_   | `--api-key`&nbsp;_A_    | API key to access the Zotero API service | | |
 | `-C`      | `--no-color`      | Don't color-code the output | Use colors in the terminal | |
-| `-d`      | `--after-date`_D_ | Only act on files modified after date "D" | Act on all files found | |
-| `-f`      | `--file-ext`_F_   | Only act on files with extensions in "F" | Act on all files found | ⚑ |
+| `-d`      | `--after-date`&nbsp;_D_ | Only act on files modified after date "D" | Act on all files found | |
+| `-f`      | `--file-ext`&nbsp;_F_   | Only act on files with extensions in "F" | Act on all files found | ⚑ |
 | `-h`      | `--help`          | Display help text and exit | | |
-| `-i`      | `--identifier`_I_ | Zotero user ID for API calls | | |
+| `-i`      | `--identifier`&nbsp;_I_ | Zotero user ID for API calls | | |
 | `-K`      | `--no-keyring`    | Don't use a keyring/keychain | Store login info in keyring | |
 | `-l`      | `--list`          | Display known services and exit | | | 
-| `-m`      | `--method`_M_     | Select how Zotero select links are written | `findercomment` | |
+| `-m`      | `--method`&nbsp;_M_     | Select how Zotero select links are written | `findercomment` | |
 | `-n`      | `--dry-run`       | Say what would be done, but don't do it | Do it | | 
 | `-o`      | `--overwrite`     | Overwrite previous metadata content | Don't write if already present | |
 | `-q`      | `--quiet`         | Don't print messages while working | Be chatty while working | |
 | `-s`      | `--space`         | Append trailing space to Finder comments | Don't add a space | ★ |
 | `-V`      | `--version`       | Display program version info and exit | | |
-| `-@`_OUT_ | `--debug`_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
+| `-@`&nbsp;_OUT_ | `--debug`&nbsp;_OUT_    | Debugging mode; write trace to _OUT_ | Normal mode | ⬥ |
 
 ⚑ &nbsp; Certain files are always ignored: hidden files, macOS aliases, and files with extensions `.sqlite`, `.sqlite-journal`, `.bak`, `.csl`, `.css`, `.js`, `.json`, `.pl`, and `.config_resp`.<br>
 ⬥ &nbsp; To write to the console, use the character `-` as the value of _OUT_; otherwise, _OUT_ must be the name of a file where the output should be written.<br>
