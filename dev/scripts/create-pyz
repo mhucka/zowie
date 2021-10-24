@@ -277,7 +277,7 @@ with open('preamble.py', 'w') as file:
 
 run(f'~/.pyenv/shims/shiv -p "{_HASHBANG}" -c zowie -o "{outname}" -E'
     + f' --preamble preamble.py --prefer-binary'
-    + f' git+file://{realpath(here)}')
+    + f' git+file://{realpath(here)} --upgrade')
 
 inform(f'Creating zip file')
 zip_file = dirname + '.zip'

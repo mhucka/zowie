@@ -33,10 +33,10 @@ Regretfully, Zowie can **only** work with Zotero libraries that use normal/local
 
 ## Installation
 
-Zowie is available as a self-contained, single-file, ready-to-run program for macOS, as well as a program for running within a Python interpreter. The following are alternative ways of installing it.
+There are multiple ways of installing Zowie, ranging from downloading a self-contained, single-file, ready-to-run application, to installing it as a typical Python program using `pip`.  Please choose the alternative that suits you.
 
 
-### _Alternative 1: using ready-to-run executables_
+### _Alternative 1: downloading the ready-to-run application_
 
 Depending on the version of macOS you are using, please see the relevant section below.
 
@@ -68,7 +68,7 @@ sudo mv zowie /usr/local/bin
 
 </details>
 <p> </p>
-<details><summary><img alt="macOS before 10.15" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS before version 10.15 (Catalina)</strong></summary>
+<details><summary><img alt="macOS before 10.15" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS 10.14 (Mojave) and earlier</strong></summary>
 
 A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
 
@@ -93,7 +93,7 @@ sudo mv zowie /usr/local/bin
 </details>
 
 
-### _Alternative 2: using `pipx`_
+### _Alternative 2: installing Zowie using `pipx`_
 
 You can use [pipx](https://pypa.github.io/pipx/) to install Zowie. Pipx will install it into a separate Python environment that isolates the dependencies needed by Zowie from other Python programs on your system, and yet the resulting `zowie` command wil be executable from any shell &ndash; like any normal application on your computer. If you do not already have `pipx` on your system, it can be installed in a variety of easy ways and it is best to consult [Pipx's installation guide](https://pypa.github.io/pipx/installation/) for instructions. Once you have pipx on your system, you can install Zowie with the following command:
 ```sh
@@ -103,12 +103,12 @@ pipx install zowie
 Pipx can also let you run Zowie directly using `pipx run zowie`, although in that case, you must always prefix every Zowie command with `pipx run`.  Consult the [documentation for `pipx run`](https://github.com/pypa/pipx#walkthrough-running-an-application-in-a-temporary-virtual-environment) for more information.
 
 
-### _Alternative 3: using `pip`_
+### _Alternative 3: installing Zowie using `pip`_
 
 The instructions below assume you have a Python 3 interpreter installed on your computer.  Note that the default on macOS at least through 10.14 (Mojave) is Python **2** &ndash; please first install Python version 3 and familiarize yourself with running Python programs on your system before proceeding further.
 
 You should be able to install `zowie` with [`pip`](https://pip.pypa.io/en/stable/installing/) for Python&nbsp;3.  To install `zowie` from the [Python package repository (PyPI)](https://pypi.org), run the following command:
-```
+```sh
 python3 -m pip install zowie
 ```
 
@@ -118,6 +118,22 @@ python3 -m pip install git+https://github.com/mhucka/zowie.git
 ```
 
 _If you already installed Zowie once before_, and want to update to the latest version, add `--upgrade` to the end of either command line above.
+
+
+### _Alternative 4: installing Zowie from sources_
+
+If  you prefer to install Zowie directly from the source code, you can do that too. To get a copy of the files, you can clone the GitHub repository:
+```sh
+git clone https://github.com/mhucka/zowie
+```
+
+Alternatively, you can download the files as a ZIP archive using this link directly from your browser using this link: <https://github.com/mhucka/zowie/archive/refs/heads/main.zip>
+
+Next, after getting a copy of the files,  run `setup.py` inside the code directory:
+```sh
+cd zowie
+python3 setup.py install
+```
 
 
 ## Usage
