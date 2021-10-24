@@ -10,8 +10,8 @@ biplist         == 1.0.3
 boltons         == 21.0.0
 bun             == 0.0.8
 commonpy        == 1.5.0
-keyring         == 21.5.0
-keyrings.alt    == 4.0.2
+keyring         == 23.2.1
+keyrings.alt    == 4.1.0
 pdfrw           == 0.4
 plac            == 1.3.3
 py-applescript  == 1.0.2
