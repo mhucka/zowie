@@ -38,7 +38,7 @@ There are multiple ways of installing Zowie, ranging from downloading a self-con
 
 Depending on the version of macOS you are using, please see the relevant section below.
 
-<details><summary><img alt="macOS 10.15 and later" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS version 10.15 (Catalina) or later</strong></summary>
+#### macOS version 10.15 (Catalina) or later
 
 First, you need a Python interpreter version 3.8 or higher on your computer. Happily, that's the version provided by macOS 10.15 and later, but if you have never run `python3` on your computer, then the first time you do, macOS will ask if you want to install certain additional software components. (Let it do so.) Check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
 ```sh
@@ -64,9 +64,8 @@ The following is an example command that you can type in a terminal to move Zowi
 sudo mv zowie /usr/local/bin
 ```
 
-</details>
-<p> </p>
-<details><summary><img alt="macOS before 10.15" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS 10.14 (Mojave) and earlier</strong></summary>
+
+#### macOS 10.14 (Mojave) and earlier
 
 A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
 
@@ -87,8 +86,6 @@ The following is an example command that you can type in a terminal to move Zowi
 ```shell
 sudo mv zowie /usr/local/bin
 ```
-
-</details>
 
 
 ### _Alternative 2: installing Zowie using `pipx`_
