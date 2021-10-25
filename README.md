@@ -50,10 +50,10 @@ python3 --version
 Next, 
 
 1. <img align="right" width="350px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets**
-2. Download the ZIP file whose name contains the version of Python on your computer
-3. Unzip the file (if your browser didn't unzip it)
-4. Open the folder that gets created (it will have a name like `zowie-1.2.0-macos-python3.8`)
-5. Look inside for `zowie` and move it to a location where you put other command-line programs (such as `/usr/local/bin`). 
+2. **Download** the ZIP file whose name contains the version of Python on your computer
+3. **Unzip** the file (if your browser didn't unzip it)
+4. **Open the folder** that gets created (it will have a name like `zowie-1.2.0-macos-python3.8`)
+5. Look inside for `zowie` and **move it** to a location where you put other command-line programs (such as `/usr/local/bin`). 
 
 If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
 
@@ -74,9 +74,9 @@ sudo mv zowie /usr/local/bin
 A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
 
 1. <img align="right" width="350px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/pyinstaller-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets**
-3. Click on `zowie.zip` to download it
-4. Unzip the file; this will leave you with a file named `zowie`, which is the program itself
-5. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`).
+2. Click on `zowie.zip` to **download** it
+3. **Unzip** the file; this will leave you with a file named `zowie`, which is the program itself
+4. **Move** `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`).
 
 If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
 
