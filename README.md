@@ -33,22 +33,23 @@ Regretfully, Zowie can **only** work with Zotero libraries that use normal/local
 
 ## Installation
 
-There are multiple ways of installing Zowie, ranging from downloading a self-contained, single-file, ready-to-run application, to installing it as a typical Python program using `pip`.  Please choose the alternative that suits you.
+There are multiple ways of installing Zowie, ranging from downloading a self-contained, single-file, ready-to-run program, to installing it as a typical Python program using `pip`.  Please choose the alternative that suits you.
 
 
-### _Alternative 1: downloading the ready-to-run application_
+### _Alternative 1: downloading the ready-to-run program_
 
-Depending on the version of macOS you are using, please see the relevant section below.
+There are two variants of Zowie in its ready-to-run form, suitable for different versions of macOS.
 
-<details><summary><img alt="macOS 10.15 and later" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS version 10.15 (Catalina) or later</strong></summary>
+<details><summary><img alt="macOS 10.15 and later" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS 10.15 (Catalina) and later</strong></summary>
 
-First, you need a Python interpreter version 3.8 or higher on your computer. Happily, that's the version provided by macOS 10.15 and later, but if you have never run `python3` on your computer, then the first time you do, macOS will ask if you want to install certain additional software components. (Let it do so.) Check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
+The first variant of a runnable Zowie program needs a Python interpreter version 3.8 or higher on your computer. Happily, that's the case for macOS 10.15 and later. To be sure, first check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
 ```sh
 python3 --version
 ```
 
-Next, 
+(Note: if this is the first time you've run `python3` on your system, macOS will ask if you want to install certain additional software components. Let it do so.)
 
+Next,
 1. <img align="right" width="350px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets**
 2. **Download** the ZIP file whose name contains the version of Python on your computer
 3. **Unzip** the file (if your browser didn't unzip it)
@@ -71,7 +72,7 @@ sudo mv zowie /usr/local/bin
 <p> </p>
 <details><summary><img alt="macOS before 10.15" align="top" height="26px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/mac-os-32.png">&nbsp;<strong>macOS 10.14 (Mojave) and earlier</strong></summary>
 
-A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
+A runnable variant of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
 
 1. <img align="right" width="350px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/pyinstaller-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets**
 2. Click on `zowie.zip` to **download** it
@@ -95,7 +96,7 @@ sudo mv zowie /usr/local/bin
 
 ### _Alternative 2: installing Zowie using `pipx`_
 
-You can use [pipx](https://pypa.github.io/pipx/) to install Zowie. Pipx will install it into a separate Python environment that isolates the dependencies needed by Zowie from other Python programs on your system, and yet the resulting `zowie` command wil be executable from any shell &ndash; like any normal application on your computer. If you do not already have `pipx` on your system, it can be installed in a variety of easy ways and it is best to consult [Pipx's installation guide](https://pypa.github.io/pipx/installation/) for instructions. Once you have pipx on your system, you can install Zowie with the following command:
+You can use [pipx](https://pypa.github.io/pipx/) to install Zowie. Pipx will install it into a separate Python environment that isolates the dependencies needed by Zowie from other Python programs on your system, and yet the resulting `zowie` command wil be executable from any shell &ndash; like any normal program on your computer. If you do not already have `pipx` on your system, it can be installed in a variety of easy ways and it is best to consult [Pipx's installation guide](https://pypa.github.io/pipx/installation/) for instructions. Once you have pipx on your system, you can install Zowie with the following command:
 ```sh
 pipx install zowie
 ```
