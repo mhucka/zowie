@@ -150,12 +150,10 @@ run-shiv:
 
 # make release ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-release: | test-branch binary release-on-github print-instructions
+release: | test-branch release-on-github print-instructions
 
 test-branch: vars
-ifneq ($(branch),main)
-	$(error Current git branch != main. Merge changes into main first)
-endif
+	$(if $(filter-out $(branch),main),$(error Current git branch != main.))
 
 update-init: vars
 	@sed -i .bak -e "s|^\(__version__ *=\).*|\1 '$(version)'|"  $(init_file)
