@@ -14,6 +14,7 @@ Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS
 * [Installation](#installation)
 * [Usage](#usage)
 * [Known issues and limitations](#known-issues-and-limitations)
+* [Additional tips](#additional-tips)
 * [Getting help](#getting-help)
 * [Contributing](#contributing)
 * [License](#license)
@@ -300,6 +301,11 @@ The following is a list of currently-known issues and limitations:
 * [DEVONthink](https://www.devontechnologies.com/apps/devonthink) bases the "URL" value of a file on the file's [`com.apple.metadata:kMDItemWhereFroms`](https://developer.apple.com/documentation/coreservices/kmditemwherefroms) extended attribute.  The original hope behind Zowie was to make it write Zotero select links directly into that attribute value. Unfortunately, it turns out that if a file has already been indexed by DEVONthink, then [it will _not_ detect any changes to the `com.apple.metadata:kMDItemWhereFroms` attribute](https://discourse.devontechnologies.com/t/some-finder-comments-not-showing-in-devonthink/66864/38) made by an external program. Thus, if you index your Zotero folder within DEVONthink, you cannot use Zowie's `wherefroms` method to update the "URL" field directly. You are advised instead to use Zowie's `findercomment` method (the default) in combination with smart rules in DEVONthink, as discussed in [the wiki](https://github.com/mhucka/zowie/wiki/Example:-using-Zowie-with-DEVONthink). I share your frustration.
 
 * For reasons I have not had time to investigate, the binary version of `zowie` takes a very long time to start up on macOS 10.15 (Catalina) and 11.1 (Big Sur).  On my test system inside a virtual machine running on a fast iMac, it takes 10 seconds or more before the first output from `zowie` appears.
+
+
+## Additional tips
+
+In the [wiki associated with the Zowie project in GitHub](https://github.com/mhucka/zowie/wiki), I have started writing some notes about how I personally use Zowie to combine Zotero with DEVONthink.
 
 
 ## Getting help
