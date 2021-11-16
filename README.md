@@ -310,7 +310,7 @@ The following is a list of currently-known issues and limitations:
 
 ## Additional tips
 
-In the [wiki associated with the Zowie project in GitHub](https://github.com/mhucka/zowie/wiki), I have started writing some notes about how I use Zowie personally to use Zotero with DEVONthink.
+In the [wiki associated with the Zowie project in GitHub](https://github.com/mhucka/zowie/wiki), I have started writing some notes about how I personally use Zowie to combine Zotero with DEVONthink.
 
 
 ## Getting help
