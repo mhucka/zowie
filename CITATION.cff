@@ -1,0 +1,23 @@
+# YAML 1.2
+---
+authors: 
+  -
+    affiliation: "Caltech Library"
+    given-names: Mike
+    family-names: Hucka
+    orcid: "0000-0001-9105-5960"
+cff-version: "1.1.0"
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/mhucka/zowie"
+title: "Zowie: write Zotero select links into article attachment files"
+date-released: 2021-10-24
+version: "1.2.0"
+doi: 10.22002/2154
+keywords: 
+  - Zotero
+  - DEVONthink
+  - information management
+  - reference management
+  - command-line programs
+  - software utilities
+...

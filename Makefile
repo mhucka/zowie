@@ -19,7 +19,7 @@ TEST := $(foreach p,$(PROGRAMS_NEEDED),\
 	  $(if $(shell which $(p)),_,$(error Cannot find program "$(p)")))
 
 # Set some basic variables.  These are quick to set; we set additional
-# variables using "set-vars" but only when the others are needed.
+# variables using "vars" but only when the others are needed.
 
 name	:= $(strip $(shell awk -F "=" '/^name/ {print $$2}' setup.cfg))
 version	:= $(strip $(shell awk -F "=" '/^version/ {print $$2}' setup.cfg))
