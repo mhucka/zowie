@@ -5,24 +5,24 @@
 # @website https://github.com/mhucka/zowie
 # =============================================================================
 
-aenum           == 3.1.0
+aenum           == 3.1.11
 biplist         == 1.0.3
 boltons         == 21.0.0
 bun             == 0.0.8
-commonpy        == 1.5.0
+commonpy        == 1.12.0
 keyring         == 23.2.1
 keyrings.alt    == 4.1.0
 pdfrw           == 0.4
-plac            == 1.3.3
+plac            == 1.3.5
 py-applescript  == 1.0.2
-pyzotero        == 1.4.26
-pyxattr         == 0.7.2
-setuptools      == 58.3.0
-sidetrack       == 2.0.0
+pyzotero        == 1.5.5
+pyxattr         == 0.8.0
+setuptools      >= 58.0.0
+sidetrack       == 2.0.1
 
 # The following are needed by the py-applescript module, but because the
 # py-applescript module doesn't have a requirements.txt, installation via pip
 # ends up missing these dependencies.
-pyobjc-core                      == 7.3.0
-pyobjc-framework-AppleScriptKit  == 7.3.0
-pyobjc-framework-AppleScriptObjC == 7.3.0
+pyobjc-core                      == 9.0.1
+pyobjc-framework-AppleScriptKit  == 9.0.1
+pyobjc-framework-AppleScriptObjC == 9.0.1
