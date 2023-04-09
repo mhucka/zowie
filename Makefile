@@ -169,10 +169,10 @@ make-zip: run-pyinstaller
 shiv zipapps: | run-shiv
 
 run-shiv:;
-	@mkdir -p dist
-	dev/scripts/create-pyz dist 3.8.2
-	dev/scripts/create-pyz dist 3.9.5
-	dev/scripts/create-pyz dist 3.10.0
+	@mkdir -p $(distdir)
+	dev/scripts/create-pyz $(distdir) 3.8.16
+	dev/scripts/create-pyz $(distdir) 3.9.16
+	dev/scripts/create-pyz $(distdir) 3.10.10
 
 build-darwin: $(distdir)/$(app_name) # $(about-file) $(help-file) # NEWS.html
 #	packagesbuild dev/installer-builders/macos/packages-config/zowie.pkgproj
