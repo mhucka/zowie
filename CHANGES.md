@@ -1,5 +1,17 @@
 # Change log for Zowie
 
+## ★ Version 1.3.0 ★
+
+This release updates the required version of some dependencies and changes the minimum version of Python to version 3.8. There are no functional or operational changes in this release.
+
+Detailed changes:
+* Updated versions of dependencies in `requirements.txt`.
+* Added `requirements-dev.txt`.
+* Improved `codemeta.json`.
+* Updated `Makefile` and `setup.py` to use versions developed for other projects.
+* Updated copyright year in various files.
+
+
 ## ★ Version 1.2.0 ★
 
 * Add new `-s` option. Please see the section on [special-case behavior](https://github.com/mhucka/zowie#special-case-behavior) for an explanation.

@@ -1,0 +1,18 @@
+# =============================================================================
+# @file    requirements-dev.txt
+# @brief   Python dependencies for Zowie for development & testing
+# @created 2023-04-02
+# @license Please see the file named LICENSE in the project directory
+# @website https://github.com/caltechlibrary/zowie
+# =============================================================================
+
+-r requirements.txt
+
+fastnumbers >= 5.0.1
+
+twine       >= 4.0.0
+pyinstaller >= 5.9.0
+
+pytest      >= 6.2.5
+pytest-cov  >= 3.0.0
+pytest-mock >= 3.7.0

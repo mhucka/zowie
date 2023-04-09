@@ -72,6 +72,7 @@ TAGS
 __pycache__
 *.py[cod]
 *$py.class
+.eggs
 
 # InnoSetup-specific things to ignore:
 # .............................................................................
@@ -91,3 +92,4 @@ dist
 *.bak
 zowie.egg-info
 .README.md.tmp
+*.tmp
