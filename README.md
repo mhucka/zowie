@@ -324,7 +324,7 @@ I would be happy to receive your help and participation if you are interested.  
 
 ## License
 
-This software is Copyright (C) 2020-2021, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
+This software is Copyright (C) 2020&ndash;2023, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
 
 
 ## Acknowledgments
