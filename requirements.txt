@@ -9,7 +9,7 @@ aenum           == 3.1.12
 biplist         == 1.0.3
 boltons         == 21.0.0
 bun             == 0.0.8
-commonpy        == 1.12.0
+commonpy        == 1.12.2
 keyring         == 23.2.1
 keyrings.alt    == 4.1.0
 pdfrw           == 0.4
