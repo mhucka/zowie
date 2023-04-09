@@ -8,6 +8,8 @@
 
 -r requirements.txt
 
+fastnumbers >= 5.0.1
+
 twine       >= 4.0.0
 pyinstaller >= 5.9.0
 
