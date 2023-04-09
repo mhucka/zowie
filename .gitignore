@@ -92,3 +92,4 @@ dist
 *.bak
 zowie.egg-info
 .README.md.tmp
+*.tmp
