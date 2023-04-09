@@ -163,7 +163,7 @@ class MainBody():
             if __debug__: log(f'filtering files by date {self.after_date_str}')
             kept = []
             tzinfo = self.after_date.tzinfo
-            for file in self.files:
+            for file in self._targets:
                 mtime = datetime.fromtimestamp(Path(file).stat().st_mtime)
                 if mtime.replace(tzinfo = tzinfo) >= self.after_date:
                     if __debug__: log(f'keeping {file}')

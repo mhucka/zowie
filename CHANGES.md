@@ -2,9 +2,11 @@
 
 ## ★ Version 1.3.0 ★
 
-This release updates the required version of some dependencies and changes the minimum version of Python to version 3.8. There are no functional or operational changes in this release.
+This release fixes issues #13 and #18, updates the required version of some dependencies, and changes the minimum version of Python to version 3.8.
 
 Detailed changes:
+* Fix issue #13: filtering by date using the `-d` option is broken.
+* Fix issue #18: installations using `pipx` failed.
 * Updated versions of dependencies in `requirements.txt`.
 * Added `requirements-dev.txt`.
 * Improved `codemeta.json`.
