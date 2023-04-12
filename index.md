@@ -2,7 +2,6 @@ Zowie ("**Zo**tero link **w**r**i**t**e**r") is a command-line program for macOS
 
 [![License](https://img.shields.io/badge/License-BSD-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Python](https://img.shields.io/badge/Python-3.6+-brightgreen.svg?style=flat-square)](http://shields.io)
-[![DOI](https://img.shields.io/badge/dynamic/json.svg?label=DOI&style=flat-square&colorA=gray&colorB=navy&query=$.metadata.doi&uri=https://data.caltech.edu/api/record/1867)](https://data.caltech.edu/records/1867)
 [![GitHub stars](https://img.shields.io/github/stars/mhucka/zowie.svg?style=flat-square&color=lightgray&label=Stars)](https://github.com/mhucka/zowie/stargazers)
 [![Latest release](https://img.shields.io/github/v/release/mhucka/zowie.svg?style=flat-square&color=b44e88&label=Latest%20release)](https://github.com/mhucka/zowie/releases)
 [![PyPI](https://img.shields.io/pypi/v/zowie.svg?style=flat-square&color=orange&label=PyPI)](https://pypi.org/project/zowie/)
@@ -32,50 +31,28 @@ Regretfully, Zowie can **only** work with Zotero libraries that use normal/local
 
 ## Installation
 
-There are multiple ways of installing Zowie, ranging from downloading a self-contained, single-file, ready-to-run application, to installing it as a typical Python program using `pip`.  Please choose the alternative that suits you.
+There are multiple ways of installing Zowie, ranging from downloading a self-contained, single-file, ready-to-run program, to installing it as a typical Python program using `pip`.  Please choose the alternative that suits you and your Mac environment.
 
 
-### _Alternative 1: downloading the ready-to-run application_
+### _Alternative 1: downloading the ready-to-run program_
 
-Depending on the version of macOS you are using, please see the relevant section below.
-
-
-#### macOS version 10.15 (Catalina) or later
-
-First, you need a Python interpreter version 3.8 or higher on your computer. Happily, that's the version provided by macOS 10.15 and later, but if you have never run `python3` on your computer, then the first time you do, macOS will ask if you want to install certain additional software components. (Let it do so.) Check the version of the program `python3` that you get by running the following command in a terminal and inspecting the results:
+On macOS Catalina (10.15) or later, you can use a ready-to-run version of Zowie that only needs a Python interpreter version 3.8 or higher on your computer. That's the case for macOS 10.15 and later, but before you can use it, you may need to let macOS install some additional software components from Apple. To test it, run the following command in a terminal and **take note of the version of Python** that it prints:
 ```sh
 python3 --version
 ```
-
-Next, 
-
-1. <img align="right" width="300px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets** section
-2. Click on the ZIP file whose name contains your version of Python
-3. Unzip the downloaded file (if your browser didn't unzip it)
-4. Open the folder that gets created (it will have a name like `zowie-1.2.0-macos-python3.8`)
-5. Look inside for `zowie` and move it to a location where you put other command-line programs (such as `/usr/local/bin`). 
-
-If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
-
-```shell
-sudo mkdir /usr/local/bin
+**If this is the first time** you've run `python3` on your system, macOS will either ask you if you want to install certain additional software components, or it may produce an error about 
+`xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools) ...`. In either case, the solution is to run the following command in the terminal:
 ```
-
-The following is an example command that you can type in a terminal to move Zowie there:
-
-```shell
-sudo mv zowie /usr/local/bin
+xcode-select --install
 ```
+In the pop-up dialog box that this brings up, **click the _Install_ button** and agree to let it install the [Command Line Tools](https://developer.apple.com/library/archive/technotes/tn2339/_index.html) package from Apple.
 
-
-#### macOS 10.14 (Mojave) and earlier
-
-A runnable version of Zowie created using a different method is available for macOS before 10.15, for which Apple did not provide Python version 3. This copy of Zowie works like any normal command-line program and does **not** require Python.  (However, it **does not run on macOS Catalina or later** due to Apple security issues.)
-
-1. <img align="right" width="300px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/pyinstaller-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets** section
-3. Click on `zowie.zip` to download it
-4. Unzip the file; this will leave you with a file named `zowie`, which is the program itself
-5. Move `zowie` to a folder where you put other command-line programs (e.g. `/usr/local/bin`).
+Next,
+1. <img align="right" width="350px" src="https://github.com/mhucka/zowie/raw/develop/.graphics/shiv-releases.png"/>Go to the [latest release on GitHub](https://github.com/mhucka/zowie/releases) and find the **Assets**
+2. **Download** the ZIP file whose name contains the version of Python on your computer (which you determined by running `python3 --version` above)
+3. **Unzip** the file (if your browser didn't unzip it)
+4. **Open the folder** that gets created (it will have a name like `zowie-1.2.0-macos-python3.8`)
+5. Look inside for `zowie` and **move it** to a location where you put other command-line programs (such as `/usr/local/bin`). 
 
 If you want to put it in `/usr/local/bin` but that folder does not exist on your computer yet, you can create it by opening a terminal window and running the following command (_prior_ to moving `zowie` into `/usr/local/bin`):
 
@@ -320,7 +297,7 @@ I would be happy to receive your help and participation if you are interested.  
 
 ## License
 
-This software is Copyright (C) 2020-2021, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
+This software is Copyright (C) 2020&ndash;2023, by Michael Hucka and the California Institute of Technology (Pasadena, California, USA).  This software is freely distributed under a 3-clause BSD type license.  Please see the [LICENSE](LICENSE) file for more information.
 
 
 ## Acknowledgments
